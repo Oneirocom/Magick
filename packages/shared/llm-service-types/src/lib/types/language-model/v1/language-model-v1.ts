@@ -147,8 +147,14 @@ Response headers.
   }>
 }
 
+type LanguageModel = {
+  id: string
+  modelName: string
+  displayName: string
+}
+
 export type ExtensibleLanguageModel<T extends Record<string, unknown> = {}> =
-  LanguageModelV1 & T
+  LanguageModel & T
 
 export type LanguageModelV1StreamPart =
   // Basic text deltas:
