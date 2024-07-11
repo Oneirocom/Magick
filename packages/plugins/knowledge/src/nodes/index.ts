@@ -48,6 +48,7 @@ export const createPack = makeFlowNodeDefinition({
     } catch (error) {
       // Handle error
       console.error('Error creating pack:', error)
+      throw error
     }
   },
 })
