@@ -135,10 +135,7 @@ export const BaseNode: React.FC<BaseNodeProps> = ({
 
       const node = instance?.getNode(id)
 
-      instance.setCenter(
-        (node?.position.x || 0) + 100,
-        (node?.position.y || 0) + 100
-      )
+      instance.setCenter(node?.position.x || 0, node?.position.y || 0)
 
       // setTimeout(() => {
       //   setError(false)
