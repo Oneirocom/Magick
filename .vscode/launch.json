@@ -37,6 +37,13 @@
       "cwd": "${workspaceFolder}/apps/cloud-agent-manager"
     },
     {
+      "name": "Embedder",
+      "type": "node",
+      "request": "attach",
+      "port": 8091,
+      "cwd": "${workspaceFolder}/apps/embedder"
+    },
+    {
       "name": "Server",
       "type": "node",
       "request": "attach",
