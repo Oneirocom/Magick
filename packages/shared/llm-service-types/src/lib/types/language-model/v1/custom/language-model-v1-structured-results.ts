@@ -68,12 +68,12 @@ type TextStreamYield = { choices: [{ delta: { content: string } }] }
 type TextStreamResult = string
 
 // Stream yield type for StreamObjectReturn
-type StreamObjectYield<T> = {
+export type StreamObjectYield<T> = {
   choices: [{ delta: { content: DeepPartial<T> } }]
 }
 
 // Stream result type for StreamObjectReturn
-type StreamObjectResult<T> = DeepPartial<T>
+export type StreamObjectResult<T> = DeepPartial<T>
 
 // Type definition for deep partial object
 export type DeepPartial<T> = {
