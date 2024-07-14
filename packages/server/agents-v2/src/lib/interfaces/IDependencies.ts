@@ -14,6 +14,8 @@ import { RedisPubSub } from '../dependencies/redisPubSub'
 import { TypedEmitter } from 'tiny-typed-emitter'
 import { IEventEmitter } from './IEventEmitter'
 import { ICommandHub } from './ICommandHub'
+import { ILLMService } from './ILLMService'
+import { KeywordsLLMService as LLMService } from '../services/LLMService/KeywordsLLMService'
 
 /**
  * This is the central source of truth for all dependencies that are available.
@@ -31,6 +33,7 @@ export const DependencyInterfaces = {
   PubSub: {} as IPubSub,
   EventEmitter: {} as IEventEmitter,
   CommandHub: {} as ICommandHub,
+  LLMService: {} as ILLMService,
 
   // We can also just use this to add key:value types for later access
   ['Factory<EventStore>']: {} as unknown,
@@ -59,6 +62,7 @@ export const CONFIG_TO_SERVICE_MAP = {
   // database: { useSingleton: true, service: 'Database' },
   eventStore: { useSingleton: false, service: 'EventStore' },
   eventEmitter: { useSingleton: true, service: 'EventEmitter' },
+  LLMService: { useSingleton: true, service: 'LLMService' },
   // ... other mappings
 } as const
 
@@ -86,6 +90,7 @@ export const DEFAULT_DEPENDENCIES: DefaultDependenciesType = {
   eventEmitter: TypedEmitter,
   // database: DatabaseService,
   eventStore: EventStore,
+  LLMService: LLMService,
 }
 
 /**
