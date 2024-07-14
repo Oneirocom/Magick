@@ -7,7 +7,8 @@
     "experimentalDecorators": true,
     "allowImportingTsExtensions": true,
     "emitDeclarationOnly": true,
-    "target": "es2021"
+    "target": "es2021",
+    "types": ["node"],
   },
   "files": [],
   "include": [],
@@ -18,5 +19,5 @@
     {
       "path": "./tsconfig.spec.json"
     }
-  ]
+  ],
 }
