@@ -15,15 +15,16 @@ import {
   GenerateObjectResult,
   GenerateRequest,
   StreamObjectRequest,
+  StreamObjectResult,
   StreamObjectReturn,
+  StreamObjectYield,
   StreamTextReturn,
 } from '../../../../../../shared/llm-service-types/src'
 import {
   ILLMService,
-  LanguageModelProviderWithApiKey,
+  ExtensibleLanguageModelProvider,
 } from '../../interfaces/ILLMService'
 import { KeywordsService } from '../../../../../../cloud/next/keywords/src'
-import { CoreUserService } from '../../../../../../plugins/core/src'
 import { createOpenAI } from '../../../../../vercel/core/src/lib/magick-openai/src'
 
 type KeywordsModel = {
@@ -42,12 +43,11 @@ type KeywordsModel = {
   }
 }
 
-export default class KeywordsLLMService implements ILLMService {
+export class KeywordsLLMService implements ILLMService {
   private keywords: KeywordsService
   // private credentialManager: ICredentialManager
-  private providersCache?: LanguageModelProviderWithApiKey[]
+  private providersCache?: ExtensibleLanguageModelProvider<{ apiKey: string }>[]
   private modelCache: Record<string, ExtensibleLanguageModel[]> = {}
-  private userService: CoreUserService
   private lastOutput: any
 
   constructor() {
@@ -55,7 +55,9 @@ export default class KeywordsLLMService implements ILLMService {
     // this.credentialManager = new CredentialManager()
   }
 
-  async getProviders(): Promise<LanguageModelProviderWithApiKey[]> {
+  async getProviders<T extends Record<string, unknown> = {}>(): Promise<
+    ExtensibleLanguageModelProvider<T & { apiKey: string }>[]
+  > {
     if (!this.providersCache) {
       const modelsGroupedByProvider = await this.keywords.fetchModels()
       this.providersCache = Object.entries(modelsGroupedByProvider).map(
@@ -66,16 +68,18 @@ export default class KeywordsLLMService implements ILLMService {
         })
       )
     }
-    return this.providersCache
+    return this.providersCache as ExtensibleLanguageModelProvider<
+      T & { apiKey: string }
+    >[]
   }
 
-  async getModels(
+  async getModels<T extends Record<string, unknown> = {}>(
     provider: string
-  ): Promise<ExtensibleLanguageModel<KeywordsModel>[]> {
+  ): Promise<ExtensibleLanguageModel<T & KeywordsModel>[]> {
     if (this.modelCache[provider]) {
-      return this.modelCache[
-        provider
-      ] as ExtensibleLanguageModel<KeywordsModel>[]
+      return this.modelCache[provider] as ExtensibleLanguageModel<
+        T & KeywordsModel
+      >[]
     }
 
     const modelsGroupedByProvider = await this.keywords.fetchModels()
@@ -90,19 +94,19 @@ export default class KeywordsLLMService implements ILLMService {
       modelName: model.model_name,
       displayName: model.display_name,
       ...model,
-    })) as ExtensibleLanguageModel<KeywordsModel>[]
+    })) as ExtensibleLanguageModel<T & KeywordsModel>[]
 
     this.modelCache[provider] = models
-    return models as ExtensibleLanguageModel<KeywordsModel>[]
+    return models as ExtensibleLanguageModel<T & KeywordsModel>[]
   }
 
   async generateText<TOOLS extends Record<string, CoreTool>>(
     request: GenerateRequest & { tools?: TOOLS },
     extraMetadata?: Record<string, any>
   ): Promise<string> {
-    const provider = extraMetadata.provider
-    const apiKey = extraMetadata.apiKey
-    const customerIdentifier = extraMetadata.customer_identifier
+    const provider = extraMetadata?.provider
+    const apiKey = extraMetadata?.apiKey
+    const customerIdentifier = extraMetadata?.customer_identifier
 
     if (!provider || !apiKey || !customerIdentifier) {
       throw new Error('Provider, apiKey, and customerIdentifier are required')
@@ -144,9 +148,9 @@ export default class KeywordsLLMService implements ILLMService {
     request: GenerateRequest & { tools?: TOOLS },
     extraMetadata?: Record<string, any>
   ): StreamTextReturn {
-    const provider = extraMetadata.provider
-    const apiKey = extraMetadata.apiKey
-    const customerIdentifier = extraMetadata.customer_identifier
+    const provider = extraMetadata?.provider
+    const apiKey = extraMetadata?.apiKey
+    const customerIdentifier = extraMetadata?.customer_identifier
 
     if (!provider || !apiKey || !customerIdentifier) {
       throw new Error('Provider, apiKey, and customerIdentifier are required')
@@ -194,9 +198,9 @@ export default class KeywordsLLMService implements ILLMService {
     request: GenerateObjectRequest<T>,
     extraMetadata: Record<string, string>
   ): Promise<GenerateObjectResult<T>> {
-    const provider = extraMetadata.provider
-    const apiKey = extraMetadata.apiKey
-    const customerIdentifier = extraMetadata.customer_identifier
+    const provider = extraMetadata?.provider
+    const apiKey = extraMetadata?.apiKey
+    const customerIdentifier = extraMetadata?.customer_identifier
 
     if (!provider || !apiKey || !customerIdentifier) {
       throw new Error('Provider, apiKey, and customerIdentifier are required')
@@ -230,18 +234,15 @@ export default class KeywordsLLMService implements ILLMService {
 
     return data as GenerateObjectResult<T>
   }
-
   async streamObject<T>(
     request: StreamObjectRequest<T>,
-    extraMetadata?: Record<string, string>
+    extraMetadata?: Record<string, unknown>
   ): Promise<StreamObjectReturn<T>> {
-    const chunks: DeepPartial<T>[] = []
-
     const { model, schema, prompt } = request
 
-    const provider = extraMetadata?.provider
-    const apiKey = extraMetadata?.apiKey
-    const customerIdentifier = extraMetadata?.customer_identifier
+    const provider = extraMetadata?.provider as string
+    const apiKey = extraMetadata?.apiKey as string
+    const customerIdentifier = extraMetadata?.customer_identifier as string
 
     if (!provider || !apiKey || !customerIdentifier) {
       throw new Error('Provider, apiKey, and customerIdentifier are required')
@@ -266,28 +267,31 @@ export default class KeywordsLLMService implements ILLMService {
       prompt,
     }
 
-    async function* objectGenerator(): StreamObjectReturn<T> {
+    async function* objectGenerator(): AsyncGenerator<
+      StreamObjectYield<T>,
+      StreamObjectResult<T>,
+      unknown
+    > {
       const { partialObjectStream } = await originalStreamObject(body)
 
-      yield { choices: [{ delta: { content: '<START>' } }] }
-
       for await (const partialObject of partialObjectStream) {
-        chunks.push(partialObject)
         yield {
-          choices: [{ delta: { content: JSON.stringify(partialObject) } }],
+          choices: [{ delta: { content: partialObject as DeepPartial<T> } }],
         }
-        return chunks.join('')
       }
+
+      // Return the final result
+      return {} as StreamObjectResult<T> // You may want to return a more meaningful final result
     }
 
     return objectGenerator()
   }
 
-  async generateUI(options: any) {
-    return
-  }
+  // async generateUI(options: any) {
+  //   return
+  // }
 
-  async streamUI(options: any) {
-    return
-  }
+  // async streamUI(options: any) {
+  //   return
+  // }
 }
