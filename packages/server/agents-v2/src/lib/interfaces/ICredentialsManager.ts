@@ -1,10 +1,21 @@
-import { PluginCredential } from '@magickml/credentials'
-import { CredentialsType } from '../services/credentialsManager/credentialsManager'
+import { Prisma } from '../../../../db/src'
 
-export type CredentialType = 'core' | 'plugin' | 'custom'
-export interface ICredentialManager<
-  T extends object = Record<string, unknown>
-> {
+export type Credential = Prisma.$credentialsPayload['scalars']
+
+export type AgentCredentialV2 = Prisma.$agent_credentialsPayload['scalars'] & {
+  credential: Partial<Credential>
+}
+
+export type CredentialsWithValue = Credential & { value: string }
+
+export type AgentCredential = Prisma.$agent_credentialsPayload['scalars']
+
+export type CredentialKeyValuePair = {
+  name: string
+  value: string
+  serviceType: string
+}
+export interface ICredentialManager {
   /**
    * Initialize the credential manager.
    */
@@ -13,18 +24,18 @@ export interface ICredentialManager<
   /**
    * Update the current credentials from the data source.
    */
-  update(): Promise<void>
+  refreshCredentialsCache(): Promise<void>
 
   /**
    * Get all current credentials.
    */
-  getCredentials(): CredentialsType<T> | undefined
+  getCredentials(): Promise<CredentialKeyValuePair[]>
 
   /**
    * Get a specific credential by name.
    * @param name The name of the credential to retrieve.
    */
-  getCredential(name: keyof T): T[keyof T] | undefined
+  getCredential(name: string): string | undefined
 
   /**
    * Get a custom credential by name.
@@ -36,25 +47,23 @@ export interface ICredentialManager<
    * Add or update a credential.
    * @param credential The credential to add or update.
    */
-  addCredential(
-    credential: Partial<T>,
-    pluginCredential: PluginCredential
-  ): Promise<void>
+  addCredential(credential: Credential): Promise<{ id: string }>
+
+  /**
+   * Update a specific credential.
+   * @param credential The credential to update.
+   */
+  updateCredential(credential: Credential): Promise<boolean>
 
   /**
    * Delete a specific credential.
    * @param name The name of the credential to delete.
    */
-  deleteCredential(name: keyof T): Promise<void>
+  deleteCredential(name: string): Promise<boolean>
 
   /**
    * Validate a specific credential.
    * @param name The name of the credential to validate.
    */
-  validateCredential(name: keyof T): Promise<boolean>
-
-  /**
-   * Get a list of required credentials.
-   */
-  getRequiredCredentials(): (keyof T)[]
+  validateCredential(name: string): Promise<boolean>
 }
