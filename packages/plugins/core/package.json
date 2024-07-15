@@ -10,7 +10,6 @@
     "@magickml/agent-plugin": "0.0.1",
     "@magickml/behave-graph": "^0.14.14",
     "@magickml/credentials": "0.0.1",
-    "@magickml/embedder-client-ts": "0.0.1",
     "@magickml/grimoire": "0.0.1",
     "@magickml/redis-pubsub": "0.0.1",
     "@magickml/server-config": "0.0.1",
@@ -33,7 +32,6 @@
     "uuid": "^9.0.0",
     "zod": "^3.22.4",
     "@magickml/shared-plugins": "0.0.1",
-    "@magickml/embedder-schemas": "0.0.1",
     "tslib": "^2.3.0"
   },
   "type": "commonjs",
