@@ -1,5 +1,3 @@
-// import { ICredentialManager } from '../../../interfaces/credentialsManager'
-
 import {
   streamText as originalStreamText,
   generateText,
@@ -8,6 +6,12 @@ import {
   DeepPartial,
 } from 'ai'
 
+import {
+  ILLMService,
+  ExtensibleLanguageModelProvider,
+} from '../../interfaces/ILLMService'
+import { KeywordsService } from '@magickml/keywords-service'
+import { createOpenAI } from '@magickml/vercel-sdk-core'
 import {
   CoreTool,
   ExtensibleLanguageModel,
@@ -19,13 +23,7 @@ import {
   StreamObjectReturn,
   StreamObjectYield,
   StreamTextReturn,
-} from '../../../../../../shared/llm-service-types/src'
-import {
-  ILLMService,
-  ExtensibleLanguageModelProvider,
-} from '../../interfaces/ILLMService'
-import { KeywordsService } from '../../../../../../cloud/next/keywords/src'
-import { createOpenAI } from '../../../../../vercel/core/src/lib/magick-openai/src'
+} from '@magickml/llm-service-types'
 
 type KeywordsModel = {
   model_name: string
@@ -45,14 +43,11 @@ type KeywordsModel = {
 
 export class KeywordsLLMService implements ILLMService {
   private keywords: KeywordsService
-  // private credentialManager: ICredentialManager
   private providersCache?: ExtensibleLanguageModelProvider<{ apiKey: string }>[]
   private modelCache: Record<string, ExtensibleLanguageModel[]> = {}
-  private lastOutput: any
 
   constructor() {
     this.keywords = new KeywordsService()
-    // this.credentialManager = new CredentialManager()
   }
 
   async getProviders<T extends Record<string, unknown> = {}>(): Promise<
@@ -66,7 +61,7 @@ export class KeywordsLLMService implements ILLMService {
           name: providerData.providerName,
           apiKey: providerData.apiKey,
         })
-      )
+      ) as ExtensibleLanguageModelProvider<T & { apiKey: string }>[]
     }
     return this.providersCache as ExtensibleLanguageModelProvider<
       T & { apiKey: string }
@@ -108,10 +103,9 @@ export class KeywordsLLMService implements ILLMService {
     const apiKey = extraMetadata?.apiKey
     const customerIdentifier = extraMetadata?.customer_identifier
 
-    if (!provider || !apiKey || !customerIdentifier) {
+    if (!provider || !customerIdentifier) {
       throw new Error('Provider, apiKey, and customerIdentifier are required')
     }
-
     const openai = createOpenAI({
       baseURL: process.env['KEYWORDS_API_URL'],
       apiKey: process.env['KEYWORDS_API_KEY'],
@@ -133,17 +127,13 @@ export class KeywordsLLMService implements ILLMService {
 
     const data = await generateText(body)
 
-    console.log({
-      data,
-      body,
-    })
-
     if (!data) {
       throw new Error('No data returned')
     }
 
     return data.text.trim()
   }
+
   streamText<TOOLS extends Record<string, CoreTool>>(
     request: GenerateRequest & { tools?: TOOLS },
     extraMetadata?: Record<string, any>
@@ -152,7 +142,7 @@ export class KeywordsLLMService implements ILLMService {
     const apiKey = extraMetadata?.apiKey
     const customerIdentifier = extraMetadata?.customer_identifier
 
-    if (!provider || !apiKey || !customerIdentifier) {
+    if (!provider || !customerIdentifier) {
       throw new Error('Provider, apiKey, and customerIdentifier are required')
     }
 
@@ -234,6 +224,7 @@ export class KeywordsLLMService implements ILLMService {
 
     return data as GenerateObjectResult<T>
   }
+
   async streamObject<T>(
     request: StreamObjectRequest<T>,
     extraMetadata?: Record<string, unknown>
@@ -286,12 +277,4 @@ export class KeywordsLLMService implements ILLMService {
 
     return objectGenerator()
   }
-
-  // async generateUI(options: any) {
-  //   return
-  // }
-
-  // async streamUI(options: any) {
-  //   return
-  // }
 }
