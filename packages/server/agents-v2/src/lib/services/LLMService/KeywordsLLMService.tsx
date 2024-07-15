@@ -1,5 +1,3 @@
-// import { ICredentialManager } from '../../../interfaces/credentialsManager'
-
 import {
   streamText as originalStreamText,
   generateText,
@@ -45,14 +43,11 @@ type KeywordsModel = {
 
 export class KeywordsLLMService implements ILLMService {
   private keywords: KeywordsService
-  // private credentialManager: ICredentialManager
   private providersCache?: ExtensibleLanguageModelProvider<{ apiKey: string }>[]
   private modelCache: Record<string, ExtensibleLanguageModel[]> = {}
-  private lastOutput: any
 
   constructor() {
     this.keywords = new KeywordsService()
-    // this.credentialManager = new CredentialManager()
   }
 
   async getProviders<T extends Record<string, unknown> = {}>(): Promise<
@@ -66,7 +61,7 @@ export class KeywordsLLMService implements ILLMService {
           name: providerData.providerName,
           apiKey: providerData.apiKey,
         })
-      )
+      ) as ExtensibleLanguageModelProvider<T & { apiKey: string }>[]
     }
     return this.providersCache as ExtensibleLanguageModelProvider<
       T & { apiKey: string }
@@ -108,13 +103,13 @@ export class KeywordsLLMService implements ILLMService {
     const apiKey = extraMetadata?.apiKey
     const customerIdentifier = extraMetadata?.customer_identifier
 
-    if (!provider || !apiKey || !customerIdentifier) {
+    if (!provider || !customerIdentifier) {
       throw new Error('Provider, apiKey, and customerIdentifier are required')
     }
-
+    console.log('api key', process.env['KEYWORDS_API_KEY'])
     const openai = createOpenAI({
-      baseURL: process.env['KEYWORDS_API_URL'],
-      apiKey: process.env['KEYWORDS_API_KEY'],
+      baseURL: 'https://api.keywordsai.co',
+      apiKey: 'QnVif7uB.zeRJatZvTRWe9yABP8nx4ZCeuJuTsxQ3',
       extraMetaData: {
         customer_identifier: customerIdentifier,
         customer_credentials: {
@@ -133,17 +128,13 @@ export class KeywordsLLMService implements ILLMService {
 
     const data = await generateText(body)
 
-    console.log({
-      data,
-      body,
-    })
-
     if (!data) {
       throw new Error('No data returned')
     }
 
     return data.text.trim()
   }
+
   streamText<TOOLS extends Record<string, CoreTool>>(
     request: GenerateRequest & { tools?: TOOLS },
     extraMetadata?: Record<string, any>
@@ -152,13 +143,13 @@ export class KeywordsLLMService implements ILLMService {
     const apiKey = extraMetadata?.apiKey
     const customerIdentifier = extraMetadata?.customer_identifier
 
-    if (!provider || !apiKey || !customerIdentifier) {
+    if (!provider || !customerIdentifier) {
       throw new Error('Provider, apiKey, and customerIdentifier are required')
     }
 
     const openai = createOpenAI({
-      baseURL: process.env['KEYWORDS_API_URL'],
-      apiKey: process.env['KEYWORDS_API_KEY'],
+      baseURL: 'https://api.keywordsai.co',
+      apiKey: 'QnVif7uB.zeRJatZvTRWe9yABP8nx4ZCeuJuTsxQ3',
       extraMetaData: {
         customer_identifier: customerIdentifier,
         customer_credentials: {
@@ -234,6 +225,7 @@ export class KeywordsLLMService implements ILLMService {
 
     return data as GenerateObjectResult<T>
   }
+
   async streamObject<T>(
     request: StreamObjectRequest<T>,
     extraMetadata?: Record<string, unknown>
@@ -286,12 +278,4 @@ export class KeywordsLLMService implements ILLMService {
 
     return objectGenerator()
   }
-
-  // async generateUI(options: any) {
-  //   return
-  // }
-
-  // async streamUI(options: any) {
-  //   return
-  // }
 }
