@@ -1,17 +1,16 @@
-import { prismaCore } from '@magickml/server-db'
-import { decrypt, encrypt, PluginCredential } from '@magickml/credentials'
-import { CREDENTIALS_ENCRYPTION_KEY } from '@magickml/server-config'
-import { ICredentialManager } from '../../interfaces/ICredentialsManager'
+import { CREDENTIALS_ENCRYPTION_KEY } from '../../../../../config/src'
+import { decrypt, encrypt } from '../../../../../credentials/src'
+import { prismaCore } from '../../../../../db/src'
+import {
+  CredentialKeyValuePair,
+  ICredentialManager,
+  Credential,
+} from '../../interfaces/ICredentialsManager'
 
-export type CredentialsType<
-  T extends object = Record<string, string | undefined>
-> = T
-export class CredentialManager<T extends object = Record<string, unknown>>
-  implements ICredentialManager<T>
-{
+export class CredentialManager implements ICredentialManager {
   protected projectId: string
   protected agentId: string
-  protected currentCredentials: CredentialsType<T> | undefined
+  protected cachedCredentials: CredentialKeyValuePair[] = []
 
   constructor(agentId: string, projectId: string) {
     this.projectId = projectId
@@ -19,16 +18,27 @@ export class CredentialManager<T extends object = Record<string, unknown>>
   }
 
   async init(): Promise<void> {
-    await this.update()
+    await this.refreshCredentialsCache()
   }
 
-  async update(): Promise<void> {
+  async getCredentials(): Promise<CredentialKeyValuePair[]> {
+    if (this.cachedCredentials.length === 0) {
+      await this.refreshCredentialsCache()
+    }
+    const credentials = this.cachedCredentials.map(credential => ({
+      name: credential.name,
+      value: credential.value,
+      serviceType: 'core',
+    }))
+    return credentials
+  }
+
+  async refreshCredentialsCache(): Promise<void> {
     try {
       const creds = await prismaCore.agent_credentials.findMany({
         where: {
           agentId: this.agentId,
           credentials: {
-            serviceType: 'core',
             projectId: this.projectId,
           },
         },
@@ -42,29 +52,28 @@ export class CredentialManager<T extends object = Record<string, unknown>>
         },
       })
 
-      const credentials = creds.reduce((acc, credential) => {
-        // @ts-ignore
-        acc[credential.credentials.name] = decrypt(
+      const credentials = creds.map(credential => ({
+        name: credential.credentials.name,
+        value: decrypt(
           credential.credentials.value,
           CREDENTIALS_ENCRYPTION_KEY
-        )
-        return acc
-      }, {})
+        ),
+      })) as CredentialKeyValuePair[]
 
-      this.currentCredentials = credentials as CredentialsType<T>
+      this.cachedCredentials = credentials
     } catch (error) {
       throw new Error(
-        `Error updating plugin credentials in agent: ${this.agentId}: ${error}`
+        `Error fetching plugin credentials for agent: ${this.agentId}: ${error}`
       )
     }
   }
 
-  getCredentials(): CredentialsType<T> | undefined {
-    return this.currentCredentials
-  }
+  getCredential(name: string): string | undefined {
+    const credential = this.cachedCredentials.find(cred => cred.name === name)
 
-  getCredential(name: keyof T): T[keyof T] | undefined {
-    return this.currentCredentials ? this.currentCredentials[name] : undefined
+    return credential
+      ? decrypt(credential.value, CREDENTIALS_ENCRYPTION_KEY)
+      : undefined
   }
 
   async getCustomCredential(name: string): Promise<string | undefined> {
@@ -94,87 +103,99 @@ export class CredentialManager<T extends object = Record<string, unknown>>
     )
   }
 
-  async addCredential(
-    credential: Partial<T>,
-    pluginCredential: PluginCredential
-  ): Promise<void> {
-    for (const [name, value] of Object.entries(credential)) {
-      // First, try to find an existing credential
-      const existingCredential = await prismaCore.credentials.findFirst({
-        where: {
-          name: name,
-          serviceType: pluginCredential.serviceType,
-          projectId: this.projectId,
-        },
-      })
-
-      if (existingCredential) {
-        // Update the existing credential
-        await prismaCore.credentials.update({
-          where: { id: existingCredential.id },
-          data: {
-            value: encrypt(value as string, CREDENTIALS_ENCRYPTION_KEY),
-            credentialType: pluginCredential.credentialType,
-            description: pluginCredential.description,
-            pluginName: pluginCredential.pluginName,
-          },
-        })
-      } else {
-        // Create a new credential
-        const createdCredential = await prismaCore.credentials.create({
-          data: {
-            name: name,
-            value: encrypt(value as string, CREDENTIALS_ENCRYPTION_KEY),
-            serviceType: pluginCredential.serviceType,
-            projectId: this.projectId,
-            credentialType: pluginCredential.credentialType,
-            description: pluginCredential.description,
-            pluginName: pluginCredential.pluginName,
-          },
-        })
-
-        // Link the new credential to the agent
-        await prismaCore.agent_credentials.create({
-          data: {
-            agentId: this.agentId,
-            credentialId: createdCredential.id,
-          },
-        })
-      }
-    }
-    await this.update()
-  }
-
-  async deleteCredential(name: keyof T): Promise<void> {
-    // First, delete the agent_credentials link
-    await prismaCore.agent_credentials.deleteMany({
+  async addCredential(credential: Credential): Promise<{ id: string }> {
+    const existingCredential = await prismaCore.credentials.findFirst({
       where: {
-        agentId: this.agentId,
-        credentials: {
-          name: name as string,
-          projectId: this.projectId,
-        },
-      },
-    })
-
-    // Then, delete the credential itself
-    await prismaCore.credentials.deleteMany({
-      where: {
-        name: name as string,
+        name: credential.name,
+        serviceType: credential?.serviceType,
         projectId: this.projectId,
       },
     })
 
-    await this.update()
+    if (existingCredential) {
+      throw new Error(`Credential ${credential.name} already exists`)
+    }
+
+    const createdCredential = await prismaCore.credentials.create({
+      data: {
+        name: credential.name,
+        value: encrypt(credential.value, CREDENTIALS_ENCRYPTION_KEY),
+        serviceType: credential.serviceType,
+        projectId: this.projectId,
+        credentialType: credential.credentialType,
+        description: credential.description,
+      },
+    })
+
+    await prismaCore.agent_credentials.create({
+      data: {
+        agentId: this.agentId,
+        credentialId: createdCredential.id,
+      },
+    })
+
+    await this.refreshCredentialsCache()
+    return { id: createdCredential.id }
   }
 
-  async validateCredential(name: keyof T): Promise<boolean> {
+  async updateCredential(credential: Credential): Promise<boolean> {
+    const existingCredential = await prismaCore.credentials.findFirst({
+      where: {
+        name: credential.name,
+        serviceType: credential?.serviceType,
+        projectId: this.projectId,
+      },
+    })
+
+    if (!existingCredential) {
+      throw new Error(`Credential ${credential.name} not found`)
+    }
+
+    await prismaCore.credentials.update({
+      where: { id: existingCredential.id },
+      data: {
+        value: encrypt(credential.value, CREDENTIALS_ENCRYPTION_KEY),
+        credentialType: credential.credentialType,
+        description: credential.description,
+      },
+    })
+
+    await this.refreshCredentialsCache()
+    return true
+  }
+
+  async deleteCredential(name: string): Promise<boolean> {
+    try {
+      // First, delete the agent_credentials link
+      await prismaCore.agent_credentials.deleteMany({
+        where: {
+          agentId: this.agentId,
+          credentials: {
+            name: name as string,
+            projectId: this.projectId,
+          },
+        },
+      })
+
+      // Then, delete the credential itself
+      await prismaCore.credentials.deleteMany({
+        where: {
+          name: name as string,
+          projectId: this.projectId,
+        },
+      })
+
+      await this.refreshCredentialsCache()
+      return true
+    } catch (error) {
+      throw new Error(
+        `Error deleting credential ${name} for agent: ${this.agentId}: ${error}`
+      )
+    }
+  }
+
+  async validateCredential(name: string): Promise<boolean> {
     const credential = this.getCredential(name)
     return credential !== undefined && credential !== null
-  }
-
-  getRequiredCredentials(): (keyof T)[] {
-    // Implement your logic to return required credentials
-    return [] as (keyof T)[]
   }
 }
