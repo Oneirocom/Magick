@@ -2,6 +2,7 @@ import { EventStore } from '../dependencies/eventStore'
 import { RedisClientWrapper } from '../dependencies/redisService'
 import { KeyvStateService } from '../dependencies/keyvStateService'
 import { RedisPubSub } from '../dependencies/redisPubSub'
+import { KeywordsLLMService as LLMService } from '../services/LLMService/KeywordsLLMService'
 import { TypedEmitter } from 'tiny-typed-emitter'
 import { DefaultDependenciesType } from '../interfaces/IDependencies'
 
@@ -14,4 +15,5 @@ export const DEFAULT_DEPENDENCIES: DefaultDependenciesType = {
   eventEmitter: TypedEmitter,
   // database: DatabaseService,
   eventStore: EventStore,
+  LLMService: LLMService,
 }
