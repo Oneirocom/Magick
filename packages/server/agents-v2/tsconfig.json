@@ -2,9 +2,12 @@
   "extends": "../../../tsconfig.base.json",
   "compilerOptions": {
     "module": "commonjs",
+    "moduleResolution": "bundler",
     "downlevelIteration": true,
     "experimentalDecorators": true,
-    "allowImportingTsExtensions": true
+    "allowImportingTsExtensions": true,
+    "emitDeclarationOnly": true,
+    "target": "es2021"
   },
   "files": [],
   "include": [],
