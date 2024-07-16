@@ -491,7 +491,7 @@
     "@types/lodash": "4.14.195",
     "@types/md5": "^2.3.5",
     "@types/mocha": "10.0.1",
-    "@types/node": "18.19.33",
+    "@types/node": "^18.19.33",
     "@types/pg": "^8.11.6",
     "@types/react": "18.3.1",
     "@types/react-csv": "1.1.3",

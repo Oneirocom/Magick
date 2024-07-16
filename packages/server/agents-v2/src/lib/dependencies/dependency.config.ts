@@ -11,6 +11,7 @@ import { ISpellStorage } from '../interfaces/ISpellStorage'
 import { ICommandHub } from '../interfaces/ICommandHub'
 import { ServiceType } from '../interfaces/IDependencies'
 import { ILLMService } from '../interfaces/ILLMService'
+import { ICredentialManager } from '../interfaces/ICredentialsManager'
 
 /**
  * This is the central source of truth for all dependencies that are available.
@@ -29,7 +30,8 @@ export const DependencyInterfaces = {
   EventEmitter: {} as IEventEmitter,
   SpellStorage: {} as ISpellStorage,
   CommandHub: {} as ICommandHub,
-  LLMService: {} as ILLMService,
+  coreLLMService: {} as ILLMService,
+  CredentialManager: {} as ICredentialManager,
   // We can also just use this to add key:value types for later access
   ['Factory<EventStore>']: {} as unknown,
   // ... other services
@@ -47,7 +49,8 @@ export const CONFIG_TO_SERVICE_MAP = {
   // database: { useSingleton: true, service: 'Database' },
   eventStore: { useSingleton: false, service: 'EventStore' },
   eventEmitter: { useSingleton: true, service: 'EventEmitter' },
-  LLMService: { useSingleton: true, service: 'LLMService' },
+  coreLLMService: { useSingleton: true, service: 'LLMService' },
+  credentialManager: { useSingleton: true, service: 'CredentialManager' },
   // ... other mappings
 } as const
 
