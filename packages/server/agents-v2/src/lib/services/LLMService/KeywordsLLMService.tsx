@@ -7,6 +7,12 @@ import {
 } from 'ai'
 
 import {
+  ILLMService,
+  ExtensibleLanguageModelProvider,
+} from '../../interfaces/ILLMService'
+import { KeywordsService } from '@magickml/keywords-service'
+import { createOpenAI } from '@magickml/vercel-sdk-core'
+import {
   CoreTool,
   ExtensibleLanguageModel,
   GenerateObjectRequest,
@@ -17,13 +23,7 @@ import {
   StreamObjectReturn,
   StreamObjectYield,
   StreamTextReturn,
-} from '../../../../../../shared/llm-service-types/src'
-import {
-  ILLMService,
-  ExtensibleLanguageModelProvider,
-} from '../../interfaces/ILLMService'
-import { KeywordsService } from '../../../../../../cloud/next/keywords/src'
-import { createOpenAI } from '../../../../../vercel/core/src/lib/magick-openai/src'
+} from '@magickml/llm-service-types'
 
 type KeywordsModel = {
   model_name: string
@@ -106,7 +106,6 @@ export class KeywordsLLMService implements ILLMService {
     if (!provider || !customerIdentifier) {
       throw new Error('Provider, apiKey, and customerIdentifier are required')
     }
-    console.log('api key', process.env['KEYWORDS_API_KEY'])
     const openai = createOpenAI({
       baseURL: 'https://api.keywordsai.co',
       apiKey: 'QnVif7uB.zeRJatZvTRWe9yABP8nx4ZCeuJuTsxQ3',
