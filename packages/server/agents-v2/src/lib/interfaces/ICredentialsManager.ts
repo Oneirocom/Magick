@@ -1,4 +1,4 @@
-import { Prisma } from '../../../../db/src'
+import { Prisma } from '@magickml/server-db'
 
 export type Credential = Prisma.$credentialsPayload['scalars']
 

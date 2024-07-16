@@ -2,7 +2,6 @@
 import { config } from 'dotenv-flow'
 // import { importMetaEnv } from '../../../client/config/src/lib/import-meta-env'
 import { v4 } from 'uuid'
-import { importMetaEnv } from './import-meta-env'
 
 // Load environment variables
 config({
@@ -10,7 +9,7 @@ config({
 })
 
 // Check whether "process" is defined or not, and assign the appropriate environment object.
-const processEnv = typeof process === 'undefined' ? importMetaEnv : process.env
+const processEnv = process?.env
 
 /**
  * Get an environment variable value for the given key.

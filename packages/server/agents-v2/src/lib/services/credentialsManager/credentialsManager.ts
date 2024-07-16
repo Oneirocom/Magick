@@ -1,11 +1,11 @@
-import { CREDENTIALS_ENCRYPTION_KEY } from '../../../../../config/src'
-import { decrypt, encrypt } from '../../../../../credentials/src'
-import { prismaCore } from '../../../../../db/src'
+import { prismaCore } from '@magickml/server-db'
 import {
   CredentialKeyValuePair,
   ICredentialManager,
   Credential,
 } from '../../interfaces/ICredentialsManager'
+import { decrypt, encrypt } from '@magickml/credentials'
+import { CREDENTIALS_ENCRYPTION_KEY } from '@magickml/server-config'
 
 export class CredentialManager implements ICredentialManager {
   protected projectId: string

@@ -1,16 +1,18 @@
+import { createOpenAI } from '@magickml/vercel-sdk-core'
+
 import { KeywordsLLMService } from './KeywordsLLMService' // Adjust the import path as needed
-import { KeywordsService } from '../../../../../../cloud/next/keywords/src' // Adjust the import path as needed
-import { createOpenAI } from '../../../../../vercel/core/src/lib/magick-openai/src' // Adjust the import path as needed
-import {
-  GenerateObjectResult,
-  GenerateObjectRequest,
-} from '../../../../../../shared/llm-service-types/src' // Adjust the import path as needed
+
 import { z } from 'zod'
-import { StreamObjectRequest } from '../../../../../../shared/llm-service-types/src' // Adjust the import path as needed
+import {
+  GenerateObjectRequest,
+  GenerateObjectResult,
+  StreamObjectRequest,
+} from '@magickml/llm-service-types'
+import { KeywordsService } from '@magickml/keywords-service'
 
 // Mock the dependencies
-jest.mock('../../../../../../cloud/next/keywords/src')
-jest.mock('../../../../../vercel/core/src/lib/magick-openai/src')
+jest.mock('@magickml/keywords-service')
+jest.mock('@magickml/vercel-sdk-core')
 jest.mock('ai')
 
 describe('KeywordsLLMService', () => {
