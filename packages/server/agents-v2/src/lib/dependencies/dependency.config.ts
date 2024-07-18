@@ -30,7 +30,7 @@ export const DependencyInterfaces = {
   EventEmitter: {} as IEventEmitter,
   SpellStorage: {} as ISpellStorage,
   CommandHub: {} as ICommandHub,
-  coreLLMService: {} as ILLMService,
+  LLMService: {} as ILLMService,
   CredentialManager: {} as ICredentialManager,
   // We can also just use this to add key:value types for later access
   ['Factory<EventStore>']: {} as unknown,
@@ -49,7 +49,7 @@ export const CONFIG_TO_SERVICE_MAP = {
   // database: { useSingleton: true, service: 'Database' },
   eventStore: { useSingleton: false, service: 'EventStore' },
   eventEmitter: { useSingleton: true, service: 'EventEmitter' },
-  coreLLMService: { useSingleton: true, service: 'LLMService' },
+  LLMService: { useSingleton: true, service: 'LLMService' },
   credentialManager: { useSingleton: true, service: 'CredentialManager' },
   // ... other mappings
 } as const
