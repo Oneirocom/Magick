@@ -8,12 +8,12 @@ import { decrypt, encrypt } from '@magickml/credentials'
 import { CREDENTIALS_ENCRYPTION_KEY } from '@magickml/server-config'
 
 export class CredentialManager implements ICredentialManager {
-  protected projectId: string
+  protected worldId: string
   protected agentId: string
   protected cachedCredentials: CredentialKeyValuePair[] = []
 
-  constructor(agentId: string, projectId: string) {
-    this.projectId = projectId
+  constructor({ worldId, agentId }: { worldId: string; agentId: string }) {
+    this.worldId = worldId
     this.agentId = agentId
   }
 
@@ -39,7 +39,7 @@ export class CredentialManager implements ICredentialManager {
         where: {
           agentId: this.agentId,
           credentials: {
-            projectId: this.projectId,
+            worldId: this.worldId,
           },
         },
         include: {
@@ -82,7 +82,7 @@ export class CredentialManager implements ICredentialManager {
         agentId: this.agentId,
         credentials: {
           credentialType: 'custom',
-          projectId: this.projectId,
+          worldId: this.worldId,
           name,
         },
       },
@@ -108,7 +108,7 @@ export class CredentialManager implements ICredentialManager {
       where: {
         name: credential.name,
         serviceType: credential?.serviceType,
-        projectId: this.projectId,
+        worldId: this.worldId,
       },
     })
 
@@ -121,7 +121,8 @@ export class CredentialManager implements ICredentialManager {
         name: credential.name,
         value: encrypt(credential.value, CREDENTIALS_ENCRYPTION_KEY),
         serviceType: credential.serviceType,
-        projectId: this.projectId,
+        worldId: this.worldId,
+        projectId: '',
         credentialType: credential.credentialType,
         description: credential.description,
       },
@@ -143,7 +144,7 @@ export class CredentialManager implements ICredentialManager {
       where: {
         name: credential.name,
         serviceType: credential?.serviceType,
-        projectId: this.projectId,
+        worldId: this.worldId,
       },
     })
 
@@ -172,7 +173,7 @@ export class CredentialManager implements ICredentialManager {
           agentId: this.agentId,
           credentials: {
             name: name as string,
-            projectId: this.projectId,
+            worldId: this.worldId,
           },
         },
       })
@@ -181,7 +182,7 @@ export class CredentialManager implements ICredentialManager {
       await prismaCore.credentials.deleteMany({
         where: {
           name: name as string,
-          projectId: this.projectId,
+          worldId: this.worldId,
         },
       })
 
