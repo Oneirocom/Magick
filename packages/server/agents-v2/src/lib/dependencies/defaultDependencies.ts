@@ -16,6 +16,6 @@ export const DEFAULT_DEPENDENCIES: DefaultDependenciesType = {
   eventEmitter: TypedEmitter,
   // database: DatabaseService,
   eventStore: EventStore,
-  coreLLMService: LLMService,
+  LLMService: LLMService,
   credentialManager: CredentialManager,
 }
