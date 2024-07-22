@@ -53,7 +53,7 @@ export const corePluginCredentials = [
     pluginName: corePluginName,
   },
   {
-    name: 'PERPLEXITY_API_KEY',
+    name: 'PERPLEXITYAI_API_KEY',
     serviceType: 'perplexity',
     credentialType: 'plugin',
     clientName: 'Perplexity',
@@ -89,7 +89,7 @@ export const corePluginCredentials = [
     pluginName: corePluginName,
   },
   {
-    name: 'TOGETHERAI_API_KEY',
+    name: 'TOGETHER_API_KEY',
     serviceType: 'togetherai',
     credentialType: 'plugin',
     clientName: 'TogetherAI',
@@ -125,7 +125,7 @@ export const corePluginCredentials = [
     pluginName: corePluginName,
   },
   {
-    name: 'OPENROUTER_API_KEY',
+    name: 'OPEN_ROUTER_API_KEY',
     serviceType: 'openrouter',
     credentialType: 'plugin',
     clientName: 'OpenRouter',
@@ -293,7 +293,7 @@ export const corePluginCredentials = [
     pluginName: corePluginName,
   },
   {
-    name: 'VERTEXAI_API_KEY',
+    name: 'GOOGLE_VERTEX_AI_API_KEY',
     serviceType: 'vertexai',
     credentialType: 'plugin',
     clientName: 'VertexAI',
@@ -313,8 +313,3 @@ export type CorePluginCredentialNames = ExtractPluginCredentialNames<
 export type CorePluginCredentialsKeys = {
   [K in CorePluginCredentialNames]: string | undefined
 }
-
-// export type CorePluginCredentials = Record<
-//   CorePluginCredentialNames,
-//   string | undefined
-// >

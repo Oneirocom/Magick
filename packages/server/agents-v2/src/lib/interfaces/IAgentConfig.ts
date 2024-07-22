@@ -9,5 +9,7 @@ export type BaseConfig = {
 // Main configuration object for the agent
 export interface AgentConfig<T = AgentConfigOptions> {
   dependencies: BaseConfig
-  options: T
+  options: T & {
+    worldId: string
+  }
 }
