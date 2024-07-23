@@ -142,7 +142,7 @@ export class CredentialManager implements ICredentialManager {
     return { id: createdCredential.id }
   }
 
-  async updateCredential(credential: Credential): Promise<boolean> {
+  async updateCredential(credential: Partial<Credential>): Promise<boolean> {
     const existingCredential = await prismaCore.credentials.findFirst({
       where: {
         name: credential.name,
@@ -154,11 +154,16 @@ export class CredentialManager implements ICredentialManager {
     if (!existingCredential) {
       throw new Error(`Credential ${credential.name} not found`)
     }
+    const { value, id, credentialType } = credential
+
+    if (!value && !id && !credentialType) {
+      throw new Error('value, id and credentialType are required')
+    }
 
     await prismaCore.credentials.update({
       where: { id: existingCredential.id },
       data: {
-        value: encrypt(credential.value, CREDENTIALS_ENCRYPTION_KEY),
+        value: encrypt(credential.value || '', CREDENTIALS_ENCRYPTION_KEY),
         credentialType: credential.credentialType,
         description: credential.description,
       },
