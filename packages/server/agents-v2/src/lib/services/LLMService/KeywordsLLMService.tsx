@@ -244,35 +244,41 @@ export class KeywordsLLMService implements ILLMService {
       apiKey: process.env['KEYWORDS_API_KEY'],
       extraMetaData: {
         customer_identifier: customerIdentifier,
-        customer_credentials: {
-          [provider]: {
-            api_key: apiKey,
-          },
-        },
+        // customer_credentials: {
+        //   [provider]: {
+        //     api_key: apiKey,
+        //   },
+        // },
       },
     })
 
     const body = {
-      model: openai.chat(model),
+      model: openai(model),
       schema,
       prompt,
     }
+
+    const { partialObjectStream, object: finalObjectPromise } =
+      await originalStreamObject(body)
 
     async function* objectGenerator(): AsyncGenerator<
       StreamObjectYield<T>,
       StreamObjectResult<T>,
       unknown
     > {
-      const { partialObjectStream } = await originalStreamObject(body)
-
       for await (const partialObject of partialObjectStream) {
         yield {
           choices: [{ delta: { content: partialObject as DeepPartial<T> } }],
         }
       }
 
-      // Return the final result
-      return {} as StreamObjectResult<T> // You may want to return a more meaningful final result
+      // Await and return the final result
+      const finalObject = await finalObjectPromise
+      return {
+        object: finalObject,
+        finishReason: 'stop',
+        usage: { promptTokens: 0, completionTokens: 0, totalTokens: 0 },
+      } as StreamObjectResult<T>
     }
 
     return objectGenerator()
