@@ -11,5 +11,6 @@ export interface AgentConfig<T = AgentConfigOptions> {
   dependencies: BaseConfig
   options: T & {
     worldId: string
+    agentId: string
   }
 }

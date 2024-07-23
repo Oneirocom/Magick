@@ -11,7 +11,7 @@ export class AgentConfigBuilder<
   T extends Record<string, any> = AgentConfigOptions
 > {
   private config: AgentConfig<T> = {
-    options: {} as T & { worldId: string },
+    options: {} as T & { worldId: string; agentId: string },
     dependencies: {} as BaseConfig,
   }
 
@@ -38,7 +38,7 @@ export class AgentConfigBuilder<
   }
 
   withCredentialManagerService(
-    ServiceClass: new () => ServiceInterface<'CredentialManager'>
+    ServiceClass: new (args?: any) => ServiceInterface<'CredentialManager'>
   ): this {
     this.config.dependencies.credentialManager = ServiceClass
     this.requiredDependencies.delete('credentialManager')
@@ -69,7 +69,9 @@ export class AgentConfigBuilder<
     return this
   }
 
-  withOptions(options: T & { worldId: string } & Partial<BaseConfig>): this {
+  withOptions(
+    options: T & { worldId: string; agentId: string } & Partial<BaseConfig>
+  ): this {
     this.config.options = options
     return this
   }
