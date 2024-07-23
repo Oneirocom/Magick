@@ -3,7 +3,7 @@ import { z } from 'zod'
 import {
   GenerateObjectRequest,
   // GenerateObjectResult,
-  // StreamObjectRequest,
+  StreamObjectRequest,
 } from '@magickml/llm-service-types'
 
 describe('KeywordsLLMService', () => {
@@ -123,31 +123,64 @@ describe('KeywordsLLMService', () => {
     })
   })
 
-  // describe('streamObject', () => {
-  //   it('should stream object successfully', async () => {
-  //     const providers = await service.getProviders()
-  //     const providerId = providers[0].id
-  //     const models = await service.getModels(providerId)
+  describe('streamObject', () => {
+    let service: KeywordsLLMService
 
-  //     const schema = z.object({
-  //       partial: z.string(),
-  //     })
+    beforeAll(async () => {
+      // Initialize the service or any necessary setup
+      service = new KeywordsLLMService()
+    })
 
-  //     const request: StreamObjectRequest<z.infer<typeof schema>> = {
-  //       model: models[0].id,
-  //       schema: schema,
-  //       prompt: 'Stream an object',
-  //     }
-  //     const extraMetadata = {
-  //       provider: providerId,
-  //       apiKey: process.env['KEYWORDS_API_KEY'],
-  //       customer_identifier: 'MP_user_2dIC8xjSe2zMhpXvqlQEo4fYRIO',
-  //     }
+    it('should stream object successfully', async () => {
+      const providers = await service.getProviders()
+      const providerId = providers[0].id
+      const models = await service.getModels(providerId)
 
-  //     const generator = await service.streamObject(request, extraMetadata)
-  //     console.log(generator)
+      const schema = z.object({
+        magicSpells: z.string(),
+      })
 
-  //     // Ensure the return type matches StreamObjectReturn<T>
-  //   })
-  // })
+      const request: StreamObjectRequest<z.infer<typeof schema>> = {
+        model: models[0].id,
+        schema: schema,
+        prompt: 'Generate a magic spell name',
+      }
+      const extraMetadata = {
+        provider: providerId,
+        apiKey: process.env['KEYWORDS_API_KEY'],
+        customer_identifier: 'MP_user_2dIC8xjSe2zMhpXvqlQEo4fYRIO',
+      }
+
+      const generator = await service.streamObject(request, extraMetadata)
+      console.log(generator)
+
+      // Ensure the return type matches StreamObjectReturn<T>
+      expect(generator).toHaveProperty('next')
+      expect(generator).toHaveProperty('throw')
+      expect(generator).toHaveProperty('return')
+      expect(generator[Symbol.asyncIterator]).toBeDefined()
+
+      const result: Array<any> = []
+
+      for await (const chunk of generator) {
+        console.log('Streamed chunk:', chunk)
+        if (
+          chunk.choices &&
+          chunk.choices[0].delta &&
+          chunk.choices[0].delta.content
+        ) {
+          result.push(chunk.choices[0].delta.content)
+        }
+      }
+
+      console.log('Final streamed object:', result)
+      expect(Array.isArray(result)).toBe(true)
+      expect(result.length).toBeGreaterThan(0)
+
+      // Validate the final combined object
+      const finalObject = result[result.length - 1]
+      expect(finalObject).toHaveProperty('magicSpells')
+      expect(finalObject.magicSpells).toBeDefined()
+    })
+  })
 })
