@@ -100,22 +100,22 @@ export class KeywordsLLMService implements ILLMService {
     extraMetadata?: Record<string, any>
   ): Promise<string> {
     const provider = extraMetadata?.provider
-    const apiKey = extraMetadata?.apiKey
+    // const apiKey = extraMetadata?.apiKey
     const customerIdentifier = extraMetadata?.customer_identifier
 
     if (!provider || !customerIdentifier) {
       throw new Error('Provider, apiKey, and customerIdentifier are required')
     }
     const openai = createOpenAI({
-      baseURL: 'https://api.keywordsai.co',
-      apiKey: 'QnVif7uB.zeRJatZvTRWe9yABP8nx4ZCeuJuTsxQ3',
+      baseURL: process.env['KEYWORDS_API_URL'],
+      apiKey: process.env['KEYWORDS_API_KEY'],
       extraMetaData: {
         customer_identifier: customerIdentifier,
-        customer_credentials: {
-          [provider]: {
-            api_key: apiKey,
-          },
-        },
+        // customer_credentials: {
+        //   [provider]: {
+        //     api_key: apiKey,
+        //   },
+        // },
       },
     })
 
@@ -139,7 +139,7 @@ export class KeywordsLLMService implements ILLMService {
     extraMetadata?: Record<string, any>
   ): StreamTextReturn {
     const provider = extraMetadata?.provider
-    const apiKey = extraMetadata?.apiKey
+    // const apiKey = extraMetadata?.apiKey
     const customerIdentifier = extraMetadata?.customer_identifier
 
     if (!provider || !customerIdentifier) {
@@ -151,11 +151,11 @@ export class KeywordsLLMService implements ILLMService {
       apiKey: 'QnVif7uB.zeRJatZvTRWe9yABP8nx4ZCeuJuTsxQ3',
       extraMetaData: {
         customer_identifier: customerIdentifier,
-        customer_credentials: {
-          [provider]: {
-            api_key: apiKey,
-          },
-        },
+        // customer_credentials: {
+        //   [provider]: {
+        //     api_key: apiKey,
+        //   },
+        // },
       },
     })
 
@@ -201,11 +201,11 @@ export class KeywordsLLMService implements ILLMService {
       apiKey: process.env['KEYWORDS_API_KEY'],
       extraMetaData: {
         customer_identifier: customerIdentifier,
-        customer_credentials: {
-          [provider]: {
-            api_key: apiKey,
-          },
-        },
+        // customer_credentials: {
+        //   [provider]: {
+        //     api_key: apiKey,
+        //   },
+        // },
       },
     })
 
