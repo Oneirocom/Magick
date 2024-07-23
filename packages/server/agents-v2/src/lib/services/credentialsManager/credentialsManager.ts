@@ -6,15 +6,18 @@ import {
 } from '../../interfaces/ICredentialsManager'
 import { decrypt, encrypt } from '@magickml/credentials'
 import { CREDENTIALS_ENCRYPTION_KEY } from '@magickml/server-config'
+import { Agent } from '../../Agent'
+import { inject } from 'inversify'
+import { TYPES } from '../../dependencies/dependency.config'
 
 export class CredentialManager implements ICredentialManager {
   protected worldId: string
   protected agentId: string
   protected cachedCredentials: CredentialKeyValuePair[] = []
 
-  constructor({ worldId, agentId }: { worldId: string; agentId: string }) {
-    this.worldId = worldId
-    this.agentId = agentId
+  constructor(@inject(TYPES.Agent) private agent: Agent) {
+    this.worldId = agent.config.options.worldId
+    this.agentId = agent.config.options.agentId
   }
 
   async init(): Promise<void> {
