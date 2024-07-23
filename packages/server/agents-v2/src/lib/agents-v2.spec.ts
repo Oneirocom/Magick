@@ -10,6 +10,7 @@ describe('Agent Integration', () => {
     const config = new AgentConfigBuilder()
       .withOptions({
         redisUrl: 'redis://localhost:6379',
+        worldId: 'test-world',
       })
       .build()
 
