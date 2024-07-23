@@ -35,7 +35,7 @@ export class Agent extends EventEmitterWrapper<AgentEvents> {
     // Here we create a new event emitter from a passed in config dependency.
     // We extended from the EventEmitterWrapper class to enable custom event emitters we extend from.
 
-    console.log('EVENT EMITTER', config)
+    // console.log('EVENT EMITTER', config)
     const eventEmitter =
       new config.dependencies.eventEmitter() as TypedEmitter<AgentEvents>
     super(eventEmitter)
