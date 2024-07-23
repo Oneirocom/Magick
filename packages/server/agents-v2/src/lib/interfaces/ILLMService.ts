@@ -9,8 +9,8 @@ import {
   CoreTool,
   StreamTextReturn,
   GenerateObjectRequest,
-  StreamObjectRequest,
-  StreamObjectReturn,
+  // StreamObjectRequest,
+  // StreamObjectReturn,
 } from '@magickml/llm-service-types'
 
 export interface ILLMService {
@@ -32,10 +32,10 @@ export interface ILLMService {
     request: GenerateObjectRequest<T>,
     extraMetadata: Record<string, unknown>
   ): Promise<GenerateObjectResult<T>>
-  streamObject<T>(
-    request: StreamObjectRequest<T>,
-    extraMetadata?: Record<string, unknown>
-  ): Promise<StreamObjectReturn<T>>
+  // streamObject<T>(
+  //   request: StreamObjectRequest<T>,
+  //   extraMetadata?: Record<string, unknown>
+  // ): Promise<StreamObjectReturn<T>>
   // generateUI(options: GenerateUIOptions): Promise<GenerateUIResult>
   // streamUI(options: StreamUIOptions): Promise<StreamUIResult>
 }
