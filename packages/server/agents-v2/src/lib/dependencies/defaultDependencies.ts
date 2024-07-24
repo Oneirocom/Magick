@@ -6,6 +6,11 @@ import { KeywordsLLMService as LLMService } from '../services/LLMService/Keyword
 import { TypedEmitter } from 'tiny-typed-emitter'
 import { DefaultDependenciesType } from '../interfaces/IDependencies'
 import { CredentialManager } from '../services/credentialsManager/credentialsManager'
+import { SpellManager } from './spellManager'
+import { EventRouter } from './eventRouter'
+import { SpellbookLibrary } from './spellbookLibrary'
+import { ChannelManager } from './channelManager'
+import { MockChannelService } from '../mocks/ChannelService'
 
 // Default implementations for the services
 export const DEFAULT_DEPENDENCIES: DefaultDependenciesType = {
@@ -14,8 +19,14 @@ export const DEFAULT_DEPENDENCIES: DefaultDependenciesType = {
   stateService: KeyvStateService,
   pubSub: RedisPubSub,
   eventEmitter: TypedEmitter,
+  eventRouter: EventRouter,
+  spellManager: SpellManager,
+  spellbookLibrary: SpellbookLibrary,
+  channelManager: ChannelManager,
+  // TODO Replace this mock with the real service
+  channelService: MockChannelService,
   // database: DatabaseService,
   eventStore: EventStore,
-  coreLLMService: LLMService,
+  LLMService: LLMService,
   credentialManager: CredentialManager,
 }

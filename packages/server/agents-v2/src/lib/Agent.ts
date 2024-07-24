@@ -13,6 +13,12 @@ import {
   DependencyInterfaces,
   TYPES,
 } from './dependencies/dependency.config'
+import { ISpellbook } from './interfaces/ISpellbook'
+import { ChannelInterface } from './interfaces/IChannelManager'
+import { Spellbook } from './dependencies/spellbook'
+import { ISpellCaster } from './interfaces/ISpellcaster'
+import { ISpell } from './interfaces/spell'
+import { SpellCaster } from './dependencies/spellcaster'
 
 // Define the base event types for the Agent
 export interface BaseAgentEvents {
@@ -34,8 +40,6 @@ export class Agent extends EventEmitterWrapper<AgentEvents> {
   constructor(public readonly id: string, config: AgentConfig) {
     // Here we create a new event emitter from a passed in config dependency.
     // We extended from the EventEmitterWrapper class to enable custom event emitters we extend from.
-
-    console.log('EVENT EMITTER', config)
     const eventEmitter =
       new config.dependencies.eventEmitter() as TypedEmitter<AgentEvents>
     super(eventEmitter)
@@ -89,6 +93,43 @@ export class Agent extends EventEmitterWrapper<AgentEvents> {
           return context.container.get<IEventStore>(TYPES.EventStore)
         }
       })
+
+    // spellbook factory
+    this.container
+      .bind<interfaces.Factory<ISpellbook>>(TYPES['Factory<Spellbook>'])
+      .toFactory<ISpellbook, [ChannelInterface]>(
+        (context: interfaces.Context) => {
+          return (channel: ChannelInterface) => {
+            const spellbook = context.container.get<ISpellbook>(TYPES.Spellbook)
+            ;(spellbook as ISpellbook).setChannel(channel)
+            return spellbook
+          }
+        }
+      )
+
+    this.container
+      .bind<ISpellbook>(TYPES.Spellbook)
+      .to(Spellbook)
+      .inTransientScope()
+
+    // spellcaster factory
+    this.container
+      .bind<interfaces.Factory<ISpellCaster>>(TYPES['Factory<SpellCaster>'])
+      .toFactory<ISpellCaster, [ISpell]>((context: interfaces.Context) => {
+        return (spell: ISpell) => {
+          const spellCaster = context.container.get<ISpellCaster>(
+            TYPES.SpellCaster
+          )
+          ;(spellCaster as ISpellCaster).initialize()
+          // we will handle initializing in a bit
+          return spellCaster
+        }
+      })
+
+    this.container
+      .bind<ISpellCaster>(TYPES.SpellCaster)
+      .to(SpellCaster)
+      .inTransientScope()
   }
 
   async initialize(): Promise<void> {

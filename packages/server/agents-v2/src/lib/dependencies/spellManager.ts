@@ -25,19 +25,16 @@ export class SpellManager implements SpellManager {
     this.agent.on('spell:deleted', this.handleSpellDeleted.bind(this))
   }
 
-  private handleSpellCreated(spell: ISpell): ISpell {
+  private handleSpellCreated(spell: ISpell): void {
     this.spells.set(spell.id, spell)
-    return spell
   }
 
-  private handleSpellUpdated(spell: ISpell): ISpell {
+  private handleSpellUpdated(spell: ISpell): void {
     this.spells.set(spell.id, spell)
-    return spell
   }
 
-  private handleSpellDeleted(id: string): string {
+  private handleSpellDeleted(id: string): void {
     this.spells.delete(id)
-    return id
   }
 
   private handleSpellsLoaded(spells: ISpell[]): void {

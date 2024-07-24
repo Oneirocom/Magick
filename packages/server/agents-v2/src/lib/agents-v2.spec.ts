@@ -1,5 +1,6 @@
 import { Agent } from './Agent'
 import { AgentConfigBuilder } from './core/AgentConfigBuilder'
+import { KeyvStateService } from './dependencies/keyvStateService'
 
 jest.setTimeout(10000) // Increase timeout for initialization
 
@@ -11,6 +12,7 @@ describe('Agent Integration', () => {
       .withOptions({
         redisUrl: 'redis://localhost:6379',
       })
+      .withStateService(KeyvStateService)
       .build()
 
     agent = new Agent('test-agent', config)

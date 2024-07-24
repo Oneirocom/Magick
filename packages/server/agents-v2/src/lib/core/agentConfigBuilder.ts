@@ -19,13 +19,15 @@ export class AgentConfigBuilder<
     Object.keys(DEFAULT_DEPENDENCIES) as ConfigServiceType[]
   )
 
-  withStateService(ServiceClass: new () => IStateService): this {
+  withStateService(ServiceClass: new (args?: any) => IStateService): this {
     this.config.dependencies.stateService = ServiceClass
     this.requiredDependencies.delete('stateService')
     return this
   }
 
-  withRedisService(ServiceClass: new () => ServiceInterface<'Redis'>): this {
+  withRedisService(
+    ServiceClass: new (args?: any) => ServiceInterface<'Redis'>
+  ): this {
     this.config.dependencies.redis = ServiceClass
     this.requiredDependencies.delete('redis')
     return this
