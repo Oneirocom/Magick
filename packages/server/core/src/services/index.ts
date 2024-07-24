@@ -15,6 +15,7 @@ import { pluginState } from './state/plugin-state-service'
 import { pluginCommand } from './commands/plugin-command-service'
 import { presigner } from './presigner/presigner-service'
 import { agentChannel } from './agentChannels/agentChannels'
+import { healthz } from './healthz/healthz.class'
 
 // For more information about this file see https://dove.feathersjs.com/guides/cli/application.html#configure-functions
 import type { Application } from '../declarations'
@@ -43,6 +44,7 @@ export const services = async (app: Application): Promise<void> => {
   app.configure(pluginCommand)
   app.configure(presigner)
   app.configure(agentChannel)
+  app.configure(healthz)
 
   // Wait for a tick to handle race condition
   // TODO: handle this race condition better

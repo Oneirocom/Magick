@@ -136,6 +136,7 @@ exports.Prisma.AgentsScalarFieldEnum = {
   updatedAt: 'updatedAt',
   pingedAt: 'pingedAt',
   projectId: 'projectId',
+  worldId: 'worldId',
   data: 'data',
   runState: 'runState',
   image: 'image',
@@ -166,6 +167,7 @@ exports.Prisma.ChatMessagesScalarFieldEnum = {
 exports.Prisma.CredentialsScalarFieldEnum = {
   id: 'id',
   projectId: 'projectId',
+  worldId: 'worldId',
   name: 'name',
   serviceType: 'serviceType',
   credentialType: 'credentialType',
@@ -201,6 +203,7 @@ exports.Prisma.Public_eventsScalarFieldEnum = {
   channel: 'channel',
   channelType: 'channelType',
   projectId: 'projectId',
+  worldId: 'worldId',
   content: 'content',
   agentId: 'agentId',
   entities: 'entities',
@@ -243,6 +246,7 @@ exports.Prisma.KnowledgeScalarFieldEnum = {
   dataType: 'dataType',
   data: 'data',
   projectId: 'projectId',
+  worldId: 'worldId',
   metadata: 'metadata',
   memoryId: 'memoryId',
   createdAt: 'createdAt',
@@ -261,6 +265,7 @@ exports.Prisma.PluginStateScalarFieldEnum = {
 exports.Prisma.RequestScalarFieldEnum = {
   id: 'id',
   projectId: 'projectId',
+  worldId: 'worldId',
   requestData: 'requestData',
   responseData: 'responseData',
   duration: 'duration',
@@ -285,6 +290,7 @@ exports.Prisma.SpellReleasesScalarFieldEnum = {
   agentId: 'agentId',
   spellId: 'spellId',
   projectId: 'projectId',
+  worldId: 'worldId',
   createdAt: 'createdAt'
 };
 
@@ -292,6 +298,7 @@ exports.Prisma.SpellsScalarFieldEnum = {
   id: 'id',
   name: 'name',
   projectId: 'projectId',
+  worldId: 'worldId',
   graph: 'graph',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
@@ -306,6 +313,7 @@ exports.Prisma.TasksScalarFieldEnum = {
   objective: 'objective',
   eventData: 'eventData',
   projectId: 'projectId',
+  worldId: 'worldId',
   date: 'date',
   steps: 'steps',
   agentId: 'agentId'
@@ -328,6 +336,7 @@ exports.Prisma.SeraphEventsScalarFieldEnum = {
   id: 'id',
   agentId: 'agentId',
   projectId: 'projectId',
+  worldId: 'worldId',
   spellId: 'spellId',
   type: 'type',
   data: 'data',
@@ -398,6 +407,7 @@ exports.Prisma.agentsOrderByRelevanceFieldEnum = {
   updatedAt: 'updatedAt',
   pingedAt: 'pingedAt',
   projectId: 'projectId',
+  worldId: 'worldId',
   runState: 'runState',
   image: 'image',
   rootSpellId: 'rootSpellId',
@@ -422,6 +432,7 @@ exports.Prisma.chatMessagesOrderByRelevanceFieldEnum = {
 exports.Prisma.credentialsOrderByRelevanceFieldEnum = {
   id: 'id',
   projectId: 'projectId',
+  worldId: 'worldId',
   name: 'name',
   serviceType: 'serviceType',
   credentialType: 'credentialType',
@@ -451,6 +462,7 @@ exports.Prisma.public_eventsOrderByRelevanceFieldEnum = {
   channel: 'channel',
   channelType: 'channelType',
   projectId: 'projectId',
+  worldId: 'worldId',
   content: 'content',
   agentId: 'agentId',
   entities: 'entities',
@@ -481,6 +493,7 @@ exports.Prisma.knowledgeOrderByRelevanceFieldEnum = {
   dataType: 'dataType',
   data: 'data',
   projectId: 'projectId',
+  worldId: 'worldId',
   memoryId: 'memoryId'
 };
 
@@ -493,6 +506,7 @@ exports.Prisma.pluginStateOrderByRelevanceFieldEnum = {
 exports.Prisma.requestOrderByRelevanceFieldEnum = {
   id: 'id',
   projectId: 'projectId',
+  worldId: 'worldId',
   requestData: 'requestData',
   responseData: 'responseData',
   status: 'status',
@@ -510,13 +524,15 @@ exports.Prisma.spellReleasesOrderByRelevanceFieldEnum = {
   description: 'description',
   agentId: 'agentId',
   spellId: 'spellId',
-  projectId: 'projectId'
+  projectId: 'projectId',
+  worldId: 'worldId'
 };
 
 exports.Prisma.spellsOrderByRelevanceFieldEnum = {
   id: 'id',
   name: 'name',
   projectId: 'projectId',
+  worldId: 'worldId',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   type: 'type',
@@ -528,6 +544,7 @@ exports.Prisma.tasksOrderByRelevanceFieldEnum = {
   type: 'type',
   objective: 'objective',
   projectId: 'projectId',
+  worldId: 'worldId',
   date: 'date',
   steps: 'steps',
   agentId: 'agentId'
@@ -543,6 +560,7 @@ exports.Prisma.seraphEventsOrderByRelevanceFieldEnum = {
   id: 'id',
   agentId: 'agentId',
   projectId: 'projectId',
+  worldId: 'worldId',
   spellId: 'spellId',
   type: 'type'
 };

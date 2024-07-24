@@ -6,15 +6,18 @@ import {
 } from '../../interfaces/ICredentialsManager'
 import { decrypt, encrypt } from '@magickml/credentials'
 import { CREDENTIALS_ENCRYPTION_KEY } from '@magickml/server-config'
+import { Agent } from '../../Agent'
+import { inject } from 'inversify'
+import { TYPES } from '../../dependencies/dependency.config'
 
 export class CredentialManager implements ICredentialManager {
-  protected projectId: string
+  protected worldId: string
   protected agentId: string
   protected cachedCredentials: CredentialKeyValuePair[] = []
 
-  constructor(agentId: string, projectId: string) {
-    this.projectId = projectId
-    this.agentId = agentId
+  constructor(@inject(TYPES.Agent) private agent: Agent) {
+    this.worldId = agent.config.options.worldId
+    this.agentId = agent.config.options.agentId
   }
 
   async init(): Promise<void> {
@@ -39,7 +42,7 @@ export class CredentialManager implements ICredentialManager {
         where: {
           agentId: this.agentId,
           credentials: {
-            projectId: this.projectId,
+            worldId: this.worldId,
           },
         },
         include: {
@@ -82,7 +85,7 @@ export class CredentialManager implements ICredentialManager {
         agentId: this.agentId,
         credentials: {
           credentialType: 'custom',
-          projectId: this.projectId,
+          worldId: this.worldId,
           name,
         },
       },
@@ -108,7 +111,7 @@ export class CredentialManager implements ICredentialManager {
       where: {
         name: credential.name,
         serviceType: credential?.serviceType,
-        projectId: this.projectId,
+        worldId: this.worldId,
       },
     })
 
@@ -121,7 +124,8 @@ export class CredentialManager implements ICredentialManager {
         name: credential.name,
         value: encrypt(credential.value, CREDENTIALS_ENCRYPTION_KEY),
         serviceType: credential.serviceType,
-        projectId: this.projectId,
+        worldId: this.worldId,
+        projectId: '',
         credentialType: credential.credentialType,
         description: credential.description,
       },
@@ -138,23 +142,28 @@ export class CredentialManager implements ICredentialManager {
     return { id: createdCredential.id }
   }
 
-  async updateCredential(credential: Credential): Promise<boolean> {
+  async updateCredential(credential: Partial<Credential>): Promise<boolean> {
     const existingCredential = await prismaCore.credentials.findFirst({
       where: {
         name: credential.name,
         serviceType: credential?.serviceType,
-        projectId: this.projectId,
+        worldId: this.worldId,
       },
     })
 
     if (!existingCredential) {
       throw new Error(`Credential ${credential.name} not found`)
     }
+    const { value, id, credentialType } = credential
+
+    if (!value && !id && !credentialType) {
+      throw new Error('value, id and credentialType are required')
+    }
 
     await prismaCore.credentials.update({
       where: { id: existingCredential.id },
       data: {
-        value: encrypt(credential.value, CREDENTIALS_ENCRYPTION_KEY),
+        value: encrypt(credential.value || '', CREDENTIALS_ENCRYPTION_KEY),
         credentialType: credential.credentialType,
         description: credential.description,
       },
@@ -172,7 +181,7 @@ export class CredentialManager implements ICredentialManager {
           agentId: this.agentId,
           credentials: {
             name: name as string,
-            projectId: this.projectId,
+            worldId: this.worldId,
           },
         },
       })
@@ -181,7 +190,7 @@ export class CredentialManager implements ICredentialManager {
       await prismaCore.credentials.deleteMany({
         where: {
           name: name as string,
-          projectId: this.projectId,
+          worldId: this.worldId,
         },
       })
 

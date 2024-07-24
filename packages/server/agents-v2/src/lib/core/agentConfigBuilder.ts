@@ -3,6 +3,7 @@ import { AgentConfigOptions } from '../Agent'
 import { AgentConfig, BaseConfig } from '../interfaces/IAgentConfig'
 import {
   ConfigServiceType,
+  Constructor,
   ServiceInterface,
 } from '../interfaces/IDependencies'
 import { DEFAULT_DEPENDENCIES } from '../dependencies/defaultDependencies'
@@ -11,7 +12,7 @@ export class AgentConfigBuilder<
   T extends Record<string, any> = AgentConfigOptions
 > {
   private config: AgentConfig<T> = {
-    options: {} as T,
+    options: {} as T & { worldId: string; agentId: string },
     dependencies: {} as BaseConfig,
   }
 
@@ -30,6 +31,20 @@ export class AgentConfigBuilder<
   ): this {
     this.config.dependencies.redis = ServiceClass
     this.requiredDependencies.delete('redis')
+    return this
+  }
+
+  withLLMService(ServiceClass: new () => ServiceInterface<'LLMService'>): this {
+    this.config.dependencies.LLMService = ServiceClass
+    this.requiredDependencies.delete('LLMService')
+    return this
+  }
+
+  withCredentialManagerService(
+    ServiceClass: Constructor<ServiceInterface<'CredentialManager'>>
+  ): this {
+    this.config.dependencies.credentialManager = ServiceClass
+    this.requiredDependencies.delete('credentialManager')
     return this
   }
 
@@ -57,7 +72,9 @@ export class AgentConfigBuilder<
     return this
   }
 
-  withOptions(options: T & Partial<BaseConfig>): this {
+  withOptions(
+    options: T & { worldId: string; agentId: string } & Partial<BaseConfig>
+  ): this {
     this.config.options = options
     return this
   }

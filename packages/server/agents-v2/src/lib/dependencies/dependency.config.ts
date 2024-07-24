@@ -36,7 +36,7 @@ export const DependencyInterfaces = {
   EventEmitter: {} as IEventEmitter,
   SpellStorage: {} as ISpellStorage,
   CommandHub: {} as ICommandHub,
-  CoreLLMService: {} as ILLMService,
+  LLMService: {} as ILLMService,
   CredentialManager: {} as ICredentialManager,
   SpellManager: {} as ISpellManager,
   SpellCaster: {} as ISpellCaster,
@@ -68,7 +68,7 @@ export const CONFIG_TO_SERVICE_MAP = {
   spellManager: { useSingleton: true, service: 'SpellManager' },
   eventStore: { useSingleton: false, service: 'EventStore' },
   eventEmitter: { useSingleton: true, service: 'EventEmitter' },
-  LLMService: { useSingleton: true, service: 'CoreLLMService' },
+  LLMService: { useSingleton: true, service: 'LLMService' },
   credentialManager: { useSingleton: true, service: 'CredentialManager' },
   // ... other mappings
 } as const

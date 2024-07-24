@@ -21,11 +21,7 @@ const config: Config = {
   },
   testPathIgnorePatterns: ['/node_modules/', '/__tests__/unit/'],
   extensionsToTreatAsEsm: ['.ts'],
-  globals: {
-    'ts-jest': {
-      useESM: true,
-    },
-  },
+  globals: {},
 }
 
 export default config

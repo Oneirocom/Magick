@@ -3669,6 +3669,7 @@ export namespace Prisma {
     updatedAt: string | null
     pingedAt: string | null
     projectId: string | null
+    worldId: string | null
     runState: string | null
     image: string | null
     rootSpellId: string | null
@@ -3693,6 +3694,7 @@ export namespace Prisma {
     updatedAt: string | null
     pingedAt: string | null
     projectId: string | null
+    worldId: string | null
     runState: string | null
     image: string | null
     rootSpellId: string | null
@@ -3718,6 +3720,7 @@ export namespace Prisma {
     updatedAt: number
     pingedAt: number
     projectId: number
+    worldId: number
     data: number
     runState: number
     image: number
@@ -3745,6 +3748,7 @@ export namespace Prisma {
     updatedAt?: true
     pingedAt?: true
     projectId?: true
+    worldId?: true
     runState?: true
     image?: true
     rootSpellId?: true
@@ -3769,6 +3773,7 @@ export namespace Prisma {
     updatedAt?: true
     pingedAt?: true
     projectId?: true
+    worldId?: true
     runState?: true
     image?: true
     rootSpellId?: true
@@ -3794,6 +3799,7 @@ export namespace Prisma {
     updatedAt?: true
     pingedAt?: true
     projectId?: true
+    worldId?: true
     data?: true
     runState?: true
     image?: true
@@ -3893,6 +3899,7 @@ export namespace Prisma {
     updatedAt: string | null
     pingedAt: string | null
     projectId: string | null
+    worldId: string | null
     data: JsonValue | null
     runState: string
     image: string | null
@@ -3936,6 +3943,7 @@ export namespace Prisma {
     updatedAt?: boolean
     pingedAt?: boolean
     projectId?: boolean
+    worldId?: boolean
     data?: boolean
     runState?: boolean
     image?: boolean
@@ -3970,6 +3978,7 @@ export namespace Prisma {
     updatedAt?: boolean
     pingedAt?: boolean
     projectId?: boolean
+    worldId?: boolean
     data?: boolean
     runState?: boolean
     image?: boolean
@@ -3997,6 +4006,7 @@ export namespace Prisma {
     updatedAt?: boolean
     pingedAt?: boolean
     projectId?: boolean
+    worldId?: boolean
     data?: boolean
     runState?: boolean
     image?: boolean
@@ -4048,6 +4058,7 @@ export namespace Prisma {
       updatedAt: string | null
       pingedAt: string | null
       projectId: string | null
+      worldId: string | null
       data: Prisma.JsonValue | null
       runState: string
       image: string | null
@@ -4503,6 +4514,7 @@ export namespace Prisma {
     readonly updatedAt: FieldRef<"agents", 'String'>
     readonly pingedAt: FieldRef<"agents", 'String'>
     readonly projectId: FieldRef<"agents", 'String'>
+    readonly worldId: FieldRef<"agents", 'String'>
     readonly data: FieldRef<"agents", 'Json'>
     readonly runState: FieldRef<"agents", 'String'>
     readonly image: FieldRef<"agents", 'String'>
@@ -5992,6 +6004,7 @@ export namespace Prisma {
   export type CredentialsMinAggregateOutputType = {
     id: string | null
     projectId: string | null
+    worldId: string | null
     name: string | null
     serviceType: string | null
     credentialType: string | null
@@ -6005,6 +6018,7 @@ export namespace Prisma {
   export type CredentialsMaxAggregateOutputType = {
     id: string | null
     projectId: string | null
+    worldId: string | null
     name: string | null
     serviceType: string | null
     credentialType: string | null
@@ -6018,6 +6032,7 @@ export namespace Prisma {
   export type CredentialsCountAggregateOutputType = {
     id: number
     projectId: number
+    worldId: number
     name: number
     serviceType: number
     credentialType: number
@@ -6034,6 +6049,7 @@ export namespace Prisma {
   export type CredentialsMinAggregateInputType = {
     id?: true
     projectId?: true
+    worldId?: true
     name?: true
     serviceType?: true
     credentialType?: true
@@ -6047,6 +6063,7 @@ export namespace Prisma {
   export type CredentialsMaxAggregateInputType = {
     id?: true
     projectId?: true
+    worldId?: true
     name?: true
     serviceType?: true
     credentialType?: true
@@ -6060,6 +6077,7 @@ export namespace Prisma {
   export type CredentialsCountAggregateInputType = {
     id?: true
     projectId?: true
+    worldId?: true
     name?: true
     serviceType?: true
     credentialType?: true
@@ -6147,6 +6165,7 @@ export namespace Prisma {
   export type CredentialsGroupByOutputType = {
     id: string
     projectId: string
+    worldId: string | null
     name: string
     serviceType: string
     credentialType: string
@@ -6178,6 +6197,7 @@ export namespace Prisma {
   export type credentialsSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     projectId?: boolean
+    worldId?: boolean
     name?: boolean
     serviceType?: boolean
     credentialType?: boolean
@@ -6194,6 +6214,7 @@ export namespace Prisma {
   export type credentialsSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     projectId?: boolean
+    worldId?: boolean
     name?: boolean
     serviceType?: boolean
     credentialType?: boolean
@@ -6208,6 +6229,7 @@ export namespace Prisma {
   export type credentialsSelectScalar = {
     id?: boolean
     projectId?: boolean
+    worldId?: boolean
     name?: boolean
     serviceType?: boolean
     credentialType?: boolean
@@ -6233,6 +6255,7 @@ export namespace Prisma {
     scalars: $Extensions.GetPayloadResult<{
       id: string
       projectId: string
+      worldId: string | null
       name: string
       serviceType: string
       credentialType: string
@@ -6664,6 +6687,7 @@ export namespace Prisma {
   interface credentialsFieldRefs {
     readonly id: FieldRef<"credentials", 'String'>
     readonly projectId: FieldRef<"credentials", 'String'>
+    readonly worldId: FieldRef<"credentials", 'String'>
     readonly name: FieldRef<"credentials", 'String'>
     readonly serviceType: FieldRef<"credentials", 'String'>
     readonly credentialType: FieldRef<"credentials", 'String'>
@@ -8870,6 +8894,7 @@ export namespace Prisma {
     channel: string | null
     channelType: string | null
     projectId: string | null
+    worldId: string | null
     content: string | null
     agentId: string | null
     date: string | null
@@ -8886,6 +8911,7 @@ export namespace Prisma {
     channel: string | null
     channelType: string | null
     projectId: string | null
+    worldId: string | null
     content: string | null
     agentId: string | null
     date: string | null
@@ -8902,6 +8928,7 @@ export namespace Prisma {
     channel: number
     channelType: number
     projectId: number
+    worldId: number
     content: number
     agentId: number
     entities: number
@@ -8921,6 +8948,7 @@ export namespace Prisma {
     channel?: true
     channelType?: true
     projectId?: true
+    worldId?: true
     content?: true
     agentId?: true
     date?: true
@@ -8937,6 +8965,7 @@ export namespace Prisma {
     channel?: true
     channelType?: true
     projectId?: true
+    worldId?: true
     content?: true
     agentId?: true
     date?: true
@@ -8953,6 +8982,7 @@ export namespace Prisma {
     channel?: true
     channelType?: true
     projectId?: true
+    worldId?: true
     content?: true
     agentId?: true
     entities?: true
@@ -9043,6 +9073,7 @@ export namespace Prisma {
     channel: string | null
     channelType: string | null
     projectId: string | null
+    worldId: string | null
     content: string | null
     agentId: string | null
     entities: string[]
@@ -9077,6 +9108,7 @@ export namespace Prisma {
     channel?: boolean
     channelType?: boolean
     projectId?: boolean
+    worldId?: boolean
     content?: boolean
     agentId?: boolean
     entities?: boolean
@@ -9094,6 +9126,7 @@ export namespace Prisma {
     channel?: boolean
     channelType?: boolean
     projectId?: boolean
+    worldId?: boolean
     content?: boolean
     agentId?: boolean
     entities?: boolean
@@ -9111,6 +9144,7 @@ export namespace Prisma {
     channel?: boolean
     channelType?: boolean
     projectId?: boolean
+    worldId?: boolean
     content?: boolean
     agentId?: boolean
     entities?: boolean
@@ -9132,6 +9166,7 @@ export namespace Prisma {
       channel: string | null
       channelType: string | null
       projectId: string | null
+      worldId: string | null
       content: string | null
       agentId: string | null
       entities: string[]
@@ -9565,6 +9600,7 @@ export namespace Prisma {
     readonly channel: FieldRef<"public_events", 'String'>
     readonly channelType: FieldRef<"public_events", 'String'>
     readonly projectId: FieldRef<"public_events", 'String'>
+    readonly worldId: FieldRef<"public_events", 'String'>
     readonly content: FieldRef<"public_events", 'String'>
     readonly agentId: FieldRef<"public_events", 'String'>
     readonly entities: FieldRef<"public_events", 'String[]'>
@@ -12747,6 +12783,7 @@ export namespace Prisma {
     dataType: string | null
     data: string | null
     projectId: string | null
+    worldId: string | null
     memoryId: string | null
     createdAt: Date | null
     updatedAt: Date | null
@@ -12759,6 +12796,7 @@ export namespace Prisma {
     dataType: string | null
     data: string | null
     projectId: string | null
+    worldId: string | null
     memoryId: string | null
     createdAt: Date | null
     updatedAt: Date | null
@@ -12771,6 +12809,7 @@ export namespace Prisma {
     dataType: number
     data: number
     projectId: number
+    worldId: number
     metadata: number
     memoryId: number
     createdAt: number
@@ -12786,6 +12825,7 @@ export namespace Prisma {
     dataType?: true
     data?: true
     projectId?: true
+    worldId?: true
     memoryId?: true
     createdAt?: true
     updatedAt?: true
@@ -12798,6 +12838,7 @@ export namespace Prisma {
     dataType?: true
     data?: true
     projectId?: true
+    worldId?: true
     memoryId?: true
     createdAt?: true
     updatedAt?: true
@@ -12810,6 +12851,7 @@ export namespace Prisma {
     dataType?: true
     data?: true
     projectId?: true
+    worldId?: true
     metadata?: true
     memoryId?: true
     createdAt?: true
@@ -12896,6 +12938,7 @@ export namespace Prisma {
     dataType: string | null
     data: string | null
     projectId: string
+    worldId: string | null
     metadata: JsonValue | null
     memoryId: string | null
     createdAt: Date | null
@@ -12926,6 +12969,7 @@ export namespace Prisma {
     dataType?: boolean
     data?: boolean
     projectId?: boolean
+    worldId?: boolean
     metadata?: boolean
     memoryId?: boolean
     createdAt?: boolean
@@ -12939,6 +12983,7 @@ export namespace Prisma {
     dataType?: boolean
     data?: boolean
     projectId?: boolean
+    worldId?: boolean
     metadata?: boolean
     memoryId?: boolean
     createdAt?: boolean
@@ -12952,6 +12997,7 @@ export namespace Prisma {
     dataType?: boolean
     data?: boolean
     projectId?: boolean
+    worldId?: boolean
     metadata?: boolean
     memoryId?: boolean
     createdAt?: boolean
@@ -12969,6 +13015,7 @@ export namespace Prisma {
       dataType: string | null
       data: string | null
       projectId: string
+      worldId: string | null
       metadata: Prisma.JsonValue | null
       memoryId: string | null
       createdAt: Date | null
@@ -13398,6 +13445,7 @@ export namespace Prisma {
     readonly dataType: FieldRef<"knowledge", 'String'>
     readonly data: FieldRef<"knowledge", 'String'>
     readonly projectId: FieldRef<"knowledge", 'String'>
+    readonly worldId: FieldRef<"knowledge", 'String'>
     readonly metadata: FieldRef<"knowledge", 'Json'>
     readonly memoryId: FieldRef<"knowledge", 'String'>
     readonly createdAt: FieldRef<"knowledge", 'DateTime'>
@@ -14699,6 +14747,7 @@ export namespace Prisma {
   export type RequestMinAggregateOutputType = {
     id: string | null
     projectId: string | null
+    worldId: string | null
     requestData: string | null
     responseData: string | null
     duration: number | null
@@ -14720,6 +14769,7 @@ export namespace Prisma {
   export type RequestMaxAggregateOutputType = {
     id: string | null
     projectId: string | null
+    worldId: string | null
     requestData: string | null
     responseData: string | null
     duration: number | null
@@ -14741,6 +14791,7 @@ export namespace Prisma {
   export type RequestCountAggregateOutputType = {
     id: number
     projectId: number
+    worldId: number
     requestData: number
     responseData: number
     duration: number
@@ -14776,6 +14827,7 @@ export namespace Prisma {
   export type RequestMinAggregateInputType = {
     id?: true
     projectId?: true
+    worldId?: true
     requestData?: true
     responseData?: true
     duration?: true
@@ -14797,6 +14849,7 @@ export namespace Prisma {
   export type RequestMaxAggregateInputType = {
     id?: true
     projectId?: true
+    worldId?: true
     requestData?: true
     responseData?: true
     duration?: true
@@ -14818,6 +14871,7 @@ export namespace Prisma {
   export type RequestCountAggregateInputType = {
     id?: true
     projectId?: true
+    worldId?: true
     requestData?: true
     responseData?: true
     duration?: true
@@ -14926,6 +14980,7 @@ export namespace Prisma {
   export type RequestGroupByOutputType = {
     id: string
     projectId: string
+    worldId: string | null
     requestData: string | null
     responseData: string | null
     duration: number
@@ -14966,6 +15021,7 @@ export namespace Prisma {
   export type requestSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     projectId?: boolean
+    worldId?: boolean
     requestData?: boolean
     responseData?: boolean
     duration?: boolean
@@ -14987,6 +15043,7 @@ export namespace Prisma {
   export type requestSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     projectId?: boolean
+    worldId?: boolean
     requestData?: boolean
     responseData?: boolean
     duration?: boolean
@@ -15008,6 +15065,7 @@ export namespace Prisma {
   export type requestSelectScalar = {
     id?: boolean
     projectId?: boolean
+    worldId?: boolean
     requestData?: boolean
     responseData?: boolean
     duration?: boolean
@@ -15033,6 +15091,7 @@ export namespace Prisma {
     scalars: $Extensions.GetPayloadResult<{
       id: string
       projectId: string
+      worldId: string | null
       requestData: string | null
       responseData: string | null
       duration: number
@@ -15470,6 +15529,7 @@ export namespace Prisma {
   interface requestFieldRefs {
     readonly id: FieldRef<"request", 'String'>
     readonly projectId: FieldRef<"request", 'String'>
+    readonly worldId: FieldRef<"request", 'String'>
     readonly requestData: FieldRef<"request", 'String'>
     readonly responseData: FieldRef<"request", 'String'>
     readonly duration: FieldRef<"request", 'Int'>
@@ -15790,6 +15850,7 @@ export namespace Prisma {
     agentId: string | null
     spellId: string | null
     projectId: string | null
+    worldId: string | null
     createdAt: Date | null
   }
 
@@ -15799,6 +15860,7 @@ export namespace Prisma {
     agentId: string | null
     spellId: string | null
     projectId: string | null
+    worldId: string | null
     createdAt: Date | null
   }
 
@@ -15808,6 +15870,7 @@ export namespace Prisma {
     agentId: number
     spellId: number
     projectId: number
+    worldId: number
     createdAt: number
     _all: number
   }
@@ -15819,6 +15882,7 @@ export namespace Prisma {
     agentId?: true
     spellId?: true
     projectId?: true
+    worldId?: true
     createdAt?: true
   }
 
@@ -15828,6 +15892,7 @@ export namespace Prisma {
     agentId?: true
     spellId?: true
     projectId?: true
+    worldId?: true
     createdAt?: true
   }
 
@@ -15837,6 +15902,7 @@ export namespace Prisma {
     agentId?: true
     spellId?: true
     projectId?: true
+    worldId?: true
     createdAt?: true
     _all?: true
   }
@@ -15919,6 +15985,7 @@ export namespace Prisma {
     agentId: string
     spellId: string | null
     projectId: string | null
+    worldId: string | null
     createdAt: Date | null
     _count: SpellReleasesCountAggregateOutputType | null
     _min: SpellReleasesMinAggregateOutputType | null
@@ -15945,6 +16012,7 @@ export namespace Prisma {
     agentId?: boolean
     spellId?: boolean
     projectId?: boolean
+    worldId?: boolean
     createdAt?: boolean
     agents_agents_currentSpellReleaseIdTospellReleases?: boolean | spellReleases$agents_agents_currentSpellReleaseIdTospellReleasesArgs<ExtArgs>
     agents_spellReleases_agentIdToagents?: boolean | agentsDefaultArgs<ExtArgs>
@@ -15958,6 +16026,7 @@ export namespace Prisma {
     agentId?: boolean
     spellId?: boolean
     projectId?: boolean
+    worldId?: boolean
     createdAt?: boolean
     agents_spellReleases_agentIdToagents?: boolean | agentsDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["spellReleases"]>
@@ -15968,6 +16037,7 @@ export namespace Prisma {
     agentId?: boolean
     spellId?: boolean
     projectId?: boolean
+    worldId?: boolean
     createdAt?: boolean
   }
 
@@ -15994,6 +16064,7 @@ export namespace Prisma {
       agentId: string
       spellId: string | null
       projectId: string | null
+      worldId: string | null
       createdAt: Date | null
     }, ExtArgs["result"]["spellReleases"]>
     composites: {}
@@ -16424,6 +16495,7 @@ export namespace Prisma {
     readonly agentId: FieldRef<"spellReleases", 'String'>
     readonly spellId: FieldRef<"spellReleases", 'String'>
     readonly projectId: FieldRef<"spellReleases", 'String'>
+    readonly worldId: FieldRef<"spellReleases", 'String'>
     readonly createdAt: FieldRef<"spellReleases", 'DateTime'>
   }
     
@@ -16811,6 +16883,7 @@ export namespace Prisma {
     id: string | null
     name: string | null
     projectId: string | null
+    worldId: string | null
     createdAt: string | null
     updatedAt: string | null
     type: string | null
@@ -16821,6 +16894,7 @@ export namespace Prisma {
     id: string | null
     name: string | null
     projectId: string | null
+    worldId: string | null
     createdAt: string | null
     updatedAt: string | null
     type: string | null
@@ -16831,6 +16905,7 @@ export namespace Prisma {
     id: number
     name: number
     projectId: number
+    worldId: number
     graph: number
     createdAt: number
     updatedAt: number
@@ -16844,6 +16919,7 @@ export namespace Prisma {
     id?: true
     name?: true
     projectId?: true
+    worldId?: true
     createdAt?: true
     updatedAt?: true
     type?: true
@@ -16854,6 +16930,7 @@ export namespace Prisma {
     id?: true
     name?: true
     projectId?: true
+    worldId?: true
     createdAt?: true
     updatedAt?: true
     type?: true
@@ -16864,6 +16941,7 @@ export namespace Prisma {
     id?: true
     name?: true
     projectId?: true
+    worldId?: true
     graph?: true
     createdAt?: true
     updatedAt?: true
@@ -16948,6 +17026,7 @@ export namespace Prisma {
     id: string
     name: string | null
     projectId: string | null
+    worldId: string | null
     graph: JsonValue | null
     createdAt: string | null
     updatedAt: string | null
@@ -16976,6 +17055,7 @@ export namespace Prisma {
     id?: boolean
     name?: boolean
     projectId?: boolean
+    worldId?: boolean
     graph?: boolean
     createdAt?: boolean
     updatedAt?: boolean
@@ -16988,6 +17068,7 @@ export namespace Prisma {
     id?: boolean
     name?: boolean
     projectId?: boolean
+    worldId?: boolean
     graph?: boolean
     createdAt?: boolean
     updatedAt?: boolean
@@ -17000,6 +17081,7 @@ export namespace Prisma {
     id?: boolean
     name?: boolean
     projectId?: boolean
+    worldId?: boolean
     graph?: boolean
     createdAt?: boolean
     updatedAt?: boolean
@@ -17023,6 +17105,7 @@ export namespace Prisma {
       id: string
       name: string | null
       projectId: string | null
+      worldId: string | null
       graph: Prisma.JsonValue | null
       createdAt: string | null
       updatedAt: string | null
@@ -17451,6 +17534,7 @@ export namespace Prisma {
     readonly id: FieldRef<"spells", 'String'>
     readonly name: FieldRef<"spells", 'String'>
     readonly projectId: FieldRef<"spells", 'String'>
+    readonly worldId: FieldRef<"spells", 'String'>
     readonly graph: FieldRef<"spells", 'Json'>
     readonly createdAt: FieldRef<"spells", 'String'>
     readonly updatedAt: FieldRef<"spells", 'String'>
@@ -17829,6 +17913,7 @@ export namespace Prisma {
     type: string | null
     objective: string | null
     projectId: string | null
+    worldId: string | null
     date: string | null
     steps: string | null
     agentId: string | null
@@ -17840,6 +17925,7 @@ export namespace Prisma {
     type: string | null
     objective: string | null
     projectId: string | null
+    worldId: string | null
     date: string | null
     steps: string | null
     agentId: string | null
@@ -17852,6 +17938,7 @@ export namespace Prisma {
     objective: number
     eventData: number
     projectId: number
+    worldId: number
     date: number
     steps: number
     agentId: number
@@ -17873,6 +17960,7 @@ export namespace Prisma {
     type?: true
     objective?: true
     projectId?: true
+    worldId?: true
     date?: true
     steps?: true
     agentId?: true
@@ -17884,6 +17972,7 @@ export namespace Prisma {
     type?: true
     objective?: true
     projectId?: true
+    worldId?: true
     date?: true
     steps?: true
     agentId?: true
@@ -17896,6 +17985,7 @@ export namespace Prisma {
     objective?: true
     eventData?: true
     projectId?: true
+    worldId?: true
     date?: true
     steps?: true
     agentId?: true
@@ -17995,6 +18085,7 @@ export namespace Prisma {
     objective: string
     eventData: JsonValue
     projectId: string
+    worldId: string | null
     date: string | null
     steps: string
     agentId: string | null
@@ -18026,6 +18117,7 @@ export namespace Prisma {
     objective?: boolean
     eventData?: boolean
     projectId?: boolean
+    worldId?: boolean
     date?: boolean
     steps?: boolean
     agentId?: boolean
@@ -18038,6 +18130,7 @@ export namespace Prisma {
     objective?: boolean
     eventData?: boolean
     projectId?: boolean
+    worldId?: boolean
     date?: boolean
     steps?: boolean
     agentId?: boolean
@@ -18050,6 +18143,7 @@ export namespace Prisma {
     objective?: boolean
     eventData?: boolean
     projectId?: boolean
+    worldId?: boolean
     date?: boolean
     steps?: boolean
     agentId?: boolean
@@ -18066,6 +18160,7 @@ export namespace Prisma {
       objective: string
       eventData: Prisma.JsonValue
       projectId: string
+      worldId: string | null
       date: string | null
       steps: string
       agentId: string | null
@@ -18494,6 +18589,7 @@ export namespace Prisma {
     readonly objective: FieldRef<"tasks", 'String'>
     readonly eventData: FieldRef<"tasks", 'Json'>
     readonly projectId: FieldRef<"tasks", 'String'>
+    readonly worldId: FieldRef<"tasks", 'String'>
     readonly date: FieldRef<"tasks", 'String'>
     readonly steps: FieldRef<"tasks", 'String'>
     readonly agentId: FieldRef<"tasks", 'String'>
@@ -19806,6 +19902,7 @@ export namespace Prisma {
     id: string | null
     agentId: string | null
     projectId: string | null
+    worldId: string | null
     spellId: string | null
     type: string | null
     createdAt: Date | null
@@ -19815,6 +19912,7 @@ export namespace Prisma {
     id: string | null
     agentId: string | null
     projectId: string | null
+    worldId: string | null
     spellId: string | null
     type: string | null
     createdAt: Date | null
@@ -19824,6 +19922,7 @@ export namespace Prisma {
     id: number
     agentId: number
     projectId: number
+    worldId: number
     spellId: number
     type: number
     data: number
@@ -19836,6 +19935,7 @@ export namespace Prisma {
     id?: true
     agentId?: true
     projectId?: true
+    worldId?: true
     spellId?: true
     type?: true
     createdAt?: true
@@ -19845,6 +19945,7 @@ export namespace Prisma {
     id?: true
     agentId?: true
     projectId?: true
+    worldId?: true
     spellId?: true
     type?: true
     createdAt?: true
@@ -19854,6 +19955,7 @@ export namespace Prisma {
     id?: true
     agentId?: true
     projectId?: true
+    worldId?: true
     spellId?: true
     type?: true
     data?: true
@@ -19937,6 +20039,7 @@ export namespace Prisma {
     id: string
     agentId: string
     projectId: string
+    worldId: string | null
     spellId: string | null
     type: string
     data: JsonValue
@@ -19964,6 +20067,7 @@ export namespace Prisma {
     id?: boolean
     agentId?: boolean
     projectId?: boolean
+    worldId?: boolean
     spellId?: boolean
     type?: boolean
     data?: boolean
@@ -19974,6 +20078,7 @@ export namespace Prisma {
     id?: boolean
     agentId?: boolean
     projectId?: boolean
+    worldId?: boolean
     spellId?: boolean
     type?: boolean
     data?: boolean
@@ -19984,6 +20089,7 @@ export namespace Prisma {
     id?: boolean
     agentId?: boolean
     projectId?: boolean
+    worldId?: boolean
     spellId?: boolean
     type?: boolean
     data?: boolean
@@ -19998,6 +20104,7 @@ export namespace Prisma {
       id: string
       agentId: string
       projectId: string
+      worldId: string | null
       spellId: string | null
       type: string
       data: Prisma.JsonValue
@@ -20424,6 +20531,7 @@ export namespace Prisma {
     readonly id: FieldRef<"seraphEvents", 'String'>
     readonly agentId: FieldRef<"seraphEvents", 'String'>
     readonly projectId: FieldRef<"seraphEvents", 'String'>
+    readonly worldId: FieldRef<"seraphEvents", 'String'>
     readonly spellId: FieldRef<"seraphEvents", 'String'>
     readonly type: FieldRef<"seraphEvents", 'String'>
     readonly data: FieldRef<"seraphEvents", 'Json'>
@@ -22610,6 +22718,7 @@ export namespace Prisma {
     updatedAt: 'updatedAt',
     pingedAt: 'pingedAt',
     projectId: 'projectId',
+    worldId: 'worldId',
     data: 'data',
     runState: 'runState',
     image: 'image',
@@ -22646,6 +22755,7 @@ export namespace Prisma {
   export const CredentialsScalarFieldEnum: {
     id: 'id',
     projectId: 'projectId',
+    worldId: 'worldId',
     name: 'name',
     serviceType: 'serviceType',
     credentialType: 'credentialType',
@@ -22690,6 +22800,7 @@ export namespace Prisma {
     channel: 'channel',
     channelType: 'channelType',
     projectId: 'projectId',
+    worldId: 'worldId',
     content: 'content',
     agentId: 'agentId',
     entities: 'entities',
@@ -22744,6 +22855,7 @@ export namespace Prisma {
     dataType: 'dataType',
     data: 'data',
     projectId: 'projectId',
+    worldId: 'worldId',
     metadata: 'metadata',
     memoryId: 'memoryId',
     createdAt: 'createdAt',
@@ -22768,6 +22880,7 @@ export namespace Prisma {
   export const RequestScalarFieldEnum: {
     id: 'id',
     projectId: 'projectId',
+    worldId: 'worldId',
     requestData: 'requestData',
     responseData: 'responseData',
     duration: 'duration',
@@ -22795,6 +22908,7 @@ export namespace Prisma {
     agentId: 'agentId',
     spellId: 'spellId',
     projectId: 'projectId',
+    worldId: 'worldId',
     createdAt: 'createdAt'
   };
 
@@ -22805,6 +22919,7 @@ export namespace Prisma {
     id: 'id',
     name: 'name',
     projectId: 'projectId',
+    worldId: 'worldId',
     graph: 'graph',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt',
@@ -22822,6 +22937,7 @@ export namespace Prisma {
     objective: 'objective',
     eventData: 'eventData',
     projectId: 'projectId',
+    worldId: 'worldId',
     date: 'date',
     steps: 'steps',
     agentId: 'agentId'
@@ -22850,6 +22966,7 @@ export namespace Prisma {
     id: 'id',
     agentId: 'agentId',
     projectId: 'projectId',
+    worldId: 'worldId',
     spellId: 'spellId',
     type: 'type',
     data: 'data',
@@ -22950,6 +23067,7 @@ export namespace Prisma {
     updatedAt: 'updatedAt',
     pingedAt: 'pingedAt',
     projectId: 'projectId',
+    worldId: 'worldId',
     runState: 'runState',
     image: 'image',
     rootSpellId: 'rootSpellId',
@@ -22980,6 +23098,7 @@ export namespace Prisma {
   export const credentialsOrderByRelevanceFieldEnum: {
     id: 'id',
     projectId: 'projectId',
+    worldId: 'worldId',
     name: 'name',
     serviceType: 'serviceType',
     credentialType: 'credentialType',
@@ -23018,6 +23137,7 @@ export namespace Prisma {
     channel: 'channel',
     channelType: 'channelType',
     projectId: 'projectId',
+    worldId: 'worldId',
     content: 'content',
     agentId: 'agentId',
     entities: 'entities',
@@ -23057,6 +23177,7 @@ export namespace Prisma {
     dataType: 'dataType',
     data: 'data',
     projectId: 'projectId',
+    worldId: 'worldId',
     memoryId: 'memoryId'
   };
 
@@ -23075,6 +23196,7 @@ export namespace Prisma {
   export const requestOrderByRelevanceFieldEnum: {
     id: 'id',
     projectId: 'projectId',
+    worldId: 'worldId',
     requestData: 'requestData',
     responseData: 'responseData',
     status: 'status',
@@ -23095,7 +23217,8 @@ export namespace Prisma {
     description: 'description',
     agentId: 'agentId',
     spellId: 'spellId',
-    projectId: 'projectId'
+    projectId: 'projectId',
+    worldId: 'worldId'
   };
 
   export type spellReleasesOrderByRelevanceFieldEnum = (typeof spellReleasesOrderByRelevanceFieldEnum)[keyof typeof spellReleasesOrderByRelevanceFieldEnum]
@@ -23105,6 +23228,7 @@ export namespace Prisma {
     id: 'id',
     name: 'name',
     projectId: 'projectId',
+    worldId: 'worldId',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt',
     type: 'type',
@@ -23119,6 +23243,7 @@ export namespace Prisma {
     type: 'type',
     objective: 'objective',
     projectId: 'projectId',
+    worldId: 'worldId',
     date: 'date',
     steps: 'steps',
     agentId: 'agentId'
@@ -23140,6 +23265,7 @@ export namespace Prisma {
     id: 'id',
     agentId: 'agentId',
     projectId: 'projectId',
+    worldId: 'worldId',
     spellId: 'spellId',
     type: 'type'
   };
@@ -23343,6 +23469,7 @@ export namespace Prisma {
     updatedAt?: StringNullableFilter<"agents"> | string | null
     pingedAt?: StringNullableFilter<"agents"> | string | null
     projectId?: StringNullableFilter<"agents"> | string | null
+    worldId?: StringNullableFilter<"agents"> | string | null
     data?: JsonNullableFilter<"agents">
     runState?: StringFilter<"agents"> | string
     image?: StringNullableFilter<"agents"> | string | null
@@ -23376,6 +23503,7 @@ export namespace Prisma {
     updatedAt?: SortOrderInput | SortOrder
     pingedAt?: SortOrderInput | SortOrder
     projectId?: SortOrderInput | SortOrder
+    worldId?: SortOrderInput | SortOrder
     data?: SortOrderInput | SortOrder
     runState?: SortOrder
     image?: SortOrderInput | SortOrder
@@ -23413,6 +23541,7 @@ export namespace Prisma {
     updatedAt?: StringNullableFilter<"agents"> | string | null
     pingedAt?: StringNullableFilter<"agents"> | string | null
     projectId?: StringNullableFilter<"agents"> | string | null
+    worldId?: StringNullableFilter<"agents"> | string | null
     data?: JsonNullableFilter<"agents">
     runState?: StringFilter<"agents"> | string
     image?: StringNullableFilter<"agents"> | string | null
@@ -23446,6 +23575,7 @@ export namespace Prisma {
     updatedAt?: SortOrderInput | SortOrder
     pingedAt?: SortOrderInput | SortOrder
     projectId?: SortOrderInput | SortOrder
+    worldId?: SortOrderInput | SortOrder
     data?: SortOrderInput | SortOrder
     runState?: SortOrder
     image?: SortOrderInput | SortOrder
@@ -23478,6 +23608,7 @@ export namespace Prisma {
     updatedAt?: StringNullableWithAggregatesFilter<"agents"> | string | null
     pingedAt?: StringNullableWithAggregatesFilter<"agents"> | string | null
     projectId?: StringNullableWithAggregatesFilter<"agents"> | string | null
+    worldId?: StringNullableWithAggregatesFilter<"agents"> | string | null
     data?: JsonNullableWithAggregatesFilter<"agents">
     runState?: StringWithAggregatesFilter<"agents"> | string
     image?: StringNullableWithAggregatesFilter<"agents"> | string | null
@@ -23571,6 +23702,7 @@ export namespace Prisma {
     NOT?: credentialsWhereInput | credentialsWhereInput[]
     id?: UuidFilter<"credentials"> | string
     projectId?: StringFilter<"credentials"> | string
+    worldId?: StringNullableFilter<"credentials"> | string | null
     name?: StringFilter<"credentials"> | string
     serviceType?: StringFilter<"credentials"> | string
     credentialType?: StringFilter<"credentials"> | string
@@ -23586,6 +23718,7 @@ export namespace Prisma {
   export type credentialsOrderByWithRelationAndSearchRelevanceInput = {
     id?: SortOrder
     projectId?: SortOrder
+    worldId?: SortOrderInput | SortOrder
     name?: SortOrder
     serviceType?: SortOrder
     credentialType?: SortOrder
@@ -23605,6 +23738,7 @@ export namespace Prisma {
     OR?: credentialsWhereInput[]
     NOT?: credentialsWhereInput | credentialsWhereInput[]
     projectId?: StringFilter<"credentials"> | string
+    worldId?: StringNullableFilter<"credentials"> | string | null
     name?: StringFilter<"credentials"> | string
     serviceType?: StringFilter<"credentials"> | string
     credentialType?: StringFilter<"credentials"> | string
@@ -23620,6 +23754,7 @@ export namespace Prisma {
   export type credentialsOrderByWithAggregationInput = {
     id?: SortOrder
     projectId?: SortOrder
+    worldId?: SortOrderInput | SortOrder
     name?: SortOrder
     serviceType?: SortOrder
     credentialType?: SortOrder
@@ -23640,6 +23775,7 @@ export namespace Prisma {
     NOT?: credentialsScalarWhereWithAggregatesInput | credentialsScalarWhereWithAggregatesInput[]
     id?: UuidWithAggregatesFilter<"credentials"> | string
     projectId?: StringWithAggregatesFilter<"credentials"> | string
+    worldId?: StringNullableWithAggregatesFilter<"credentials"> | string | null
     name?: StringWithAggregatesFilter<"credentials"> | string
     serviceType?: StringWithAggregatesFilter<"credentials"> | string
     credentialType?: StringWithAggregatesFilter<"credentials"> | string
@@ -23766,6 +23902,7 @@ export namespace Prisma {
     channel?: StringNullableFilter<"public_events"> | string | null
     channelType?: StringNullableFilter<"public_events"> | string | null
     projectId?: StringNullableFilter<"public_events"> | string | null
+    worldId?: StringNullableFilter<"public_events"> | string | null
     content?: StringNullableFilter<"public_events"> | string | null
     agentId?: StringNullableFilter<"public_events"> | string | null
     entities?: StringNullableListFilter<"public_events">
@@ -23783,6 +23920,7 @@ export namespace Prisma {
     channel?: SortOrderInput | SortOrder
     channelType?: SortOrderInput | SortOrder
     projectId?: SortOrderInput | SortOrder
+    worldId?: SortOrderInput | SortOrder
     content?: SortOrderInput | SortOrder
     agentId?: SortOrderInput | SortOrder
     entities?: SortOrder
@@ -23804,6 +23942,7 @@ export namespace Prisma {
     channel?: StringNullableFilter<"public_events"> | string | null
     channelType?: StringNullableFilter<"public_events"> | string | null
     projectId?: StringNullableFilter<"public_events"> | string | null
+    worldId?: StringNullableFilter<"public_events"> | string | null
     content?: StringNullableFilter<"public_events"> | string | null
     agentId?: StringNullableFilter<"public_events"> | string | null
     entities?: StringNullableListFilter<"public_events">
@@ -23821,6 +23960,7 @@ export namespace Prisma {
     channel?: SortOrderInput | SortOrder
     channelType?: SortOrderInput | SortOrder
     projectId?: SortOrderInput | SortOrder
+    worldId?: SortOrderInput | SortOrder
     content?: SortOrderInput | SortOrder
     agentId?: SortOrderInput | SortOrder
     entities?: SortOrder
@@ -23844,6 +23984,7 @@ export namespace Prisma {
     channel?: StringNullableWithAggregatesFilter<"public_events"> | string | null
     channelType?: StringNullableWithAggregatesFilter<"public_events"> | string | null
     projectId?: StringNullableWithAggregatesFilter<"public_events"> | string | null
+    worldId?: StringNullableWithAggregatesFilter<"public_events"> | string | null
     content?: StringNullableWithAggregatesFilter<"public_events"> | string | null
     agentId?: StringNullableWithAggregatesFilter<"public_events"> | string | null
     entities?: StringNullableListFilter<"public_events">
@@ -24042,6 +24183,7 @@ export namespace Prisma {
     dataType?: StringNullableFilter<"knowledge"> | string | null
     data?: StringNullableFilter<"knowledge"> | string | null
     projectId?: StringFilter<"knowledge"> | string
+    worldId?: StringNullableFilter<"knowledge"> | string | null
     metadata?: JsonNullableFilter<"knowledge">
     memoryId?: StringNullableFilter<"knowledge"> | string | null
     createdAt?: DateTimeNullableFilter<"knowledge"> | Date | string | null
@@ -24055,6 +24197,7 @@ export namespace Prisma {
     dataType?: SortOrderInput | SortOrder
     data?: SortOrderInput | SortOrder
     projectId?: SortOrder
+    worldId?: SortOrderInput | SortOrder
     metadata?: SortOrderInput | SortOrder
     memoryId?: SortOrderInput | SortOrder
     createdAt?: SortOrderInput | SortOrder
@@ -24072,6 +24215,7 @@ export namespace Prisma {
     dataType?: StringNullableFilter<"knowledge"> | string | null
     data?: StringNullableFilter<"knowledge"> | string | null
     projectId?: StringFilter<"knowledge"> | string
+    worldId?: StringNullableFilter<"knowledge"> | string | null
     metadata?: JsonNullableFilter<"knowledge">
     memoryId?: StringNullableFilter<"knowledge"> | string | null
     createdAt?: DateTimeNullableFilter<"knowledge"> | Date | string | null
@@ -24085,6 +24229,7 @@ export namespace Prisma {
     dataType?: SortOrderInput | SortOrder
     data?: SortOrderInput | SortOrder
     projectId?: SortOrder
+    worldId?: SortOrderInput | SortOrder
     metadata?: SortOrderInput | SortOrder
     memoryId?: SortOrderInput | SortOrder
     createdAt?: SortOrderInput | SortOrder
@@ -24104,6 +24249,7 @@ export namespace Prisma {
     dataType?: StringNullableWithAggregatesFilter<"knowledge"> | string | null
     data?: StringNullableWithAggregatesFilter<"knowledge"> | string | null
     projectId?: StringWithAggregatesFilter<"knowledge"> | string
+    worldId?: StringNullableWithAggregatesFilter<"knowledge"> | string | null
     metadata?: JsonNullableWithAggregatesFilter<"knowledge">
     memoryId?: StringNullableWithAggregatesFilter<"knowledge"> | string | null
     createdAt?: DateTimeNullableWithAggregatesFilter<"knowledge"> | Date | string | null
@@ -24178,6 +24324,7 @@ export namespace Prisma {
     NOT?: requestWhereInput | requestWhereInput[]
     id?: UuidFilter<"request"> | string
     projectId?: StringFilter<"request"> | string
+    worldId?: StringNullableFilter<"request"> | string | null
     requestData?: StringNullableFilter<"request"> | string | null
     responseData?: StringNullableFilter<"request"> | string | null
     duration?: IntFilter<"request"> | number
@@ -24199,6 +24346,7 @@ export namespace Prisma {
   export type requestOrderByWithRelationAndSearchRelevanceInput = {
     id?: SortOrder
     projectId?: SortOrder
+    worldId?: SortOrderInput | SortOrder
     requestData?: SortOrderInput | SortOrder
     responseData?: SortOrderInput | SortOrder
     duration?: SortOrder
@@ -24224,6 +24372,7 @@ export namespace Prisma {
     OR?: requestWhereInput[]
     NOT?: requestWhereInput | requestWhereInput[]
     projectId?: StringFilter<"request"> | string
+    worldId?: StringNullableFilter<"request"> | string | null
     requestData?: StringNullableFilter<"request"> | string | null
     responseData?: StringNullableFilter<"request"> | string | null
     duration?: IntFilter<"request"> | number
@@ -24245,6 +24394,7 @@ export namespace Prisma {
   export type requestOrderByWithAggregationInput = {
     id?: SortOrder
     projectId?: SortOrder
+    worldId?: SortOrderInput | SortOrder
     requestData?: SortOrderInput | SortOrder
     responseData?: SortOrderInput | SortOrder
     duration?: SortOrder
@@ -24274,6 +24424,7 @@ export namespace Prisma {
     NOT?: requestScalarWhereWithAggregatesInput | requestScalarWhereWithAggregatesInput[]
     id?: UuidWithAggregatesFilter<"request"> | string
     projectId?: StringWithAggregatesFilter<"request"> | string
+    worldId?: StringNullableWithAggregatesFilter<"request"> | string | null
     requestData?: StringNullableWithAggregatesFilter<"request"> | string | null
     responseData?: StringNullableWithAggregatesFilter<"request"> | string | null
     duration?: IntWithAggregatesFilter<"request"> | number
@@ -24301,6 +24452,7 @@ export namespace Prisma {
     agentId?: UuidFilter<"spellReleases"> | string
     spellId?: UuidNullableFilter<"spellReleases"> | string | null
     projectId?: StringNullableFilter<"spellReleases"> | string | null
+    worldId?: StringNullableFilter<"spellReleases"> | string | null
     createdAt?: DateTimeNullableFilter<"spellReleases"> | Date | string | null
     agents_agents_currentSpellReleaseIdTospellReleases?: AgentsListRelationFilter
     agents_spellReleases_agentIdToagents?: XOR<AgentsRelationFilter, agentsWhereInput>
@@ -24313,6 +24465,7 @@ export namespace Prisma {
     agentId?: SortOrder
     spellId?: SortOrderInput | SortOrder
     projectId?: SortOrderInput | SortOrder
+    worldId?: SortOrderInput | SortOrder
     createdAt?: SortOrderInput | SortOrder
     agents_agents_currentSpellReleaseIdTospellReleases?: agentsOrderByRelationAggregateInput
     agents_spellReleases_agentIdToagents?: agentsOrderByWithRelationAndSearchRelevanceInput
@@ -24329,6 +24482,7 @@ export namespace Prisma {
     agentId?: UuidFilter<"spellReleases"> | string
     spellId?: UuidNullableFilter<"spellReleases"> | string | null
     projectId?: StringNullableFilter<"spellReleases"> | string | null
+    worldId?: StringNullableFilter<"spellReleases"> | string | null
     createdAt?: DateTimeNullableFilter<"spellReleases"> | Date | string | null
     agents_agents_currentSpellReleaseIdTospellReleases?: AgentsListRelationFilter
     agents_spellReleases_agentIdToagents?: XOR<AgentsRelationFilter, agentsWhereInput>
@@ -24341,6 +24495,7 @@ export namespace Prisma {
     agentId?: SortOrder
     spellId?: SortOrderInput | SortOrder
     projectId?: SortOrderInput | SortOrder
+    worldId?: SortOrderInput | SortOrder
     createdAt?: SortOrderInput | SortOrder
     _count?: spellReleasesCountOrderByAggregateInput
     _max?: spellReleasesMaxOrderByAggregateInput
@@ -24356,6 +24511,7 @@ export namespace Prisma {
     agentId?: UuidWithAggregatesFilter<"spellReleases"> | string
     spellId?: UuidNullableWithAggregatesFilter<"spellReleases"> | string | null
     projectId?: StringNullableWithAggregatesFilter<"spellReleases"> | string | null
+    worldId?: StringNullableWithAggregatesFilter<"spellReleases"> | string | null
     createdAt?: DateTimeNullableWithAggregatesFilter<"spellReleases"> | Date | string | null
   }
 
@@ -24366,6 +24522,7 @@ export namespace Prisma {
     id?: UuidFilter<"spells"> | string
     name?: StringNullableFilter<"spells"> | string | null
     projectId?: StringNullableFilter<"spells"> | string | null
+    worldId?: StringNullableFilter<"spells"> | string | null
     graph?: JsonNullableFilter<"spells">
     createdAt?: StringNullableFilter<"spells"> | string | null
     updatedAt?: StringNullableFilter<"spells"> | string | null
@@ -24378,6 +24535,7 @@ export namespace Prisma {
     id?: SortOrder
     name?: SortOrderInput | SortOrder
     projectId?: SortOrderInput | SortOrder
+    worldId?: SortOrderInput | SortOrder
     graph?: SortOrderInput | SortOrder
     createdAt?: SortOrderInput | SortOrder
     updatedAt?: SortOrderInput | SortOrder
@@ -24394,6 +24552,7 @@ export namespace Prisma {
     NOT?: spellsWhereInput | spellsWhereInput[]
     name?: StringNullableFilter<"spells"> | string | null
     projectId?: StringNullableFilter<"spells"> | string | null
+    worldId?: StringNullableFilter<"spells"> | string | null
     graph?: JsonNullableFilter<"spells">
     createdAt?: StringNullableFilter<"spells"> | string | null
     updatedAt?: StringNullableFilter<"spells"> | string | null
@@ -24406,6 +24565,7 @@ export namespace Prisma {
     id?: SortOrder
     name?: SortOrderInput | SortOrder
     projectId?: SortOrderInput | SortOrder
+    worldId?: SortOrderInput | SortOrder
     graph?: SortOrderInput | SortOrder
     createdAt?: SortOrderInput | SortOrder
     updatedAt?: SortOrderInput | SortOrder
@@ -24423,6 +24583,7 @@ export namespace Prisma {
     id?: UuidWithAggregatesFilter<"spells"> | string
     name?: StringNullableWithAggregatesFilter<"spells"> | string | null
     projectId?: StringNullableWithAggregatesFilter<"spells"> | string | null
+    worldId?: StringNullableWithAggregatesFilter<"spells"> | string | null
     graph?: JsonNullableWithAggregatesFilter<"spells">
     createdAt?: StringNullableWithAggregatesFilter<"spells"> | string | null
     updatedAt?: StringNullableWithAggregatesFilter<"spells"> | string | null
@@ -24440,6 +24601,7 @@ export namespace Prisma {
     objective?: StringFilter<"tasks"> | string
     eventData?: JsonFilter<"tasks">
     projectId?: StringFilter<"tasks"> | string
+    worldId?: StringNullableFilter<"tasks"> | string | null
     date?: StringNullableFilter<"tasks"> | string | null
     steps?: StringFilter<"tasks"> | string
     agentId?: StringNullableFilter<"tasks"> | string | null
@@ -24452,6 +24614,7 @@ export namespace Prisma {
     objective?: SortOrder
     eventData?: SortOrder
     projectId?: SortOrder
+    worldId?: SortOrderInput | SortOrder
     date?: SortOrderInput | SortOrder
     steps?: SortOrder
     agentId?: SortOrderInput | SortOrder
@@ -24468,6 +24631,7 @@ export namespace Prisma {
     objective?: StringFilter<"tasks"> | string
     eventData?: JsonFilter<"tasks">
     projectId?: StringFilter<"tasks"> | string
+    worldId?: StringNullableFilter<"tasks"> | string | null
     date?: StringNullableFilter<"tasks"> | string | null
     steps?: StringFilter<"tasks"> | string
     agentId?: StringNullableFilter<"tasks"> | string | null
@@ -24480,6 +24644,7 @@ export namespace Prisma {
     objective?: SortOrder
     eventData?: SortOrder
     projectId?: SortOrder
+    worldId?: SortOrderInput | SortOrder
     date?: SortOrderInput | SortOrder
     steps?: SortOrder
     agentId?: SortOrderInput | SortOrder
@@ -24500,6 +24665,7 @@ export namespace Prisma {
     objective?: StringWithAggregatesFilter<"tasks"> | string
     eventData?: JsonWithAggregatesFilter<"tasks">
     projectId?: StringWithAggregatesFilter<"tasks"> | string
+    worldId?: StringNullableWithAggregatesFilter<"tasks"> | string | null
     date?: StringNullableWithAggregatesFilter<"tasks"> | string | null
     steps?: StringWithAggregatesFilter<"tasks"> | string
     agentId?: StringNullableWithAggregatesFilter<"tasks"> | string | null
@@ -24593,6 +24759,7 @@ export namespace Prisma {
     id?: UuidFilter<"seraphEvents"> | string
     agentId?: UuidFilter<"seraphEvents"> | string
     projectId?: UuidFilter<"seraphEvents"> | string
+    worldId?: UuidNullableFilter<"seraphEvents"> | string | null
     spellId?: UuidNullableFilter<"seraphEvents"> | string | null
     type?: StringFilter<"seraphEvents"> | string
     data?: JsonFilter<"seraphEvents">
@@ -24603,6 +24770,7 @@ export namespace Prisma {
     id?: SortOrder
     agentId?: SortOrder
     projectId?: SortOrder
+    worldId?: SortOrderInput | SortOrder
     spellId?: SortOrderInput | SortOrder
     type?: SortOrder
     data?: SortOrder
@@ -24617,6 +24785,7 @@ export namespace Prisma {
     NOT?: seraphEventsWhereInput | seraphEventsWhereInput[]
     agentId?: UuidFilter<"seraphEvents"> | string
     projectId?: UuidFilter<"seraphEvents"> | string
+    worldId?: UuidNullableFilter<"seraphEvents"> | string | null
     spellId?: UuidNullableFilter<"seraphEvents"> | string | null
     type?: StringFilter<"seraphEvents"> | string
     data?: JsonFilter<"seraphEvents">
@@ -24627,6 +24796,7 @@ export namespace Prisma {
     id?: SortOrder
     agentId?: SortOrder
     projectId?: SortOrder
+    worldId?: SortOrderInput | SortOrder
     spellId?: SortOrderInput | SortOrder
     type?: SortOrder
     data?: SortOrder
@@ -24643,6 +24813,7 @@ export namespace Prisma {
     id?: UuidWithAggregatesFilter<"seraphEvents"> | string
     agentId?: UuidWithAggregatesFilter<"seraphEvents"> | string
     projectId?: UuidWithAggregatesFilter<"seraphEvents"> | string
+    worldId?: UuidNullableWithAggregatesFilter<"seraphEvents"> | string | null
     spellId?: UuidNullableWithAggregatesFilter<"seraphEvents"> | string | null
     type?: StringWithAggregatesFilter<"seraphEvents"> | string
     data?: JsonWithAggregatesFilter<"seraphEvents">
@@ -24837,6 +25008,7 @@ export namespace Prisma {
     updatedAt?: string | null
     pingedAt?: string | null
     projectId?: string | null
+    worldId?: string | null
     data?: NullableJsonNullValueInput | InputJsonValue
     runState?: string
     image?: string | null
@@ -24869,6 +25041,7 @@ export namespace Prisma {
     updatedAt?: string | null
     pingedAt?: string | null
     projectId?: string | null
+    worldId?: string | null
     data?: NullableJsonNullValueInput | InputJsonValue
     runState?: string
     image?: string | null
@@ -24901,6 +25074,7 @@ export namespace Prisma {
     updatedAt?: NullableStringFieldUpdateOperationsInput | string | null
     pingedAt?: NullableStringFieldUpdateOperationsInput | string | null
     projectId?: NullableStringFieldUpdateOperationsInput | string | null
+    worldId?: NullableStringFieldUpdateOperationsInput | string | null
     data?: NullableJsonNullValueInput | InputJsonValue
     runState?: StringFieldUpdateOperationsInput | string
     image?: NullableStringFieldUpdateOperationsInput | string | null
@@ -24933,6 +25107,7 @@ export namespace Prisma {
     updatedAt?: NullableStringFieldUpdateOperationsInput | string | null
     pingedAt?: NullableStringFieldUpdateOperationsInput | string | null
     projectId?: NullableStringFieldUpdateOperationsInput | string | null
+    worldId?: NullableStringFieldUpdateOperationsInput | string | null
     data?: NullableJsonNullValueInput | InputJsonValue
     runState?: StringFieldUpdateOperationsInput | string
     image?: NullableStringFieldUpdateOperationsInput | string | null
@@ -24965,6 +25140,7 @@ export namespace Prisma {
     updatedAt?: string | null
     pingedAt?: string | null
     projectId?: string | null
+    worldId?: string | null
     data?: NullableJsonNullValueInput | InputJsonValue
     runState?: string
     image?: string | null
@@ -24991,6 +25167,7 @@ export namespace Prisma {
     updatedAt?: NullableStringFieldUpdateOperationsInput | string | null
     pingedAt?: NullableStringFieldUpdateOperationsInput | string | null
     projectId?: NullableStringFieldUpdateOperationsInput | string | null
+    worldId?: NullableStringFieldUpdateOperationsInput | string | null
     data?: NullableJsonNullValueInput | InputJsonValue
     runState?: StringFieldUpdateOperationsInput | string
     image?: NullableStringFieldUpdateOperationsInput | string | null
@@ -25016,6 +25193,7 @@ export namespace Prisma {
     updatedAt?: NullableStringFieldUpdateOperationsInput | string | null
     pingedAt?: NullableStringFieldUpdateOperationsInput | string | null
     projectId?: NullableStringFieldUpdateOperationsInput | string | null
+    worldId?: NullableStringFieldUpdateOperationsInput | string | null
     data?: NullableJsonNullValueInput | InputJsonValue
     runState?: StringFieldUpdateOperationsInput | string
     image?: NullableStringFieldUpdateOperationsInput | string | null
@@ -25111,6 +25289,7 @@ export namespace Prisma {
   export type credentialsCreateInput = {
     id?: string
     projectId: string
+    worldId?: string | null
     name: string
     serviceType: string
     credentialType: string
@@ -25126,6 +25305,7 @@ export namespace Prisma {
   export type credentialsUncheckedCreateInput = {
     id?: string
     projectId: string
+    worldId?: string | null
     name: string
     serviceType: string
     credentialType: string
@@ -25141,6 +25321,7 @@ export namespace Prisma {
   export type credentialsUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
     projectId?: StringFieldUpdateOperationsInput | string
+    worldId?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
     serviceType?: StringFieldUpdateOperationsInput | string
     credentialType?: StringFieldUpdateOperationsInput | string
@@ -25156,6 +25337,7 @@ export namespace Prisma {
   export type credentialsUncheckedUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
     projectId?: StringFieldUpdateOperationsInput | string
+    worldId?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
     serviceType?: StringFieldUpdateOperationsInput | string
     credentialType?: StringFieldUpdateOperationsInput | string
@@ -25171,6 +25353,7 @@ export namespace Prisma {
   export type credentialsCreateManyInput = {
     id?: string
     projectId: string
+    worldId?: string | null
     name: string
     serviceType: string
     credentialType: string
@@ -25185,6 +25368,7 @@ export namespace Prisma {
   export type credentialsUpdateManyMutationInput = {
     id?: StringFieldUpdateOperationsInput | string
     projectId?: StringFieldUpdateOperationsInput | string
+    worldId?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
     serviceType?: StringFieldUpdateOperationsInput | string
     credentialType?: StringFieldUpdateOperationsInput | string
@@ -25199,6 +25383,7 @@ export namespace Prisma {
   export type credentialsUncheckedUpdateManyInput = {
     id?: StringFieldUpdateOperationsInput | string
     projectId?: StringFieldUpdateOperationsInput | string
+    worldId?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
     serviceType?: StringFieldUpdateOperationsInput | string
     credentialType?: StringFieldUpdateOperationsInput | string
@@ -25321,6 +25506,7 @@ export namespace Prisma {
     channel?: string | null
     channelType?: string | null
     projectId?: string | null
+    worldId?: string | null
     content?: string | null
     agentId?: string | null
     entities?: public_eventsCreateentitiesInput | string[]
@@ -25338,6 +25524,7 @@ export namespace Prisma {
     channel?: string | null
     channelType?: string | null
     projectId?: string | null
+    worldId?: string | null
     content?: string | null
     agentId?: string | null
     entities?: public_eventsCreateentitiesInput | string[]
@@ -25355,6 +25542,7 @@ export namespace Prisma {
     channel?: NullableStringFieldUpdateOperationsInput | string | null
     channelType?: NullableStringFieldUpdateOperationsInput | string | null
     projectId?: NullableStringFieldUpdateOperationsInput | string | null
+    worldId?: NullableStringFieldUpdateOperationsInput | string | null
     content?: NullableStringFieldUpdateOperationsInput | string | null
     agentId?: NullableStringFieldUpdateOperationsInput | string | null
     entities?: public_eventsUpdateentitiesInput | string[]
@@ -25372,6 +25560,7 @@ export namespace Prisma {
     channel?: NullableStringFieldUpdateOperationsInput | string | null
     channelType?: NullableStringFieldUpdateOperationsInput | string | null
     projectId?: NullableStringFieldUpdateOperationsInput | string | null
+    worldId?: NullableStringFieldUpdateOperationsInput | string | null
     content?: NullableStringFieldUpdateOperationsInput | string | null
     agentId?: NullableStringFieldUpdateOperationsInput | string | null
     entities?: public_eventsUpdateentitiesInput | string[]
@@ -25389,6 +25578,7 @@ export namespace Prisma {
     channel?: string | null
     channelType?: string | null
     projectId?: string | null
+    worldId?: string | null
     content?: string | null
     agentId?: string | null
     entities?: public_eventsCreateentitiesInput | string[]
@@ -25406,6 +25596,7 @@ export namespace Prisma {
     channel?: NullableStringFieldUpdateOperationsInput | string | null
     channelType?: NullableStringFieldUpdateOperationsInput | string | null
     projectId?: NullableStringFieldUpdateOperationsInput | string | null
+    worldId?: NullableStringFieldUpdateOperationsInput | string | null
     content?: NullableStringFieldUpdateOperationsInput | string | null
     agentId?: NullableStringFieldUpdateOperationsInput | string | null
     entities?: public_eventsUpdateentitiesInput | string[]
@@ -25423,6 +25614,7 @@ export namespace Prisma {
     channel?: NullableStringFieldUpdateOperationsInput | string | null
     channelType?: NullableStringFieldUpdateOperationsInput | string | null
     projectId?: NullableStringFieldUpdateOperationsInput | string | null
+    worldId?: NullableStringFieldUpdateOperationsInput | string | null
     content?: NullableStringFieldUpdateOperationsInput | string | null
     agentId?: NullableStringFieldUpdateOperationsInput | string | null
     entities?: public_eventsUpdateentitiesInput | string[]
@@ -25620,6 +25812,7 @@ export namespace Prisma {
     dataType?: string | null
     data?: string | null
     projectId: string
+    worldId?: string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
     memoryId?: string | null
     createdAt?: Date | string | null
@@ -25633,6 +25826,7 @@ export namespace Prisma {
     dataType?: string | null
     data?: string | null
     projectId: string
+    worldId?: string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
     memoryId?: string | null
     createdAt?: Date | string | null
@@ -25646,6 +25840,7 @@ export namespace Prisma {
     dataType?: NullableStringFieldUpdateOperationsInput | string | null
     data?: NullableStringFieldUpdateOperationsInput | string | null
     projectId?: StringFieldUpdateOperationsInput | string
+    worldId?: NullableStringFieldUpdateOperationsInput | string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
     memoryId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -25659,6 +25854,7 @@ export namespace Prisma {
     dataType?: NullableStringFieldUpdateOperationsInput | string | null
     data?: NullableStringFieldUpdateOperationsInput | string | null
     projectId?: StringFieldUpdateOperationsInput | string
+    worldId?: NullableStringFieldUpdateOperationsInput | string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
     memoryId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -25672,6 +25868,7 @@ export namespace Prisma {
     dataType?: string | null
     data?: string | null
     projectId: string
+    worldId?: string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
     memoryId?: string | null
     createdAt?: Date | string | null
@@ -25685,6 +25882,7 @@ export namespace Prisma {
     dataType?: NullableStringFieldUpdateOperationsInput | string | null
     data?: NullableStringFieldUpdateOperationsInput | string | null
     projectId?: StringFieldUpdateOperationsInput | string
+    worldId?: NullableStringFieldUpdateOperationsInput | string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
     memoryId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -25698,6 +25896,7 @@ export namespace Prisma {
     dataType?: NullableStringFieldUpdateOperationsInput | string | null
     data?: NullableStringFieldUpdateOperationsInput | string | null
     projectId?: StringFieldUpdateOperationsInput | string
+    worldId?: NullableStringFieldUpdateOperationsInput | string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
     memoryId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -25769,6 +25968,7 @@ export namespace Prisma {
   export type requestCreateInput = {
     id: string
     projectId: string
+    worldId?: string | null
     requestData?: string | null
     responseData?: string | null
     duration: number
@@ -25790,6 +25990,7 @@ export namespace Prisma {
   export type requestUncheckedCreateInput = {
     id: string
     projectId: string
+    worldId?: string | null
     requestData?: string | null
     responseData?: string | null
     duration: number
@@ -25811,6 +26012,7 @@ export namespace Prisma {
   export type requestUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
     projectId?: StringFieldUpdateOperationsInput | string
+    worldId?: NullableStringFieldUpdateOperationsInput | string | null
     requestData?: NullableStringFieldUpdateOperationsInput | string | null
     responseData?: NullableStringFieldUpdateOperationsInput | string | null
     duration?: IntFieldUpdateOperationsInput | number
@@ -25832,6 +26034,7 @@ export namespace Prisma {
   export type requestUncheckedUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
     projectId?: StringFieldUpdateOperationsInput | string
+    worldId?: NullableStringFieldUpdateOperationsInput | string | null
     requestData?: NullableStringFieldUpdateOperationsInput | string | null
     responseData?: NullableStringFieldUpdateOperationsInput | string | null
     duration?: IntFieldUpdateOperationsInput | number
@@ -25853,6 +26056,7 @@ export namespace Prisma {
   export type requestCreateManyInput = {
     id: string
     projectId: string
+    worldId?: string | null
     requestData?: string | null
     responseData?: string | null
     duration: number
@@ -25874,6 +26078,7 @@ export namespace Prisma {
   export type requestUpdateManyMutationInput = {
     id?: StringFieldUpdateOperationsInput | string
     projectId?: StringFieldUpdateOperationsInput | string
+    worldId?: NullableStringFieldUpdateOperationsInput | string | null
     requestData?: NullableStringFieldUpdateOperationsInput | string | null
     responseData?: NullableStringFieldUpdateOperationsInput | string | null
     duration?: IntFieldUpdateOperationsInput | number
@@ -25895,6 +26100,7 @@ export namespace Prisma {
   export type requestUncheckedUpdateManyInput = {
     id?: StringFieldUpdateOperationsInput | string
     projectId?: StringFieldUpdateOperationsInput | string
+    worldId?: NullableStringFieldUpdateOperationsInput | string | null
     requestData?: NullableStringFieldUpdateOperationsInput | string | null
     responseData?: NullableStringFieldUpdateOperationsInput | string | null
     duration?: IntFieldUpdateOperationsInput | number
@@ -25918,6 +26124,7 @@ export namespace Prisma {
     description?: string | null
     spellId?: string | null
     projectId?: string | null
+    worldId?: string | null
     createdAt?: Date | string | null
     agents_agents_currentSpellReleaseIdTospellReleases?: agentsCreateNestedManyWithoutSpellReleases_agents_currentSpellReleaseIdTospellReleasesInput
     agents_spellReleases_agentIdToagents: agentsCreateNestedOneWithoutSpellReleases_spellReleases_agentIdToagentsInput
@@ -25930,6 +26137,7 @@ export namespace Prisma {
     agentId: string
     spellId?: string | null
     projectId?: string | null
+    worldId?: string | null
     createdAt?: Date | string | null
     agents_agents_currentSpellReleaseIdTospellReleases?: agentsUncheckedCreateNestedManyWithoutSpellReleases_agents_currentSpellReleaseIdTospellReleasesInput
     spells?: spellsUncheckedCreateNestedManyWithoutSpellReleasesInput
@@ -25940,6 +26148,7 @@ export namespace Prisma {
     description?: NullableStringFieldUpdateOperationsInput | string | null
     spellId?: NullableStringFieldUpdateOperationsInput | string | null
     projectId?: NullableStringFieldUpdateOperationsInput | string | null
+    worldId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     agents_agents_currentSpellReleaseIdTospellReleases?: agentsUpdateManyWithoutSpellReleases_agents_currentSpellReleaseIdTospellReleasesNestedInput
     agents_spellReleases_agentIdToagents?: agentsUpdateOneRequiredWithoutSpellReleases_spellReleases_agentIdToagentsNestedInput
@@ -25952,6 +26161,7 @@ export namespace Prisma {
     agentId?: StringFieldUpdateOperationsInput | string
     spellId?: NullableStringFieldUpdateOperationsInput | string | null
     projectId?: NullableStringFieldUpdateOperationsInput | string | null
+    worldId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     agents_agents_currentSpellReleaseIdTospellReleases?: agentsUncheckedUpdateManyWithoutSpellReleases_agents_currentSpellReleaseIdTospellReleasesNestedInput
     spells?: spellsUncheckedUpdateManyWithoutSpellReleasesNestedInput
@@ -25963,6 +26173,7 @@ export namespace Prisma {
     agentId: string
     spellId?: string | null
     projectId?: string | null
+    worldId?: string | null
     createdAt?: Date | string | null
   }
 
@@ -25971,6 +26182,7 @@ export namespace Prisma {
     description?: NullableStringFieldUpdateOperationsInput | string | null
     spellId?: NullableStringFieldUpdateOperationsInput | string | null
     projectId?: NullableStringFieldUpdateOperationsInput | string | null
+    worldId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
 
@@ -25980,6 +26192,7 @@ export namespace Prisma {
     agentId?: StringFieldUpdateOperationsInput | string
     spellId?: NullableStringFieldUpdateOperationsInput | string | null
     projectId?: NullableStringFieldUpdateOperationsInput | string | null
+    worldId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
 
@@ -25987,6 +26200,7 @@ export namespace Prisma {
     id: string
     name?: string | null
     projectId?: string | null
+    worldId?: string | null
     graph?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: string | null
     updatedAt?: string | null
@@ -25998,6 +26212,7 @@ export namespace Prisma {
     id: string
     name?: string | null
     projectId?: string | null
+    worldId?: string | null
     graph?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: string | null
     updatedAt?: string | null
@@ -26009,6 +26224,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     name?: NullableStringFieldUpdateOperationsInput | string | null
     projectId?: NullableStringFieldUpdateOperationsInput | string | null
+    worldId?: NullableStringFieldUpdateOperationsInput | string | null
     graph?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: NullableStringFieldUpdateOperationsInput | string | null
     updatedAt?: NullableStringFieldUpdateOperationsInput | string | null
@@ -26020,6 +26236,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     name?: NullableStringFieldUpdateOperationsInput | string | null
     projectId?: NullableStringFieldUpdateOperationsInput | string | null
+    worldId?: NullableStringFieldUpdateOperationsInput | string | null
     graph?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: NullableStringFieldUpdateOperationsInput | string | null
     updatedAt?: NullableStringFieldUpdateOperationsInput | string | null
@@ -26031,6 +26248,7 @@ export namespace Prisma {
     id: string
     name?: string | null
     projectId?: string | null
+    worldId?: string | null
     graph?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: string | null
     updatedAt?: string | null
@@ -26042,6 +26260,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     name?: NullableStringFieldUpdateOperationsInput | string | null
     projectId?: NullableStringFieldUpdateOperationsInput | string | null
+    worldId?: NullableStringFieldUpdateOperationsInput | string | null
     graph?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: NullableStringFieldUpdateOperationsInput | string | null
     updatedAt?: NullableStringFieldUpdateOperationsInput | string | null
@@ -26052,6 +26271,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     name?: NullableStringFieldUpdateOperationsInput | string | null
     projectId?: NullableStringFieldUpdateOperationsInput | string | null
+    worldId?: NullableStringFieldUpdateOperationsInput | string | null
     graph?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: NullableStringFieldUpdateOperationsInput | string | null
     updatedAt?: NullableStringFieldUpdateOperationsInput | string | null
@@ -26065,6 +26285,7 @@ export namespace Prisma {
     objective: string
     eventData: JsonNullValueInput | InputJsonValue
     projectId: string
+    worldId?: string | null
     date?: string | null
     steps: string
     agentId?: string | null
@@ -26077,6 +26298,7 @@ export namespace Prisma {
     objective: string
     eventData: JsonNullValueInput | InputJsonValue
     projectId: string
+    worldId?: string | null
     date?: string | null
     steps: string
     agentId?: string | null
@@ -26088,6 +26310,7 @@ export namespace Prisma {
     objective?: StringFieldUpdateOperationsInput | string
     eventData?: JsonNullValueInput | InputJsonValue
     projectId?: StringFieldUpdateOperationsInput | string
+    worldId?: NullableStringFieldUpdateOperationsInput | string | null
     date?: NullableStringFieldUpdateOperationsInput | string | null
     steps?: StringFieldUpdateOperationsInput | string
     agentId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -26100,6 +26323,7 @@ export namespace Prisma {
     objective?: StringFieldUpdateOperationsInput | string
     eventData?: JsonNullValueInput | InputJsonValue
     projectId?: StringFieldUpdateOperationsInput | string
+    worldId?: NullableStringFieldUpdateOperationsInput | string | null
     date?: NullableStringFieldUpdateOperationsInput | string | null
     steps?: StringFieldUpdateOperationsInput | string
     agentId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -26112,6 +26336,7 @@ export namespace Prisma {
     objective: string
     eventData: JsonNullValueInput | InputJsonValue
     projectId: string
+    worldId?: string | null
     date?: string | null
     steps: string
     agentId?: string | null
@@ -26123,6 +26348,7 @@ export namespace Prisma {
     objective?: StringFieldUpdateOperationsInput | string
     eventData?: JsonNullValueInput | InputJsonValue
     projectId?: StringFieldUpdateOperationsInput | string
+    worldId?: NullableStringFieldUpdateOperationsInput | string | null
     date?: NullableStringFieldUpdateOperationsInput | string | null
     steps?: StringFieldUpdateOperationsInput | string
     agentId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -26135,6 +26361,7 @@ export namespace Prisma {
     objective?: StringFieldUpdateOperationsInput | string
     eventData?: JsonNullValueInput | InputJsonValue
     projectId?: StringFieldUpdateOperationsInput | string
+    worldId?: NullableStringFieldUpdateOperationsInput | string | null
     date?: NullableStringFieldUpdateOperationsInput | string | null
     steps?: StringFieldUpdateOperationsInput | string
     agentId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -26234,6 +26461,7 @@ export namespace Prisma {
     id: string
     agentId: string
     projectId: string
+    worldId?: string | null
     spellId?: string | null
     type: string
     data: JsonNullValueInput | InputJsonValue
@@ -26244,6 +26472,7 @@ export namespace Prisma {
     id: string
     agentId: string
     projectId: string
+    worldId?: string | null
     spellId?: string | null
     type: string
     data: JsonNullValueInput | InputJsonValue
@@ -26254,6 +26483,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     agentId?: StringFieldUpdateOperationsInput | string
     projectId?: StringFieldUpdateOperationsInput | string
+    worldId?: NullableStringFieldUpdateOperationsInput | string | null
     spellId?: NullableStringFieldUpdateOperationsInput | string | null
     type?: StringFieldUpdateOperationsInput | string
     data?: JsonNullValueInput | InputJsonValue
@@ -26264,6 +26494,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     agentId?: StringFieldUpdateOperationsInput | string
     projectId?: StringFieldUpdateOperationsInput | string
+    worldId?: NullableStringFieldUpdateOperationsInput | string | null
     spellId?: NullableStringFieldUpdateOperationsInput | string | null
     type?: StringFieldUpdateOperationsInput | string
     data?: JsonNullValueInput | InputJsonValue
@@ -26274,6 +26505,7 @@ export namespace Prisma {
     id: string
     agentId: string
     projectId: string
+    worldId?: string | null
     spellId?: string | null
     type: string
     data: JsonNullValueInput | InputJsonValue
@@ -26284,6 +26516,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     agentId?: StringFieldUpdateOperationsInput | string
     projectId?: StringFieldUpdateOperationsInput | string
+    worldId?: NullableStringFieldUpdateOperationsInput | string | null
     spellId?: NullableStringFieldUpdateOperationsInput | string | null
     type?: StringFieldUpdateOperationsInput | string
     data?: JsonNullValueInput | InputJsonValue
@@ -26294,6 +26527,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     agentId?: StringFieldUpdateOperationsInput | string
     projectId?: StringFieldUpdateOperationsInput | string
+    worldId?: NullableStringFieldUpdateOperationsInput | string | null
     spellId?: NullableStringFieldUpdateOperationsInput | string | null
     type?: StringFieldUpdateOperationsInput | string
     data?: JsonNullValueInput | InputJsonValue
@@ -26717,6 +26951,7 @@ export namespace Prisma {
     updatedAt?: SortOrder
     pingedAt?: SortOrder
     projectId?: SortOrder
+    worldId?: SortOrder
     data?: SortOrder
     runState?: SortOrder
     image?: SortOrder
@@ -26742,6 +26977,7 @@ export namespace Prisma {
     updatedAt?: SortOrder
     pingedAt?: SortOrder
     projectId?: SortOrder
+    worldId?: SortOrder
     runState?: SortOrder
     image?: SortOrder
     rootSpellId?: SortOrder
@@ -26766,6 +27002,7 @@ export namespace Prisma {
     updatedAt?: SortOrder
     pingedAt?: SortOrder
     projectId?: SortOrder
+    worldId?: SortOrder
     runState?: SortOrder
     image?: SortOrder
     rootSpellId?: SortOrder
@@ -26938,6 +27175,7 @@ export namespace Prisma {
   export type credentialsCountOrderByAggregateInput = {
     id?: SortOrder
     projectId?: SortOrder
+    worldId?: SortOrder
     name?: SortOrder
     serviceType?: SortOrder
     credentialType?: SortOrder
@@ -26952,6 +27190,7 @@ export namespace Prisma {
   export type credentialsMaxOrderByAggregateInput = {
     id?: SortOrder
     projectId?: SortOrder
+    worldId?: SortOrder
     name?: SortOrder
     serviceType?: SortOrder
     credentialType?: SortOrder
@@ -26965,6 +27204,7 @@ export namespace Prisma {
   export type credentialsMinOrderByAggregateInput = {
     id?: SortOrder
     projectId?: SortOrder
+    worldId?: SortOrder
     name?: SortOrder
     serviceType?: SortOrder
     credentialType?: SortOrder
@@ -27117,6 +27357,7 @@ export namespace Prisma {
     channel?: SortOrder
     channelType?: SortOrder
     projectId?: SortOrder
+    worldId?: SortOrder
     content?: SortOrder
     agentId?: SortOrder
     entities?: SortOrder
@@ -27134,6 +27375,7 @@ export namespace Prisma {
     channel?: SortOrder
     channelType?: SortOrder
     projectId?: SortOrder
+    worldId?: SortOrder
     content?: SortOrder
     agentId?: SortOrder
     date?: SortOrder
@@ -27150,6 +27392,7 @@ export namespace Prisma {
     channel?: SortOrder
     channelType?: SortOrder
     projectId?: SortOrder
+    worldId?: SortOrder
     content?: SortOrder
     agentId?: SortOrder
     date?: SortOrder
@@ -27279,6 +27522,7 @@ export namespace Prisma {
     dataType?: SortOrder
     data?: SortOrder
     projectId?: SortOrder
+    worldId?: SortOrder
     metadata?: SortOrder
     memoryId?: SortOrder
     createdAt?: SortOrder
@@ -27292,6 +27536,7 @@ export namespace Prisma {
     dataType?: SortOrder
     data?: SortOrder
     projectId?: SortOrder
+    worldId?: SortOrder
     memoryId?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -27304,6 +27549,7 @@ export namespace Prisma {
     dataType?: SortOrder
     data?: SortOrder
     projectId?: SortOrder
+    worldId?: SortOrder
     memoryId?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -27370,6 +27616,7 @@ export namespace Prisma {
   export type requestCountOrderByAggregateInput = {
     id?: SortOrder
     projectId?: SortOrder
+    worldId?: SortOrder
     requestData?: SortOrder
     responseData?: SortOrder
     duration?: SortOrder
@@ -27397,6 +27644,7 @@ export namespace Prisma {
   export type requestMaxOrderByAggregateInput = {
     id?: SortOrder
     projectId?: SortOrder
+    worldId?: SortOrder
     requestData?: SortOrder
     responseData?: SortOrder
     duration?: SortOrder
@@ -27418,6 +27666,7 @@ export namespace Prisma {
   export type requestMinOrderByAggregateInput = {
     id?: SortOrder
     projectId?: SortOrder
+    worldId?: SortOrder
     requestData?: SortOrder
     responseData?: SortOrder
     duration?: SortOrder
@@ -27490,6 +27739,7 @@ export namespace Prisma {
     agentId?: SortOrder
     spellId?: SortOrder
     projectId?: SortOrder
+    worldId?: SortOrder
     createdAt?: SortOrder
   }
 
@@ -27499,6 +27749,7 @@ export namespace Prisma {
     agentId?: SortOrder
     spellId?: SortOrder
     projectId?: SortOrder
+    worldId?: SortOrder
     createdAt?: SortOrder
   }
 
@@ -27508,6 +27759,7 @@ export namespace Prisma {
     agentId?: SortOrder
     spellId?: SortOrder
     projectId?: SortOrder
+    worldId?: SortOrder
     createdAt?: SortOrder
   }
 
@@ -27521,6 +27773,7 @@ export namespace Prisma {
     id?: SortOrder
     name?: SortOrder
     projectId?: SortOrder
+    worldId?: SortOrder
     graph?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -27532,6 +27785,7 @@ export namespace Prisma {
     id?: SortOrder
     name?: SortOrder
     projectId?: SortOrder
+    worldId?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     type?: SortOrder
@@ -27542,6 +27796,7 @@ export namespace Prisma {
     id?: SortOrder
     name?: SortOrder
     projectId?: SortOrder
+    worldId?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     type?: SortOrder
@@ -27583,6 +27838,7 @@ export namespace Prisma {
     objective?: SortOrder
     eventData?: SortOrder
     projectId?: SortOrder
+    worldId?: SortOrder
     date?: SortOrder
     steps?: SortOrder
     agentId?: SortOrder
@@ -27598,6 +27854,7 @@ export namespace Prisma {
     type?: SortOrder
     objective?: SortOrder
     projectId?: SortOrder
+    worldId?: SortOrder
     date?: SortOrder
     steps?: SortOrder
     agentId?: SortOrder
@@ -27609,6 +27866,7 @@ export namespace Prisma {
     type?: SortOrder
     objective?: SortOrder
     projectId?: SortOrder
+    worldId?: SortOrder
     date?: SortOrder
     steps?: SortOrder
     agentId?: SortOrder
@@ -27726,6 +27984,7 @@ export namespace Prisma {
     id?: SortOrder
     agentId?: SortOrder
     projectId?: SortOrder
+    worldId?: SortOrder
     spellId?: SortOrder
     type?: SortOrder
     data?: SortOrder
@@ -27736,6 +27995,7 @@ export namespace Prisma {
     id?: SortOrder
     agentId?: SortOrder
     projectId?: SortOrder
+    worldId?: SortOrder
     spellId?: SortOrder
     type?: SortOrder
     createdAt?: SortOrder
@@ -27745,6 +28005,7 @@ export namespace Prisma {
     id?: SortOrder
     agentId?: SortOrder
     projectId?: SortOrder
+    worldId?: SortOrder
     spellId?: SortOrder
     type?: SortOrder
     createdAt?: SortOrder
@@ -28772,6 +29033,7 @@ export namespace Prisma {
     updatedAt?: string | null
     pingedAt?: string | null
     projectId?: string | null
+    worldId?: string | null
     data?: NullableJsonNullValueInput | InputJsonValue
     runState?: string
     image?: string | null
@@ -28803,6 +29065,7 @@ export namespace Prisma {
     updatedAt?: string | null
     pingedAt?: string | null
     projectId?: string | null
+    worldId?: string | null
     data?: NullableJsonNullValueInput | InputJsonValue
     runState?: string
     image?: string | null
@@ -28832,6 +29095,7 @@ export namespace Prisma {
   export type credentialsCreateWithoutAgent_credentialsInput = {
     id?: string
     projectId: string
+    worldId?: string | null
     name: string
     serviceType: string
     credentialType: string
@@ -28846,6 +29110,7 @@ export namespace Prisma {
   export type credentialsUncheckedCreateWithoutAgent_credentialsInput = {
     id?: string
     projectId: string
+    worldId?: string | null
     name: string
     serviceType: string
     credentialType: string
@@ -28883,6 +29148,7 @@ export namespace Prisma {
     updatedAt?: NullableStringFieldUpdateOperationsInput | string | null
     pingedAt?: NullableStringFieldUpdateOperationsInput | string | null
     projectId?: NullableStringFieldUpdateOperationsInput | string | null
+    worldId?: NullableStringFieldUpdateOperationsInput | string | null
     data?: NullableJsonNullValueInput | InputJsonValue
     runState?: StringFieldUpdateOperationsInput | string
     image?: NullableStringFieldUpdateOperationsInput | string | null
@@ -28914,6 +29180,7 @@ export namespace Prisma {
     updatedAt?: NullableStringFieldUpdateOperationsInput | string | null
     pingedAt?: NullableStringFieldUpdateOperationsInput | string | null
     projectId?: NullableStringFieldUpdateOperationsInput | string | null
+    worldId?: NullableStringFieldUpdateOperationsInput | string | null
     data?: NullableJsonNullValueInput | InputJsonValue
     runState?: StringFieldUpdateOperationsInput | string
     image?: NullableStringFieldUpdateOperationsInput | string | null
@@ -28949,6 +29216,7 @@ export namespace Prisma {
   export type credentialsUpdateWithoutAgent_credentialsInput = {
     id?: StringFieldUpdateOperationsInput | string
     projectId?: StringFieldUpdateOperationsInput | string
+    worldId?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
     serviceType?: StringFieldUpdateOperationsInput | string
     credentialType?: StringFieldUpdateOperationsInput | string
@@ -28963,6 +29231,7 @@ export namespace Prisma {
   export type credentialsUncheckedUpdateWithoutAgent_credentialsInput = {
     id?: StringFieldUpdateOperationsInput | string
     projectId?: StringFieldUpdateOperationsInput | string
+    worldId?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
     serviceType?: StringFieldUpdateOperationsInput | string
     credentialType?: StringFieldUpdateOperationsInput | string
@@ -29001,6 +29270,7 @@ export namespace Prisma {
     description?: string | null
     spellId?: string | null
     projectId?: string | null
+    worldId?: string | null
     createdAt?: Date | string | null
     agents_spellReleases_agentIdToagents: agentsCreateNestedOneWithoutSpellReleases_spellReleases_agentIdToagentsInput
     spells?: spellsCreateNestedManyWithoutSpellReleasesInput
@@ -29012,6 +29282,7 @@ export namespace Prisma {
     agentId: string
     spellId?: string | null
     projectId?: string | null
+    worldId?: string | null
     createdAt?: Date | string | null
     spells?: spellsUncheckedCreateNestedManyWithoutSpellReleasesInput
   }
@@ -29120,6 +29391,7 @@ export namespace Prisma {
     description?: string | null
     spellId?: string | null
     projectId?: string | null
+    worldId?: string | null
     createdAt?: Date | string | null
     agents_agents_currentSpellReleaseIdTospellReleases?: agentsCreateNestedManyWithoutSpellReleases_agents_currentSpellReleaseIdTospellReleasesInput
     spells?: spellsCreateNestedManyWithoutSpellReleasesInput
@@ -29130,6 +29402,7 @@ export namespace Prisma {
     description?: string | null
     spellId?: string | null
     projectId?: string | null
+    worldId?: string | null
     createdAt?: Date | string | null
     agents_agents_currentSpellReleaseIdTospellReleases?: agentsUncheckedCreateNestedManyWithoutSpellReleases_agents_currentSpellReleaseIdTospellReleasesInput
     spells?: spellsUncheckedCreateNestedManyWithoutSpellReleasesInput
@@ -29221,6 +29494,7 @@ export namespace Prisma {
     description?: NullableStringFieldUpdateOperationsInput | string | null
     spellId?: NullableStringFieldUpdateOperationsInput | string | null
     projectId?: NullableStringFieldUpdateOperationsInput | string | null
+    worldId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     agents_spellReleases_agentIdToagents?: agentsUpdateOneRequiredWithoutSpellReleases_spellReleases_agentIdToagentsNestedInput
     spells?: spellsUpdateManyWithoutSpellReleasesNestedInput
@@ -29232,6 +29506,7 @@ export namespace Prisma {
     agentId?: StringFieldUpdateOperationsInput | string
     spellId?: NullableStringFieldUpdateOperationsInput | string | null
     projectId?: NullableStringFieldUpdateOperationsInput | string | null
+    worldId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     spells?: spellsUncheckedUpdateManyWithoutSpellReleasesNestedInput
   }
@@ -29353,6 +29628,7 @@ export namespace Prisma {
     agentId?: UuidFilter<"spellReleases"> | string
     spellId?: UuidNullableFilter<"spellReleases"> | string | null
     projectId?: StringNullableFilter<"spellReleases"> | string | null
+    worldId?: StringNullableFilter<"spellReleases"> | string | null
     createdAt?: DateTimeNullableFilter<"spellReleases"> | Date | string | null
   }
 
@@ -29398,6 +29674,7 @@ export namespace Prisma {
     updatedAt?: string | null
     pingedAt?: string | null
     projectId?: string | null
+    worldId?: string | null
     data?: NullableJsonNullValueInput | InputJsonValue
     runState?: string
     image?: string | null
@@ -29429,6 +29706,7 @@ export namespace Prisma {
     updatedAt?: string | null
     pingedAt?: string | null
     projectId?: string | null
+    worldId?: string | null
     data?: NullableJsonNullValueInput | InputJsonValue
     runState?: string
     image?: string | null
@@ -29476,6 +29754,7 @@ export namespace Prisma {
     updatedAt?: NullableStringFieldUpdateOperationsInput | string | null
     pingedAt?: NullableStringFieldUpdateOperationsInput | string | null
     projectId?: NullableStringFieldUpdateOperationsInput | string | null
+    worldId?: NullableStringFieldUpdateOperationsInput | string | null
     data?: NullableJsonNullValueInput | InputJsonValue
     runState?: StringFieldUpdateOperationsInput | string
     image?: NullableStringFieldUpdateOperationsInput | string | null
@@ -29507,6 +29786,7 @@ export namespace Prisma {
     updatedAt?: NullableStringFieldUpdateOperationsInput | string | null
     pingedAt?: NullableStringFieldUpdateOperationsInput | string | null
     projectId?: NullableStringFieldUpdateOperationsInput | string | null
+    worldId?: NullableStringFieldUpdateOperationsInput | string | null
     data?: NullableJsonNullValueInput | InputJsonValue
     runState?: StringFieldUpdateOperationsInput | string
     image?: NullableStringFieldUpdateOperationsInput | string | null
@@ -29576,6 +29856,7 @@ export namespace Prisma {
     updatedAt?: string | null
     pingedAt?: string | null
     projectId?: string | null
+    worldId?: string | null
     data?: NullableJsonNullValueInput | InputJsonValue
     runState?: string
     image?: string | null
@@ -29607,6 +29888,7 @@ export namespace Prisma {
     updatedAt?: string | null
     pingedAt?: string | null
     projectId?: string | null
+    worldId?: string | null
     data?: NullableJsonNullValueInput | InputJsonValue
     runState?: string
     image?: string | null
@@ -29654,6 +29936,7 @@ export namespace Prisma {
     updatedAt?: NullableStringFieldUpdateOperationsInput | string | null
     pingedAt?: NullableStringFieldUpdateOperationsInput | string | null
     projectId?: NullableStringFieldUpdateOperationsInput | string | null
+    worldId?: NullableStringFieldUpdateOperationsInput | string | null
     data?: NullableJsonNullValueInput | InputJsonValue
     runState?: StringFieldUpdateOperationsInput | string
     image?: NullableStringFieldUpdateOperationsInput | string | null
@@ -29685,6 +29968,7 @@ export namespace Prisma {
     updatedAt?: NullableStringFieldUpdateOperationsInput | string | null
     pingedAt?: NullableStringFieldUpdateOperationsInput | string | null
     projectId?: NullableStringFieldUpdateOperationsInput | string | null
+    worldId?: NullableStringFieldUpdateOperationsInput | string | null
     data?: NullableJsonNullValueInput | InputJsonValue
     runState?: StringFieldUpdateOperationsInput | string
     image?: NullableStringFieldUpdateOperationsInput | string | null
@@ -29716,6 +30000,7 @@ export namespace Prisma {
     updatedAt?: string | null
     pingedAt?: string | null
     projectId?: string | null
+    worldId?: string | null
     data?: NullableJsonNullValueInput | InputJsonValue
     runState?: string
     image?: string | null
@@ -29747,6 +30032,7 @@ export namespace Prisma {
     updatedAt?: string | null
     pingedAt?: string | null
     projectId?: string | null
+    worldId?: string | null
     data?: NullableJsonNullValueInput | InputJsonValue
     runState?: string
     image?: string | null
@@ -29794,6 +30080,7 @@ export namespace Prisma {
     updatedAt?: NullableStringFieldUpdateOperationsInput | string | null
     pingedAt?: NullableStringFieldUpdateOperationsInput | string | null
     projectId?: NullableStringFieldUpdateOperationsInput | string | null
+    worldId?: NullableStringFieldUpdateOperationsInput | string | null
     data?: NullableJsonNullValueInput | InputJsonValue
     runState?: StringFieldUpdateOperationsInput | string
     image?: NullableStringFieldUpdateOperationsInput | string | null
@@ -29825,6 +30112,7 @@ export namespace Prisma {
     updatedAt?: NullableStringFieldUpdateOperationsInput | string | null
     pingedAt?: NullableStringFieldUpdateOperationsInput | string | null
     projectId?: NullableStringFieldUpdateOperationsInput | string | null
+    worldId?: NullableStringFieldUpdateOperationsInput | string | null
     data?: NullableJsonNullValueInput | InputJsonValue
     runState?: StringFieldUpdateOperationsInput | string
     image?: NullableStringFieldUpdateOperationsInput | string | null
@@ -29856,6 +30144,7 @@ export namespace Prisma {
     updatedAt?: string | null
     pingedAt?: string | null
     projectId?: string | null
+    worldId?: string | null
     data?: NullableJsonNullValueInput | InputJsonValue
     runState?: string
     image?: string | null
@@ -29887,6 +30176,7 @@ export namespace Prisma {
     updatedAt?: string | null
     pingedAt?: string | null
     projectId?: string | null
+    worldId?: string | null
     data?: NullableJsonNullValueInput | InputJsonValue
     runState?: string
     image?: string | null
@@ -29928,6 +30218,7 @@ export namespace Prisma {
     updatedAt?: string | null
     pingedAt?: string | null
     projectId?: string | null
+    worldId?: string | null
     data?: NullableJsonNullValueInput | InputJsonValue
     runState?: string
     image?: string | null
@@ -29959,6 +30250,7 @@ export namespace Prisma {
     updatedAt?: string | null
     pingedAt?: string | null
     projectId?: string | null
+    worldId?: string | null
     data?: NullableJsonNullValueInput | InputJsonValue
     runState?: string
     image?: string | null
@@ -29989,6 +30281,7 @@ export namespace Prisma {
     id: string
     name?: string | null
     projectId?: string | null
+    worldId?: string | null
     graph?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: string | null
     updatedAt?: string | null
@@ -29999,6 +30292,7 @@ export namespace Prisma {
     id: string
     name?: string | null
     projectId?: string | null
+    worldId?: string | null
     graph?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: string | null
     updatedAt?: string | null
@@ -30044,6 +30338,7 @@ export namespace Prisma {
     updatedAt?: StringNullableFilter<"agents"> | string | null
     pingedAt?: StringNullableFilter<"agents"> | string | null
     projectId?: StringNullableFilter<"agents"> | string | null
+    worldId?: StringNullableFilter<"agents"> | string | null
     data?: JsonNullableFilter<"agents">
     runState?: StringFilter<"agents"> | string
     image?: StringNullableFilter<"agents"> | string | null
@@ -30081,6 +30376,7 @@ export namespace Prisma {
     updatedAt?: NullableStringFieldUpdateOperationsInput | string | null
     pingedAt?: NullableStringFieldUpdateOperationsInput | string | null
     projectId?: NullableStringFieldUpdateOperationsInput | string | null
+    worldId?: NullableStringFieldUpdateOperationsInput | string | null
     data?: NullableJsonNullValueInput | InputJsonValue
     runState?: StringFieldUpdateOperationsInput | string
     image?: NullableStringFieldUpdateOperationsInput | string | null
@@ -30112,6 +30408,7 @@ export namespace Prisma {
     updatedAt?: NullableStringFieldUpdateOperationsInput | string | null
     pingedAt?: NullableStringFieldUpdateOperationsInput | string | null
     projectId?: NullableStringFieldUpdateOperationsInput | string | null
+    worldId?: NullableStringFieldUpdateOperationsInput | string | null
     data?: NullableJsonNullValueInput | InputJsonValue
     runState?: StringFieldUpdateOperationsInput | string
     image?: NullableStringFieldUpdateOperationsInput | string | null
@@ -30156,6 +30453,7 @@ export namespace Prisma {
     id?: UuidFilter<"spells"> | string
     name?: StringNullableFilter<"spells"> | string | null
     projectId?: StringNullableFilter<"spells"> | string | null
+    worldId?: StringNullableFilter<"spells"> | string | null
     graph?: JsonNullableFilter<"spells">
     createdAt?: StringNullableFilter<"spells"> | string | null
     updatedAt?: StringNullableFilter<"spells"> | string | null
@@ -30168,6 +30466,7 @@ export namespace Prisma {
     description?: string | null
     spellId?: string | null
     projectId?: string | null
+    worldId?: string | null
     createdAt?: Date | string | null
     agents_agents_currentSpellReleaseIdTospellReleases?: agentsCreateNestedManyWithoutSpellReleases_agents_currentSpellReleaseIdTospellReleasesInput
     agents_spellReleases_agentIdToagents: agentsCreateNestedOneWithoutSpellReleases_spellReleases_agentIdToagentsInput
@@ -30179,6 +30478,7 @@ export namespace Prisma {
     agentId: string
     spellId?: string | null
     projectId?: string | null
+    worldId?: string | null
     createdAt?: Date | string | null
     agents_agents_currentSpellReleaseIdTospellReleases?: agentsUncheckedCreateNestedManyWithoutSpellReleases_agents_currentSpellReleaseIdTospellReleasesInput
   }
@@ -30204,6 +30504,7 @@ export namespace Prisma {
     description?: NullableStringFieldUpdateOperationsInput | string | null
     spellId?: NullableStringFieldUpdateOperationsInput | string | null
     projectId?: NullableStringFieldUpdateOperationsInput | string | null
+    worldId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     agents_agents_currentSpellReleaseIdTospellReleases?: agentsUpdateManyWithoutSpellReleases_agents_currentSpellReleaseIdTospellReleasesNestedInput
     agents_spellReleases_agentIdToagents?: agentsUpdateOneRequiredWithoutSpellReleases_spellReleases_agentIdToagentsNestedInput
@@ -30215,6 +30516,7 @@ export namespace Prisma {
     agentId?: StringFieldUpdateOperationsInput | string
     spellId?: NullableStringFieldUpdateOperationsInput | string | null
     projectId?: NullableStringFieldUpdateOperationsInput | string | null
+    worldId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     agents_agents_currentSpellReleaseIdTospellReleases?: agentsUncheckedUpdateManyWithoutSpellReleases_agents_currentSpellReleaseIdTospellReleasesNestedInput
   }
@@ -30229,6 +30531,7 @@ export namespace Prisma {
     updatedAt?: string | null
     pingedAt?: string | null
     projectId?: string | null
+    worldId?: string | null
     data?: NullableJsonNullValueInput | InputJsonValue
     runState?: string
     image?: string | null
@@ -30260,6 +30563,7 @@ export namespace Prisma {
     updatedAt?: string | null
     pingedAt?: string | null
     projectId?: string | null
+    worldId?: string | null
     data?: NullableJsonNullValueInput | InputJsonValue
     runState?: string
     image?: string | null
@@ -30307,6 +30611,7 @@ export namespace Prisma {
     updatedAt?: NullableStringFieldUpdateOperationsInput | string | null
     pingedAt?: NullableStringFieldUpdateOperationsInput | string | null
     projectId?: NullableStringFieldUpdateOperationsInput | string | null
+    worldId?: NullableStringFieldUpdateOperationsInput | string | null
     data?: NullableJsonNullValueInput | InputJsonValue
     runState?: StringFieldUpdateOperationsInput | string
     image?: NullableStringFieldUpdateOperationsInput | string | null
@@ -30338,6 +30643,7 @@ export namespace Prisma {
     updatedAt?: NullableStringFieldUpdateOperationsInput | string | null
     pingedAt?: NullableStringFieldUpdateOperationsInput | string | null
     projectId?: NullableStringFieldUpdateOperationsInput | string | null
+    worldId?: NullableStringFieldUpdateOperationsInput | string | null
     data?: NullableJsonNullValueInput | InputJsonValue
     runState?: StringFieldUpdateOperationsInput | string
     image?: NullableStringFieldUpdateOperationsInput | string | null
@@ -30402,6 +30708,7 @@ export namespace Prisma {
     description?: string | null
     spellId?: string | null
     projectId?: string | null
+    worldId?: string | null
     createdAt?: Date | string | null
   }
 
@@ -30536,6 +30843,7 @@ export namespace Prisma {
     description?: NullableStringFieldUpdateOperationsInput | string | null
     spellId?: NullableStringFieldUpdateOperationsInput | string | null
     projectId?: NullableStringFieldUpdateOperationsInput | string | null
+    worldId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     agents_agents_currentSpellReleaseIdTospellReleases?: agentsUpdateManyWithoutSpellReleases_agents_currentSpellReleaseIdTospellReleasesNestedInput
     spells?: spellsUpdateManyWithoutSpellReleasesNestedInput
@@ -30546,6 +30854,7 @@ export namespace Prisma {
     description?: NullableStringFieldUpdateOperationsInput | string | null
     spellId?: NullableStringFieldUpdateOperationsInput | string | null
     projectId?: NullableStringFieldUpdateOperationsInput | string | null
+    worldId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     agents_agents_currentSpellReleaseIdTospellReleases?: agentsUncheckedUpdateManyWithoutSpellReleases_agents_currentSpellReleaseIdTospellReleasesNestedInput
     spells?: spellsUncheckedUpdateManyWithoutSpellReleasesNestedInput
@@ -30556,6 +30865,7 @@ export namespace Prisma {
     description?: NullableStringFieldUpdateOperationsInput | string | null
     spellId?: NullableStringFieldUpdateOperationsInput | string | null
     projectId?: NullableStringFieldUpdateOperationsInput | string | null
+    worldId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
 
@@ -30629,6 +30939,7 @@ export namespace Prisma {
     updatedAt?: string | null
     pingedAt?: string | null
     projectId?: string | null
+    worldId?: string | null
     data?: NullableJsonNullValueInput | InputJsonValue
     runState?: string
     image?: string | null
@@ -30648,6 +30959,7 @@ export namespace Prisma {
     id: string
     name?: string | null
     projectId?: string | null
+    worldId?: string | null
     graph?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: string | null
     updatedAt?: string | null
@@ -30664,6 +30976,7 @@ export namespace Prisma {
     updatedAt?: NullableStringFieldUpdateOperationsInput | string | null
     pingedAt?: NullableStringFieldUpdateOperationsInput | string | null
     projectId?: NullableStringFieldUpdateOperationsInput | string | null
+    worldId?: NullableStringFieldUpdateOperationsInput | string | null
     data?: NullableJsonNullValueInput | InputJsonValue
     runState?: StringFieldUpdateOperationsInput | string
     image?: NullableStringFieldUpdateOperationsInput | string | null
@@ -30695,6 +31008,7 @@ export namespace Prisma {
     updatedAt?: NullableStringFieldUpdateOperationsInput | string | null
     pingedAt?: NullableStringFieldUpdateOperationsInput | string | null
     projectId?: NullableStringFieldUpdateOperationsInput | string | null
+    worldId?: NullableStringFieldUpdateOperationsInput | string | null
     data?: NullableJsonNullValueInput | InputJsonValue
     runState?: StringFieldUpdateOperationsInput | string
     image?: NullableStringFieldUpdateOperationsInput | string | null
@@ -30726,6 +31040,7 @@ export namespace Prisma {
     updatedAt?: NullableStringFieldUpdateOperationsInput | string | null
     pingedAt?: NullableStringFieldUpdateOperationsInput | string | null
     projectId?: NullableStringFieldUpdateOperationsInput | string | null
+    worldId?: NullableStringFieldUpdateOperationsInput | string | null
     data?: NullableJsonNullValueInput | InputJsonValue
     runState?: StringFieldUpdateOperationsInput | string
     image?: NullableStringFieldUpdateOperationsInput | string | null
@@ -30745,6 +31060,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     name?: NullableStringFieldUpdateOperationsInput | string | null
     projectId?: NullableStringFieldUpdateOperationsInput | string | null
+    worldId?: NullableStringFieldUpdateOperationsInput | string | null
     graph?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: NullableStringFieldUpdateOperationsInput | string | null
     updatedAt?: NullableStringFieldUpdateOperationsInput | string | null
@@ -30755,6 +31071,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     name?: NullableStringFieldUpdateOperationsInput | string | null
     projectId?: NullableStringFieldUpdateOperationsInput | string | null
+    worldId?: NullableStringFieldUpdateOperationsInput | string | null
     graph?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: NullableStringFieldUpdateOperationsInput | string | null
     updatedAt?: NullableStringFieldUpdateOperationsInput | string | null
@@ -30765,6 +31082,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     name?: NullableStringFieldUpdateOperationsInput | string | null
     projectId?: NullableStringFieldUpdateOperationsInput | string | null
+    worldId?: NullableStringFieldUpdateOperationsInput | string | null
     graph?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: NullableStringFieldUpdateOperationsInput | string | null
     updatedAt?: NullableStringFieldUpdateOperationsInput | string | null

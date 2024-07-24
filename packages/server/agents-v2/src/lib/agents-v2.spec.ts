@@ -1,6 +1,8 @@
 import { Agent } from './Agent'
 import { AgentConfigBuilder } from './core/AgentConfigBuilder'
 import { KeyvStateService } from './dependencies/keyvStateService'
+import { KeywordsLLMService } from './services/LLMService/KeywordsLLMService'
+import { CredentialManager } from './services/credentialsManager/credentialsManager'
 
 jest.setTimeout(10000) // Increase timeout for initialization
 
@@ -11,8 +13,12 @@ describe('Agent Integration', () => {
     const config = new AgentConfigBuilder()
       .withOptions({
         redisUrl: 'redis://localhost:6379',
+        worldId: 'test-world',
+        agentId: 'test-agent',
       })
       .withStateService(KeyvStateService)
+      .withLLMService(KeywordsLLMService)
+      .withCredentialManagerService(CredentialManager)
       .build()
 
     agent = new Agent('test-agent', config)
@@ -40,5 +46,11 @@ describe('Agent Integration', () => {
     agent.emit('initialized')
   })
 
-  // Add more tests as needed
+  it('should have a llm service', () => {
+    expect(agent.config.dependencies.LLMService).toBeDefined()
+  })
+
+  it('should have a credential manager service', () => {
+    expect(agent.config.dependencies.credentialManager).toBeDefined()
+  })
 })
