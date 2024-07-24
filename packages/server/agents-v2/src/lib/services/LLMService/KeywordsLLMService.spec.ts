@@ -152,7 +152,6 @@ describe('KeywordsLLMService', () => {
       }
 
       const generator = await service.streamObject(request, extraMetadata)
-      console.log(generator)
 
       // Ensure the return type matches StreamObjectReturn<T>
       expect(generator).toHaveProperty('next')
@@ -163,7 +162,7 @@ describe('KeywordsLLMService', () => {
       const result: Array<any> = []
 
       for await (const chunk of generator) {
-        console.log('Streamed chunk:', chunk)
+        // console.log('Streamed chunk:', chunk)
         if (
           chunk.choices &&
           chunk.choices[0].delta &&
@@ -173,7 +172,7 @@ describe('KeywordsLLMService', () => {
         }
       }
 
-      console.log('Final streamed object:', result)
+      // console.log('Final streamed object:', result)
       expect(Array.isArray(result)).toBe(true)
       expect(result.length).toBeGreaterThan(0)
 
