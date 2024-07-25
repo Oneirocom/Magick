@@ -2,13 +2,20 @@
 import { useCallback, useEffect, useRef } from 'react'
 import { useSnackbar } from 'notistack'
 
+import JSZip from 'jszip'
+import { saveAs } from 'file-saver'
+
 import { Tab, useConfig, useFeathers } from '@magickml/providers'
 import {
   useLazyGetSpellQuery,
   useSaveSpellMutation,
   setSyncing,
+  useGetSpellsQuery,
+  RootState,
+  useGetAgentQuery,
+  useGetAgentByIdQuery,
 } from 'client/state'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { SpellInterface } from '@magickml/agent-server-schemas'
 import posthog from 'posthog-js'
 
@@ -30,6 +37,19 @@ const EventHandler = ({ pubSub, tab, spellId }: Props) => {
 
   // only using this to handle events, so not rendering anything with it.
   const { enqueueSnackbar } = useSnackbar()
+
+  const { currentAgentId } = useSelector<RootState>(
+    state => state.globalConfig
+  ) as any
+
+  const { data: agent } = useGetAgentByIdQuery(
+    { agentId: currentAgentId },
+    {
+      skip: !currentAgentId,
+    }
+  )
+
+  const { data: spellData } = useGetSpellsQuery({})
 
   const [saveSpellMutation] = useSaveSpellMutation()
   // TODO: is this a bug?
@@ -57,8 +77,14 @@ const EventHandler = ({ pubSub, tab, spellId }: Props) => {
 
   const { events, subscribe, publish } = pubSub
 
-  const { $DELETE, $SAVE_SPELL, $SAVE_SPELL_DIFF, $EXPORT, $SUBSPELL_UPDATED } =
-    events
+  const {
+    $DELETE,
+    $SAVE_SPELL,
+    $SAVE_SPELL_DIFF,
+    $EXPORT,
+    $EXPORT_AGENT,
+    $SUBSPELL_UPDATED,
+  } = events
 
   /**
    * Save the current spell
@@ -228,9 +254,52 @@ const EventHandler = ({ pubSub, tab, spellId }: Props) => {
     link.parentNode.removeChild(link)
   }, [spellRef])
 
+  const onExportAgent = async () => {
+    if (!spellData || spellData.length === 0) {
+      enqueueSnackbar('No spells to export', { variant: 'warning' })
+      return
+    }
+
+    const zip = new JSZip()
+
+    // Iterate through all spells and add them to the zip file
+    spellData.data.forEach((spell: SpellInterface) => {
+      // Remove secrets from the spell before exporting
+      const cleanSpell = JSON.parse(JSON.stringify(spell))
+      const recurse = (obj: any) => {
+        for (const key in obj) {
+          if (key === 'secrets') {
+            obj[key] = {}
+          }
+          if (typeof obj[key] === 'object') {
+            recurse(obj[key])
+          }
+        }
+      }
+      recurse(cleanSpell)
+
+      // Add the cleaned spell to the zip file
+      zip.file(`${spell.name}.spell.json`, JSON.stringify(cleanSpell, null, 2))
+    })
+
+    // Generate the zip file
+    const content = await zip.generateAsync({ type: 'blob' })
+
+    // Save the zip file
+    saveAs(content, `${agent.name}_spells.zip`)
+
+    posthog.capture('agent_exported', {
+      spellCount: spellData.length,
+      projectId: config.projectId,
+    })
+
+    enqueueSnackbar('Agent exported successfully', { variant: 'success' })
+  }
+
   const handlerMap = {
     [$SAVE_SPELL(tab.id)]: saveSpell,
     [$EXPORT(tab.id)]: onExport,
+    [$EXPORT_AGENT(tab.id)]: onExportAgent,
     [$DELETE(tab.id)]: onDelete,
     [$SAVE_SPELL_DIFF(tab.id)]: onSaveDiff,
   }

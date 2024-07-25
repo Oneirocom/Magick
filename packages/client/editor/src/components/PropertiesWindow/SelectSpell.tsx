@@ -13,7 +13,9 @@ import {
 export const SelectSpell: React.FC<ConfigurationComponentProps> = props => {
   const { data: spellData } = useGetSpellsQuery({})
   const [spells, setSpells] = useState<SpellInterface[]>([])
-  const [spellId, setSpellId] = useState<string>(props.fullConfig.spellId || '')
+  const [spellName, setSpellName] = useState<string>(
+    props.fullConfig.spellName || ''
+  )
 
   useEffect(() => {
     if (spellData) {
@@ -25,16 +27,15 @@ export const SelectSpell: React.FC<ConfigurationComponentProps> = props => {
     }
   }, [spellData])
 
-  const onSelectSpell = (spellId: string) => {
-    setSpellId(spellId)
-    console.log('spellId', spellId)
-    props.updateConfigKey('spellId', spellId)
+  const onSelectSpell = (spellName: string) => {
+    setSpellName(spellName)
+    props.updateConfigKey('spellName', spellName)
   }
 
   return (
     <>
       <Select
-        value={spellId}
+        value={spellName}
         onValueChange={(newValue: string) => onSelectSpell(newValue)}
       >
         <SelectTrigger>
@@ -43,7 +44,7 @@ export const SelectSpell: React.FC<ConfigurationComponentProps> = props => {
         <SelectContent>
           {spells.map(spell => {
             return (
-              <SelectItem key={spell.id} value={spell.id}>
+              <SelectItem key={spell.name} value={spell.name}>
                 {spell.name}
               </SelectItem>
             )

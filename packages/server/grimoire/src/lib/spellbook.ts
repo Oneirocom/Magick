@@ -421,6 +421,18 @@ export class Spellbook<
     return agentChannel
   }
 
+  async getSpellcasterByName(spellName: string, event: EventPayload) {
+    const eventKey = this.eventKeyFromEvent(event)
+    const spellCasters = await this.createOrGetSpellCasters(eventKey, event)
+    if (!spellCasters) return null
+    for (const spellCaster of spellCasters.values()) {
+      if (spellCaster.spell.name === spellName) {
+        return spellCaster
+      }
+    }
+    return null
+  }
+
   async getSpellcasterById(spellId: string, event: EventPayload) {
     const eventKey = this.eventKeyFromEvent(event)
     const spellCasters = await this.createOrGetSpellCasters(eventKey, event)

@@ -29,7 +29,7 @@ export const jsonStringify = makeFlowNodeDefinition({
     valueTypeOptions: {
       valueType: 'object',
       defaultValue: {
-        values: ['string', 'number', 'float', 'boolean', 'object', 'array'],
+        values: ['string', 'integer', 'float', 'boolean', 'object', 'array'],
         socketName: 'Item',
       },
     },
