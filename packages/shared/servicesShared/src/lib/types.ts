@@ -7,7 +7,6 @@ import {
 } from './coreLLMService/types/liteLLMTypes'
 import { Model } from './coreLLMService/types/models'
 import pino from 'pino'
-import { Spellbook } from '@magickml/grimoire'
 
 export interface IBudgetManagerService {
   // Creates a budget for a user
@@ -230,7 +229,7 @@ export interface ISharedAgent {
   emit: (event: any, data: any) => void
   on: (event: any, listener: (data: any) => void) => void
   app: any // Consider defining a more specific type for 'app' if possible
-  spellbook: Spellbook<any, any>
+  spellbook: any
   [key: string]: any // Allow for additional properties
 }
 
