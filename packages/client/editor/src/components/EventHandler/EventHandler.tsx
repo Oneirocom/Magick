@@ -12,7 +12,6 @@ import {
   setSyncing,
   useGetSpellsQuery,
   RootState,
-  useGetAgentQuery,
   useGetAgentByIdQuery,
 } from 'client/state'
 import { useDispatch, useSelector } from 'react-redux'
