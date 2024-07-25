@@ -1,7 +1,5 @@
 # Grimoire Framework and NitroJS Extension Design Document
 
-# Grimoire Framework and NitroJS Extension Design Document
-
 ## 1. Introduction
 
 ### 1.1 Purpose of the Document
@@ -99,7 +97,7 @@ Ease of use is at the forefront of our design philosophy. We recognize that the 
 
 Community engagement is not just a nice-to-have feature; it's a core pillar of our vision. We aim to foster a vibrant ecosystem where developers can easily extend the IDE with custom nodes, functions, services, and schemas. By facilitating the easy sharing and integration of these components, we're not just building a framework; we're nurturing a collaborative environment where innovation can flourish. This community-driven approach will be key to pushing the boundaries of what's possible in AI agent development.
 
-Ultimately, our goal is to create a framework that's as powerful as it is flexible. We envision Grimoire and NitroJS being used to create standalone, efficient agents that can be easily deployed behind APIs or websockets, integrated into existing systems, and adapted to a wide range of use cases. By focusing on interoperability and ease of data exchange, we're ensuring that the agents built with our framework can seamlessly interact with the diverse ecosystem of tools and platforms that make up the modern technological landscape.
+Ultimately, our goal is to create a framework that's as powerful as it is flexible. We envision Grimoire being used to create standalone, efficient agents that can be easily deployed behind APIs or websockets, integrated into existing systems, and adapted to a wide range of use cases. By focusing on interoperability and ease of data exchange, we're ensuring that the agents built with our framework can seamlessly interact with the diverse ecosystem of tools and platforms that make up the modern technological landscape.
 
 Specific objectives include:
 
@@ -130,6 +128,8 @@ The high-level architecture consists of several key layers:
 4. **IDE Integration Layer**: This layer bridges the Grimoire framework with the visual IDE, allowing for seamless interaction between code-based and visual programming paradigms.
 
 5. **Runtime Layer**: Responsible for executing agents, managing resources, and handling communication with external systems.
+
+6. **SDK Layer**: A robust suite of SDK's which enable easy integration of AI Agents into existing applications and software.
 
 The entire system is designed to be event-driven, with a central event bus facilitating communication between different components. This approach allows for loose coupling between modules and enables real-time reactivity to both internal state changes and external inputs.
 
@@ -163,19 +163,21 @@ The entire system is designed to be event-driven, with a central event bus facil
 
 The data flow in the Grimoire framework is primarily event-driven:
 
-1. External events (e.g., user messages, API calls) are received by the Channel Manager.
+1. External events (e.g., user messages, API calls) are received by the services registered as Plugins
 
-2. The Channel Manager normalizes these events and passes them to the Event Bus.
+2. The Plugin uses the agents channel abstraction to emit events through the agent as an event bus
 
-3. The Event Bus dispatches the events to relevant listeners within the Agent Core and active plugins.
+3. The agents event bus is passed along to an event router, which is routes the events to the appropriate channels
 
-4. As agents process events, they may update their internal state via the State Management System.
+4. The channel manager processes the event through to a dedicated spellbook
 
-5. Agents can emit new events, which are again processed by the Event Bus.
+5. The Spellbook is responsible for passing the event down to all running spellcasters, where event nodes associated with those event will start off flows.
 
-6. Output events that require external communication are sent back to the Channel Manager for dispatch to appropriate external channels.
+6. Graphs can then emit events again via action nodes, triggering other behaviour in the agent, or triggering other graph events, which would pass through the event router again.
 
-7. Throughout this process, the Visual IDE (when in use) provides real-time visualization of the event flow, state changes, and agent behaviors.
+7. Output events that require external communication are sent back to the Channel Manager for dispatch to appropriate external channels.
+
+8. Throughout this process, the Visual IDE (when in use) provides real-time visualization of the event flow, state changes, and agent behaviors.
 
 This event-driven architecture allows for highly responsive agents that can adapt to complex, real-time scenarios while maintaining a clear and manageable code structure. The modular design ensures that developers can easily extend or modify specific components without affecting the entire system, promoting both flexibility and robustness in agent development.
 
@@ -191,6 +193,7 @@ Dependency Injection is a design pattern that allows us to develop loosely coupl
 2. **Testability**: Dependencies can be easily mocked or stubbed in unit tests, allowing for more comprehensive and isolated testing.
 3. **Flexibility**: It's easier to extend the system with new features or alter existing ones without major refactoring.
 4. **Separation of Concerns**: Classes and modules can focus on their core functionality without worrying about the creation and lifecycle of their dependencies.
+5. **Interface driven design**: All services and dependencies are designed first as interfaces to be implemented, making replacing them clean and straightforward.
 
 #### InversifyJS
 
