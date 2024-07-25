@@ -30,6 +30,7 @@ export const runSubspell = makeMagickAsyncNodeDefinition({
         'hiddenProperties',
         'socketOutputs',
         'socketInputs',
+        'spellName',
         'label',
       ],
     },
@@ -93,10 +94,11 @@ export const runSubspell = makeMagickAsyncNodeDefinition({
       return state
     }
 
+    const spellName = configuration.spellName
     const spellId = configuration.spellId
 
-    if (!spellId) {
-      throw new Error('No spellId provided')
+    if (!spellId || !spellName) {
+      throw new Error('No spellId or spellName provided')
     }
 
     const agent = getDependency<ISharedAgent>(CORE_DEP_KEYS.AGENT)
@@ -118,10 +120,19 @@ export const runSubspell = makeMagickAsyncNodeDefinition({
       throw new Error('No current event found')
     }
 
-    const spellCaster = await agent.spellbook.getSpellcasterById(
-      spellId,
-      currentEvent
-    )
+    let spellCaster
+
+    if (spellName) {
+      spellCaster = await agent.spellbook.getSpellcasterByName(
+        spellName,
+        currentEvent
+      )
+    } else {
+      spellCaster = await agent.spellbook.getSpellcasterById(
+        spellId,
+        currentEvent
+      )
+    }
 
     if (!spellCaster) {
       throw new Error('No spell caster found')

@@ -1,7 +1,8 @@
-// @ts-nocheck
 'use client'
 // DOCUMENTED
-import { usePubSub } from '@magickml/providers'
+import JSZip from 'jszip'
+import posthog from 'posthog-js'
+import { useConfig, usePubSub } from '@magickml/providers'
 import { ChangeEvent, useEffect, useRef, useState } from 'react'
 import { useHotkeys } from 'react-hotkeys-hook'
 import { useSelector } from 'react-redux'
@@ -10,11 +11,18 @@ import MenuIcon from '@mui/icons-material/Menu'
 import css from '../menuBar.module.css'
 import { styled } from '@mui/material/styles'
 import { NestedMenuItem } from 'mui-nested-menu'
-import { RootState, Tab, rootApi, useAppDispatch } from 'client/state'
+import {
+  RootState,
+  Tab,
+  rootApi,
+  useAppDispatch,
+  useNewSpellMutation,
+} from 'client/state'
 import { useModal } from '../../../contexts/ModalProvider'
 import { enqueueSnackbar } from 'notistack'
 import axios from 'axios'
 import { PRODUCTION } from 'clientConfig'
+import { v4 } from 'uuid'
 
 function toTitleCase(str: string) {
   return str
@@ -30,6 +38,8 @@ function toTitleCase(str: string) {
  */
 const NewMenuBar = (props: any) => {
   const dispatch = useAppDispatch()
+  const [newSpell] = useNewSpellMutation()
+  const config = useConfig()
   const { publish, events } = usePubSub()
   const [snapEnabled, setSnapEnabled] = useState(true)
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
@@ -47,7 +57,7 @@ const NewMenuBar = (props: any) => {
   }, [currentTab])
 
   // Grab all events we need
-  const { $SAVE_SPELL, $EXPORT, $DELETE, TOGGLE_SNAP } = events
+  const { $SAVE_SPELL, $EXPORT, $EXPORT_AGENT, $DELETE, TOGGLE_SNAP } = events
 
   /**
    * Save handler
@@ -83,6 +93,11 @@ const NewMenuBar = (props: any) => {
     publish($EXPORT(activeTabRef.current.id))
   }
 
+  const onExportAgent = () => {
+    if (!activeTabRef.current) return
+    publish($EXPORT_AGENT(activeTabRef.current.id))
+  }
+
   /**
    * Undo handler
    */
@@ -116,7 +131,7 @@ const NewMenuBar = (props: any) => {
     setSnapEnabled(!snapEnabled)
   }
 
-  const loadFile = async (selectedFile, replace) => {
+  const loadFile = async (selectedFile: any, replace: boolean) => {
     if (!token && PRODUCTION) {
       enqueueSnackbar('You must be logged in to create a project', {
         variant: 'error',
@@ -144,7 +159,50 @@ const NewMenuBar = (props: any) => {
     }
   }
 
-  const onImportProject = () => {
+  const importAgent = async (file: File) => {
+    try {
+      const zip = new JSZip()
+      const contents = await zip.loadAsync(file)
+
+      for (const filename of Object.keys(contents.files)) {
+        if (!contents.files[filename].dir) {
+          const content = await contents.files[filename].async('string')
+          const spellData = JSON.parse(content)
+
+          console.log('Importing:', spellData)
+
+          // Create new spell
+          const response = await newSpell({
+            id: v4(),
+            graph: spellData.graph,
+            name: `${spellData.name}`,
+            projectId: config.projectId,
+            type: spellData.type,
+          })
+
+          if ('error' in response) {
+            throw new Error(
+              `Failed to import spell ${spellData.name}: ${response.error}`
+            )
+          }
+
+          posthog.capture('spell_imported', {
+            projectId: config.projectId,
+            spellName: spellData.name,
+          })
+        }
+      }
+
+      enqueueSnackbar('Agent imported successfully', { variant: 'success' })
+    } catch (error: any) {
+      console.error('Error importing agent:', error)
+      enqueueSnackbar(`Error importing agent: ${error.message}`, {
+        variant: 'error',
+      })
+    }
+  }
+
+  const onImportAgent = () => {
     console.log('Clicking import project')
     hiddenFileInput.current?.click()
   }
@@ -152,13 +210,19 @@ const NewMenuBar = (props: any) => {
   const handleFileInputChange = (
     event: ChangeEvent<HTMLInputElement>
   ): void => {
-    if (event.target.files) {
-      Array.from(event.target.files).forEach(loadFile)
+    if (event.target.files && event.target.files.length > 0) {
+      const file = event.target.files[0]
+      if (file.name.endsWith('.zip')) {
+        importAgent(file)
+      } else {
+        // Existing logic for non-zip files
+        loadFile(file, false)
+      }
     }
   }
 
   // Menu bar entries
-  const menuBarItems = {
+  const menuBarItems: any = {
     file: {
       items: {
         new_spell: {
@@ -175,10 +239,14 @@ const NewMenuBar = (props: any) => {
         },
         export_spell: {
           onClick: onExport,
-          hotKey: 'meta+shift+e, ctrl+shift+e',
+          hotKey: 'meta+shift+e,ctrl+shift+e',
         },
-        import_project: {
-          onClick: onImportProject,
+        export_agent: {
+          onClick: onExportAgent,
+          hotKey: 'meta+shift+g',
+        },
+        import_agent: {
+          onClick: onImportAgent,
         },
       },
     },
@@ -230,6 +298,8 @@ const NewMenuBar = (props: any) => {
     formattedCommand = formattedCommand.replace('shift', '\u21E7')
     formattedCommand = formattedCommand.replace('cmd', '\u2318')
     formattedCommand = formattedCommand.replace('control', '\u2303')
+    formattedCommand = formattedCommand.replace('ctrl', '\u2303')
+    formattedCommand = formattedCommand.replace('meta', '\u2318')
     formattedCommand = formattedCommand.replace(/[`+`]/g, ' ')
 
     return formattedCommand
@@ -355,7 +425,7 @@ const NewMenuBar = (props: any) => {
       <input
         id="import"
         type="file"
-        multiple
+        accept=".zip,.json"
         ref={hiddenFileInput}
         onChange={handleFileInputChange}
         style={{ display: 'none' }}
@@ -459,7 +529,7 @@ const NewMenuBar = (props: any) => {
                     }}
                     divider={true}
                   >
-                    <div className={css['menu-item']}>
+                    <div className={(css as any)['menu-item']}>
                       <p>
                         {menuBarItems[item].items[subMenuKey].hasOwnProperty(
                           'isActive'

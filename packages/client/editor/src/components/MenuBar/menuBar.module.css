@@ -106,10 +106,10 @@ li.list-item:only-child {
   justify-content: space-between;
   align-items: center;
   width: 100%;
-  width: '180px';
+  width: '220px';
 }
 
 .menu-bar-item {
   cursor: pointer;
-  width: '180px';
+  width: '220px';
 }

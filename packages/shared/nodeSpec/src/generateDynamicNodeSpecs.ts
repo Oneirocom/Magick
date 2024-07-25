@@ -107,19 +107,19 @@ function createVariableNodeSpec(
   return newSpec
 }
 
-function createInputOutputNodeSpec(
-  baseSpec: NodeSpecJSON,
-  sockets: { name: string; valueType: string }[],
-  type: 'input' | 'output'
-): NodeSpecJSON {
-  const newSpec = updateDefaultValues(
-    baseSpec,
-    getInputOutputConfig(baseSpec, sockets, type)
-  )
-  newSpec.label = `${capitalize(type)} Sockets`
-  newSpec.type = `event/subspells/${type}`
-  return newSpec
-}
+// function createInputOutputNodeSpec(
+//   baseSpec: NodeSpecJSON,
+//   sockets: { name: string; valueType: string }[],
+//   type: 'input' | 'output'
+// ): NodeSpecJSON {
+//   const newSpec = updateDefaultValues(
+//     baseSpec,
+//     getInputOutputConfig(baseSpec, sockets, type)
+//   )
+//   newSpec.label = `${capitalize(type)} Sockets`
+//   newSpec.type = `event/subspells/${type}`
+//   return newSpec
+// }
 
 function configurationArrayToObject(
   configuration: { name: string; defaultValue: any }[]
@@ -137,22 +137,8 @@ export const generateVariableNodeSpecs = (
   const getVariableSpec = allSpecs.find(spec => spec.type === 'variables/get')
   const setVariableSpec = allSpecs.find(spec => spec.type === 'variables/set')
   const onVariableSpec = allSpecs.find(spec => spec.type === 'variables/on')
-  const inputEventSpec = allSpecs.find(
-    spec => spec.type === 'events/subspells/input'
-  )
-  const outputEventSpec = allSpecs.find(
-    spec => spec.type === 'events/subspells/output'
-  )
 
-  console.log('on variable spec', onVariableSpec)
-
-  if (
-    !getVariableSpec ||
-    !setVariableSpec ||
-    !onVariableSpec ||
-    !inputEventSpec ||
-    !outputEventSpec
-  ) {
+  if (!getVariableSpec || !setVariableSpec || !onVariableSpec) {
     return []
   }
 
@@ -189,32 +175,32 @@ export const generateVariableNodeSpecs = (
     })
     .flat()
 
-  const inputSockets =
-    spell.graph.graphInputs?.map(input => ({
-      name: input.key,
-      valueType: input.valueType,
-    })) || []
+  // const inputSockets =
+  //   spell.graph.graphInputs?.map(input => ({
+  //     name: input.key,
+  //     valueType: input.valueType,
+  //   })) || []
 
-  const outputSockets =
-    spell.graph.graphOutputs?.map(output => ({
-      name: output.key,
-      valueType: output.valueType,
-    })) || []
+  // const outputSockets =
+  //   spell.graph.graphOutputs?.map(output => ({
+  //     name: output.key,
+  //     valueType: output.valueType,
+  //   })) || []
 
-  const inputSpecJSON = createInputOutputNodeSpec(
-    inputEventSpec,
-    inputSockets,
-    'input'
-  )
-  const outputSpecJSON = createInputOutputNodeSpec(
-    outputEventSpec,
-    outputSockets,
-    'output'
-  )
+  // const inputSpecJSON = createInputOutputNodeSpec(
+  //   inputEventSpec,
+  //   inputSockets,
+  //   'input'
+  // )
+  // const outputSpecJSON = createInputOutputNodeSpec(
+  //   outputEventSpec,
+  //   outputSockets,
+  //   'output'
+  // )
 
   console.log('variable node spec', variableNodeSpecs)
 
-  return [...variableNodeSpecs, inputSpecJSON, outputSpecJSON]
+  return [...variableNodeSpecs]
 }
 
 export const sortNodeSpecsByType = (

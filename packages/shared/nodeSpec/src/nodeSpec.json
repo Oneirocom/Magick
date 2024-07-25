@@ -13,6 +13,7 @@
           "hiddenProperties",
           "socketOutputs",
           "socketInputs",
+          "spellName",
           "label"
         ]
       },
@@ -1498,7 +1499,7 @@
         "defaultValue": {
           "values": [
             "string",
-            "number",
+            "integer",
             "float",
             "boolean",
             "object",

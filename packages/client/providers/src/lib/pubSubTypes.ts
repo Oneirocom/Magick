@@ -36,6 +36,7 @@ export type PubSubEvents = {
   $RUN_SPELL: (tabId?: string) => string
   $PROCESS: (tabId: string) => string
   $EXPORT: (tabId: string) => string
+  $EXPORT_AGENT: (tabId: string) => string
   $UNDO: (tabId: string) => string
   $REDO: (tabId: string) => string
   $DELETE: (tabId: string) => string
