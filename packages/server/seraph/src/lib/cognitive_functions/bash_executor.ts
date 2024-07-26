@@ -14,7 +14,11 @@ const functionDefinition = {
   description:
     'Executes Bash commands on the local machine. Be sure to always check your memory before running commands, and always save the results of your learning and command results to memory.',
   parameters: {
-    command: { type: 'string', description: 'The Bash command to execute' },
+    command: {
+      type: 'string',
+      description:
+        'The Bash command to execute.  Be sure to wrap this in a CDATA tag so we dont try to parse symbols like &&.',
+    },
   },
   examples: [
     `<invoke>
