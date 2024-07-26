@@ -97,7 +97,7 @@ export const runSubspell = makeMagickAsyncNodeDefinition({
     const spellName = configuration.spellName
     const spellId = configuration.spellId
 
-    if (!spellId || !spellName) {
+    if (!spellId && !spellName) {
       throw new Error('No spellId or spellName provided')
     }
 
