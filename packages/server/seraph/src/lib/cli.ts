@@ -38,7 +38,7 @@ if (!process.env['ANTHROPIC_API_KEY']) {
   // seraph.registerCognitiveFunction(new MemoryStorage(seraph))
   seraph.registerCognitiveFunction(new MemoryRetrieval(seraph))
   seraph.registerCognitiveFunction(new BashExecutor(seraph))
-  seraph.registerCognitiveFunction(new GitManager(seraph))
+  // seraph.registerCognitiveFunction(new GitManager(seraph))
 
   new SeraphCLI(seraph)
 })()
