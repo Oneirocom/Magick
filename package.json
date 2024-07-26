@@ -63,7 +63,7 @@
     "nukefromorbit": "rimraf ./packages/**/node_modules && rimraf ./node_modules && rimraf ./apps/**/node_modules",
     "ogmeta:test": "node ./scripts/ogmeta.js",
     "portal:build:vercel": "npx nx build portal --runner=vercel",
-    "portal:build": "npx nx build portal",
+    "portal:build": "NODE_OPTIONS=--max_old_space_size=4000 && npx nx build portal",
     "portal:cli:build": "npx nx build cli && node scripts/rename-to-mjs.js && cd dist/apps/cli && npm pack",
     "portal:cli:install": "npm link dist/apps/cli",
     "portal:db:deploy": "npx prisma migrate deploy --schema portal/cloud/packages/db/src/lib/prisma/schema.prisma",
