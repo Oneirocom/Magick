@@ -7,6 +7,11 @@ import { metadataManager } from '../cognitive_functions/memory'
 import { SeraphCore } from '../seraphCore'
 import { z } from 'zod'
 
+import { fileURLToPath } from 'url'
+
+const __filename = fileURLToPath(import.meta.url)
+const __dirname = path.dirname(__filename)
+
 class MemoryStorageMiddleware implements IMiddleware {
   name = 'memoryStorage'
   private index: LocalIndex
@@ -19,6 +24,17 @@ class MemoryStorageMiddleware implements IMiddleware {
     })
 
     this.seraph = seraph
+
+    console.log(
+      'creating vectra store:',
+      path.join(
+        __dirname,
+        '..',
+        'cognitive_functions',
+        'memory',
+        'memory_index'
+      )
+    )
 
     this.index = new LocalIndex(
       path.join(
@@ -39,6 +55,10 @@ class MemoryStorageMiddleware implements IMiddleware {
   })
 
   async run(response: string, conversationId: string): Promise<string> {
+    if (!(await this.index.isIndexCreated())) {
+      await this.index.createIndex()
+    }
+
     const parsedResponse = JSON.parse(response)
     const {
       text,

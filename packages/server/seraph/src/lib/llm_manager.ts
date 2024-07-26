@@ -4,7 +4,8 @@ import { MessageStream } from '@anthropic-ai/sdk/lib/MessageStream'
 
 // const MODEL = 'claude-3-opus-20240229'
 // const MODEL = 'claude-3-sonnet-20240229'
-const MODEL = 'claude-3-haiku-20240307'
+const MODEL = 'claude-3-5-sonnet-20240620'
+// const MODEL = 'claude-3-haiku-20240307'
 
 class LLMManager {
   private anthropic: Anthropic

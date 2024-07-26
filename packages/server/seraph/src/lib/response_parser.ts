@@ -17,6 +17,7 @@ class ResponseParser {
       const functionCallMatch = /<invoke>(.*?)<\/invoke>/s.exec(response)
       if (functionCallMatch) {
         const functionCallXml = functionCallMatch[0]
+        console.log('Function call:', functionCallXml)
         const parsedXml = await parseStringPromise(functionCallXml)
 
         const invoke = parsedXml['invoke']

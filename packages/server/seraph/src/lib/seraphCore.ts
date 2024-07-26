@@ -251,8 +251,6 @@ class SeraphCore extends (EventEmitter as new () => TypedEmitter<SeraphEvents>) 
     const messageRegex = /<message>([\s\S]*?)<\/message>/
     const match = response.match(messageRegex)
 
-    // console.log('EXTRACT MESSAGE:', response, match)
-
     if (match && match.length > 1) {
       // console.log('EXTRACT MESSAGE:', match[1].trim())
       return match[1].trim()

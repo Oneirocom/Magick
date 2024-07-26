@@ -1,5 +1,6 @@
 import { SeraphCore } from './seraphCore'
 import { LLMManager } from './llm_manager'
+import { ConsoleLogWriter } from 'drizzle-orm'
 
 class SeraphIterator implements AsyncIterator<string> {
   private seraph: SeraphCore
@@ -29,7 +30,7 @@ class SeraphIterator implements AsyncIterator<string> {
     )
 
     let insideMessage = false
-    let partialOpeningTag = ''
+    const partialOpeningTag = ''
 
     const stream = this.llmManager.streamResponse(
       this.systemPrompt,
@@ -39,23 +40,17 @@ class SeraphIterator implements AsyncIterator<string> {
 
     stream.on('text', token => {
       if (insideMessage) {
-        if (token === '</message') {
+        if (token === '</message>') {
           insideMessage = false
           this.seraph.emit('token', '<END>')
         } else {
           this.seraph.emit('token', token)
         }
       } else {
-        if (token === '<message') {
-          partialOpeningTag = token
-        } else if (partialOpeningTag) {
-          if (token === '>') {
-            insideMessage = true
-            this.seraph.emit('token', '<START>')
-            partialOpeningTag = ''
-          } else {
-            partialOpeningTag += token
-          }
+        if (token === '<message>') {
+          // Compare with the full opening tag
+          insideMessage = true
+          this.seraph.emit('token', '<START>')
         }
       }
     })

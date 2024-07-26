@@ -48,37 +48,37 @@ class SeraphCLI {
       }
     )
 
-    let accumulatedMessage = ''
-    let isMessageStarted = false
+    // let accumulatedMessage = ''
+    // let isMessageStarted = false
 
-    function updateBoxenMessage() {
-      const formattedResponse = boxen(
-        chalk.blue('Seraph:') + '\n' + accumulatedMessage,
-        {
-          padding: 2,
-          borderStyle: 'round',
-          borderColor: 'green',
-        }
-      )
-      logUpdate(formattedResponse)
-    }
+    // function updateBoxenMessage() {
+    //   const formattedResponse = boxen(
+    //     chalk.blue('Seraph:') + '\n' + accumulatedMessage,
+    //     {
+    //       padding: 2,
+    //       borderStyle: 'round',
+    //       borderColor: 'green',
+    //     }
+    //   )
+    //   logUpdate(formattedResponse)
+    // }
 
-    this.seraph.on('token', (token: string) => {
-      if (token === '<START>') {
-        isMessageStarted = true
-        accumulatedMessage = ''
-        updateBoxenMessage()
-      } else if (token === '<END>') {
-        isMessageStarted = false
-        updateBoxenMessage()
-        console.log('')
-      } else {
-        if (isMessageStarted) {
-          accumulatedMessage += token
-          updateBoxenMessage()
-        }
-      }
-    })
+    // this.seraph.on('token', (token: string) => {
+    //   if (token === '<START>') {
+    //     isMessageStarted = true
+    //     accumulatedMessage = ''
+    //     updateBoxenMessage()
+    //   } else if (token === '<END>') {
+    //     isMessageStarted = false
+    //     updateBoxenMessage()
+    //     console.log('')
+    //   } else {
+    //     if (isMessageStarted) {
+    //       accumulatedMessage += token
+    //       updateBoxenMessage()
+    //     }
+    //   }
+    // })
 
     this.seraph.on('functionExecution', (functionExecution: SeraphFunction) => {
       console.log(chalk.yellow(`Executing function: ${functionExecution.name}`))
@@ -111,6 +111,10 @@ class SeraphCLI {
             middlewareResult.result
         )
       )
+    })
+
+    this.seraph.on('message', (message: string) => {
+      console.log(chalk.green('Message:') + '\n' + message)
     })
 
     // Add other event listeners here...
