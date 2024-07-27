@@ -1,14 +1,20 @@
-FROM node:18-alpine
+FROM node:20-alpine
+
+# Install git, python, and build dependencies
+RUN apk add --no-cache git python3 make g++ py3-pip
+
+# Set Python path
+ENV PYTHON=/usr/bin/python3
 
 # Install git
-RUN apk add --no-cache git
-
 ARG GITHUB_TOKEN
 ARG BRANCH=development
-
 ARG RAILWAY_GIT_COMMIT_SHA
+
 # Configure git to use the token
 RUN git config --global url."https://${GITHUB_TOKEN}@github.com/".insteadOf "https://github.com/"
+
+# Clone the repository
 RUN git clone --branch ${BRANCH} --depth 1 https://www.github.com/oneirocom/magick.git /app
 
 WORKDIR /app
@@ -16,9 +22,12 @@ WORKDIR /app
 # Clone the submodule
 RUN git submodule update --init --recursive portal/cloud
 
+# Install dependencies
 RUN npm install --foreground-scripts
 
+# Build the project
 RUN npx nx build portal --skip-nx-cache
 
-ENTRYPOINT [ "npx"]
-CMD [ "nx", "run", "portal:serve:production"]
+# Set the entrypoint and command
+ENTRYPOINT [ "npx" ]
+CMD [ "nx", "run", "portal:serve:production" ]
