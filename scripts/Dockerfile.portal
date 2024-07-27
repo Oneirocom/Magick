@@ -13,7 +13,7 @@ WORKDIR /app
 # Clone the submodule
 RUN git submodule update --init --recursive portal/cloud
 
-RUN npm install
+RUN npm install --foreground-scripts
 
 RUN npx nx build portal --skip-nx-cache
 
