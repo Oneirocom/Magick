@@ -32,4 +32,4 @@ RUN npx nx build portal --skip-nx-cache
 
 # Set the entrypoint and command
 ENTRYPOINT [ "npx" ]
-CMD [ "nx", "run", "portal:serve:production" ]
+CMD [ "next", "start", "dist/portal/cloud/apps/portal/.next" ]
