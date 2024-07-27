@@ -1,4 +1,4 @@
-FROM magickml/magick:latest
+FROM node:18-alpine
 
 ARG GITHUB_TOKEN
 ARG BRANCH=development
@@ -13,10 +13,9 @@ WORKDIR /app
 # Clone the submodule
 RUN git submodule update --init --recursive portal/cloud
 
-
 RUN npm install
 
 RUN npx nx build portal --skip-nx-cache
 
 ENTRYPOINT [ "npx"]
-CMD [ "nx run portal:serve:production"]
+CMD [ "nx", "run", "portal:serve:production"]
