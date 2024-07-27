@@ -6,8 +6,10 @@ RUN apk add --no-cache git python3 make g++ py3-pip
 # Set Python path
 ENV PYTHON=/usr/bin/python3
 
-# Install git
 ARG GITHUB_TOKEN
+ARG NEXT_PUBLIC_POSTHOG_KEY
+ARG POSTHOG_API_KEY
+ARG VITE_APP_POSTHOG_API_KEY
 ARG BRANCH=development
 ARG RAILWAY_GIT_COMMIT_SHA
 
