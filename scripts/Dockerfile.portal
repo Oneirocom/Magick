@@ -16,7 +16,7 @@ RUN git submodule update --init --recursive portal/cloud
 
 RUN npm install
 
-RUN npm run portal:build
+RUN npx nx build portal --skip-nx-cache
 
-ENTRYPOINT [ "npm", "run" ]
-CMD [ "portal:start" ]
+ENTRYPOINT [ "npx"]
+CMD [ "nx run portal:serve:production"]
