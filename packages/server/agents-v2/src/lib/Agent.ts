@@ -2,7 +2,7 @@ import 'reflect-metadata'
 
 import { TypedEmitter } from 'tiny-typed-emitter'
 import { AgentConfig } from './interfaces/IAgentConfig'
-import { Container, interfaces } from 'inversify'
+import { Container, injectable, interfaces } from 'inversify'
 import { IEventStore } from './interfaces/IEventStore'
 import { EventEmitterWrapper } from './core/eventEmitterWrapped'
 import { CommandHub } from './dependencies/commandHub'
@@ -33,11 +33,15 @@ interface AgentEvents extends BaseAgentEvents, ICommandHubEvents {}
 
 export interface AgentConfigOptions {}
 
+@injectable()
 export class Agent extends EventEmitterWrapper<AgentEvents> {
   container: Container
   config: AgentConfig<AgentConfigOptions>
 
-  constructor(public readonly id: string, config: AgentConfig) {
+  constructor(
+    public readonly id: string,
+    config: AgentConfig<AgentConfigOptions>
+  ) {
     // Here we create a new event emitter from a passed in config dependency.
     // We extended from the EventEmitterWrapper class to enable custom event emitters we extend from.
 
