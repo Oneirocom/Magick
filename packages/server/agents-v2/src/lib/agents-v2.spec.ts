@@ -6,6 +6,8 @@ import { CredentialManager } from './services/credentialsManager/credentialsMana
 
 jest.setTimeout(10000) // Increase timeout for initialization
 
+const WORLD_ID = '6253ac6f-7309-46e9-b8c7-2cda3405b8e3'
+const AGENT_ID = '8c4272b3-4e8d-43de-a3aa-5e1cfde31737'
 describe('Agent Integration', () => {
   let agent: Agent
 
@@ -13,8 +15,8 @@ describe('Agent Integration', () => {
     const config = new AgentConfigBuilder()
       .withOptions({
         redisUrl: 'redis://localhost:6379',
-        worldId: 'test-world',
-        agentId: 'test-agent',
+        worldId: WORLD_ID,
+        agentId: AGENT_ID,
       })
       .withStateService(KeyvStateService)
       .withLLMService(KeywordsLLMService)
