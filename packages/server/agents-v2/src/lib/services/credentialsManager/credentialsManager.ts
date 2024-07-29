@@ -1,3 +1,5 @@
+import 'reflect-metadata'
+
 import { prismaCore } from '@magickml/server-db'
 import {
   CredentialKeyValuePair,
@@ -17,8 +19,8 @@ export class CredentialManager implements ICredentialManager {
   protected cachedCredentials: CredentialKeyValuePair[] = []
 
   constructor(@inject(TYPES.Agent) private agent: Agent) {
-    this.worldId = agent.config.options.worldId
-    this.agentId = agent.config.options.agentId
+    this.worldId = this.agent.config.options.worldId
+    this.agentId = this.agent.config.options.agentId
   }
 
   async init(): Promise<void> {
@@ -58,10 +60,7 @@ export class CredentialManager implements ICredentialManager {
 
       const credentials = creds.map(credential => ({
         name: credential.credentials.name,
-        value: decrypt(
-          credential.credentials.value,
-          CREDENTIALS_ENCRYPTION_KEY
-        ),
+        value: credential.credentials.value,
       })) as CredentialKeyValuePair[]
 
       this.cachedCredentials = credentials
@@ -74,7 +73,6 @@ export class CredentialManager implements ICredentialManager {
 
   getCredential(name: string): string | undefined {
     const credential = this.cachedCredentials.find(cred => cred.name === name)
-
     return credential
       ? decrypt(credential.value, CREDENTIALS_ENCRYPTION_KEY)
       : undefined
@@ -122,6 +120,7 @@ export class CredentialManager implements ICredentialManager {
 
     const createdCredential = await prismaCore.credentials.create({
       data: {
+        id: credential.id || undefined,
         name: credential.name,
         value: encrypt(credential.value, CREDENTIALS_ENCRYPTION_KEY),
         serviceType: credential.serviceType,
