@@ -102,7 +102,9 @@
       "@magickml/flow-core": ["packages/client/flow/core/src/index.ts"],
       "@magickml/grimoire": ["packages/server/grimoire/src/index.ts"],
       "@magickml/icons": ["packages/client/icons/src/index.ts"],
-      "@magickml/keywords": ["packages/cloud/next/keywords/src/index.ts"],
+      "@magickml/keywords-service": [
+        "packages/cloud/next/keywords/src/index.ts"
+      ],
       "@magickml/knowledge-plugin": ["packages/plugins/knowledge/src/index.ts"],
       "@magickml/nitro-module": ["packages/server/nitroModule/src/index.ts"],
       "@magickml/node-spec": ["packages/shared/nodeSpec/src/index.ts"],
