@@ -1,3 +1,4 @@
+import 'reflect-metadata'
 import {
   streamText as originalStreamText,
   generateText,
@@ -24,6 +25,7 @@ import {
   StreamObjectYield,
   StreamTextReturn,
 } from '@magickml/llm-service-types'
+import { injectable } from 'inversify'
 
 type KeywordsModel = {
   model_name: string
@@ -41,6 +43,7 @@ type KeywordsModel = {
   }
 }
 
+@injectable()
 export class KeywordsLLMService implements ILLMService {
   private keywords: KeywordsService
   private providersCache?: ExtensibleLanguageModelProvider<{ apiKey: string }>[]
