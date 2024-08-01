@@ -107,13 +107,12 @@ export class Agent
   commandHub: CommandHub<this>
   version!: string
   pubsub: RedisPubSub
-  app: any
-  // app: Application
+  app: Application
   spellbook: Spellbook<Application, this>
   pluginManager: PluginManager<this>
   private heartbeatInterval: NodeJS.Timer
   loggingService: AgentLoggingService<this>
-  seraphManager: SeraphManager
+  seraphManager?: SeraphManager
 
   /**
    * Agent constructor initializes properties and sets intervals for updating agents
@@ -138,17 +137,19 @@ export class Agent
 
     this.commandHub = new CommandHub<this>(this, this.pubsub)
 
-    this.seraphManager = new SeraphManager({
-      seraphOptions: {
-        openAIApiKey: process.env.OPENAI_API_KEY || '',
-        anthropicApiKey: process.env.ANTHROPIC_API_KEY || '',
-      },
-      agentId: this.id,
-      projectId: this.projectId,
-      pubSub: this.pubsub,
-      commandHub: this.commandHub,
-      app: this.app,
-    })
+    if (process.env['ENABLE_SERAPH']) {
+      this.seraphManager = new SeraphManager({
+        seraphOptions: {
+          openAIApiKey: process.env.OPENAI_API_KEY || '',
+          anthropicApiKey: process.env.ANTHROPIC_API_KEY || '',
+        },
+        agentId: this.id,
+        projectId: this.projectId,
+        pubSub: this.pubsub,
+        commandHub: this.commandHub,
+        app: this.app,
+      })
+    }
 
     this.pluginManager = new PluginManager<this>({
       pluginDirectory: process.env.PLUGIN_DIRECTORY || './plugins',
