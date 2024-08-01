@@ -31,14 +31,6 @@ import {
 } from './commands/command-manager'
 import { BaseActionManager } from './actions/action-manager'
 import { type EventDefinition } from './events/event-manager'
-import { PluginStorageManager, S3PluginStorageManager } from './storage'
-
-import {
-  AWS_SECRET_KEY,
-  AWS_ACCESS_KEY,
-  AWS_REGION,
-  AWS_BUCKET_NAME,
-} from '@magickml/server-config'
 // nx-ignore-next-line
 import {
   ActionPayload,
@@ -105,7 +97,7 @@ export abstract class BasePlugin<
   credentialsManager: PluginCredentialsManager<Credentials>
   commandManager: PluginCommandManager
   actionsManager: BaseActionManager
-  storageManager: PluginStorageManager
+  // storageManager: PluginStorageManager
 
   abstract nodes?: NodeDefinition[]
   abstract values?: ValueType[]
@@ -163,15 +155,6 @@ export abstract class BasePlugin<
     this.commandManager = new BaseCommandManager()
 
     this.actionsManager = new BaseActionManager(this.agent)
-
-    this.storageManager = new S3PluginStorageManager(
-      this.agentId,
-      this.name,
-      AWS_ACCESS_KEY,
-      AWS_SECRET_KEY,
-      AWS_REGION,
-      AWS_BUCKET_NAME
-    )
   }
 
   // CONFIG
