@@ -28,7 +28,8 @@ import { Spellbook } from '@magickml/agent-service'
 import { AgentLoggingService } from './AgentLogger'
 
 import CorePlugin from '@magickml/core-plugin'
-// import KnowledgePlugin from '@magickml/knowledge-plugin'
+
+import KnowledgePlugin from '@magickml/knowledge-plugin'
 import DiscordPlugin from '@magickml/discord-plugin'
 import SlackPlugin from '@magickml/slack-plugin'
 
@@ -81,12 +82,7 @@ type AgentEvents = {
   error: (error: ActionPayload) => void
 }
 
-const plugins = [
-  CorePlugin,
-  // KnowledgePlugin,
-  DiscordPlugin,
-  SlackPlugin,
-]
+const plugins = [CorePlugin, KnowledgePlugin, DiscordPlugin, SlackPlugin]
 
 /**
  * Agent class represents an agent instance.
