@@ -1,5 +1,5 @@
 import { NodeCategory, makeFlowNodeDefinition } from '@magickml/behave-graph'
-import { IEventStore } from '@magickml/grimoire'
+import { IEventStore } from '@magickml/agent-service'
 
 export const clearMessageHistory = makeFlowNodeDefinition({
   typeName: 'queries/messages/clearMessageHistory',

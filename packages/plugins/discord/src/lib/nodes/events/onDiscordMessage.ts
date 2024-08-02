@@ -5,7 +5,7 @@ import {
   type DiscordEventPayload,
 } from '../../configx'
 import { EventPayload } from '@magickml/shared-services'
-import { makeMagickEventNodeDefinition } from '@magickml/grimoire'
+import { makeMagickEventNodeDefinition } from '@magickml/agent-service'
 import { NodeCategory } from '@magickml/behave-graph'
 
 type State = {

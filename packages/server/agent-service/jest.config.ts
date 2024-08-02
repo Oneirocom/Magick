@@ -1,11 +1,11 @@
 /* eslint-disable */
 export default {
-  displayName: '@magickml/grimoire',
+  displayName: '@magickml/agent-service',
   preset: '../../../jest.preset.js',
   testEnvironment: 'node',
   transform: {
     '^.+\\.[tj]s$': ['ts-jest', { tsconfig: '<rootDir>/tsconfig.spec.json' }],
   },
   moduleFileExtensions: ['ts', 'js', 'html'],
-  coverageDirectory: '../../../coverage/packages/server/grimoire',
+  coverageDirectory: '../../../coverage/packages/server/agent-service',
 }

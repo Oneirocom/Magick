@@ -1,6 +1,6 @@
 import { CoreEventsPlugin } from '@magickml/agent-plugin'
 import { RedisPubSub } from '@magickml/redis-pubsub'
-import { SpellCaster } from '@magickml/grimoire'
+import { SpellCaster } from '@magickml/agent-service'
 import { DATABASE_URL } from '@magickml/server-config'
 
 import { CoreLLMService } from './services/coreLLMService/coreLLMService'

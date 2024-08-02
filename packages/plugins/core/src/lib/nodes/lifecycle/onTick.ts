@@ -3,7 +3,7 @@ import {
   ILifecycleEventEmitter,
   NodeCategory,
 } from '@magickml/behave-graph'
-import { IEventStore, makeMagickEventNodeDefinition } from '@magickml/grimoire'
+import { IEventStore, makeMagickEventNodeDefinition } from '@magickml/agent-service'
 import { CORE_DEP_KEYS, ISharedAgent } from '@magickml/shared-services'
 
 type State = {

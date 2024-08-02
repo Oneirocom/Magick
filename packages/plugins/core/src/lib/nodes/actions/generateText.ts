@@ -5,7 +5,7 @@ import {
 } from '@magickml/behave-graph'
 import { CoreLLMService } from '../../services/coreLLMService/coreLLMService'
 import { CORE_DEP_KEYS } from '@magickml/shared-services'
-import { IEventStore } from '@magickml/grimoire'
+import { IEventStore } from '@magickml/agent-service'
 import { getProviderIdMapping } from '@magickml/shared-services'
 
 type Message = {

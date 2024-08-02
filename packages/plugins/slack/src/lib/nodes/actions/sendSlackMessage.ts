@@ -4,7 +4,7 @@ import {
   SendSlackMessage,
 } from '../../configx'
 import { SocketDefinition } from '@magickml/behave-graph'
-import { IEventStore } from '@magickml/grimoire'
+import { IEventStore } from '@magickml/agent-service'
 import { createActionNode } from '@magickml/shared-plugins'
 
 type Inputs = {

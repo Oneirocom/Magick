@@ -1,5 +1,5 @@
 {
-  "name": "@magickml/grimoire",
+  "name": "@magickml/agent-service",
   "version": "0.0.1",
   "dependencies": {
     "@feathersjs/feathers": "5.0.25",

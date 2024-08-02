@@ -1,6 +1,6 @@
 import { NodeCategory } from '@magickml/behave-graph'
 import { EventPayload } from '@magickml/shared-services'
-import { makeMagickEventNodeDefinition } from '@magickml/grimoire'
+import { makeMagickEventNodeDefinition } from '@magickml/agent-service'
 import { EventTypes } from '@magickml/agent-communication'
 import { corePluginName } from '../../config'
 

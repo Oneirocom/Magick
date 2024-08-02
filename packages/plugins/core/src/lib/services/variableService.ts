@@ -1,5 +1,5 @@
 import Keyv from 'keyv'
-import { EventStore, SpellCaster } from '@magickml/grimoire'
+import { EventStore, SpellCaster } from '@magickml/agent-service'
 import { ArrayVariable, ArrayVariableData } from '../values/Array/ArrayVariable'
 import EventEmitter from 'events'
 import TypedEmitter from 'typed-emitter'
