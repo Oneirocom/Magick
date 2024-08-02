@@ -1,73 +1,61 @@
+import consola from 'consola'
 import { useRuntimeConfig } from 'nitropack/runtime'
 import { defineNovaPlugin } from 'nova/runtime'
+import { initApp } from '../../../../../packages/server/core/src'
+import {
+  AgentV2 as Agent,
+  type AgentConfig,
+} from '../../../../../packages/server/agents/src'
 
 export default defineNovaPlugin({
   useRuntimeConfig,
-  initialize: (nitro, config) => {
-    // Perform initialization tasks
+  initialize: async (nitroApp, config) => {
+    consola.info('Initializing agent')
+    nitroApp.agentClient = await initApp()
 
-    console.log('Initializing nodes feature')
-    return {
-      /* initialization result */
+    const agentData = await nitroApp.agentClient
+      .service('agents')
+      .get(config.agentId)
+
+    const agentConfig: AgentConfig = {
+      pubsub: nitroApp.agentClient.get('pubsub'),
+      app: nitroApp.agentClient,
+      useInternalPlugins: false,
     }
-  },
-  before: (nitro, initResult) => {
-    // Run tasks before feature initialization
-    return {
-      /* before result */
-    }
-  },
-  after: (nitro, beforeResult) => {
-    // Run tasks after feature initialization
+
+    // // use data and app to create agent
+    const agent = new Agent(agentData, agentConfig)
+
+    nitroApp.agent = agent
 
     return {}
   },
+  before: (nitro, initResult) => {
+    return {}
+  },
+  after: (nitro, beforeResult) => {
+    return {}
+  },
   runtimeSetup: {
-    nodes: {
-      initFeatureHandlers: async (nitro, handlers) => {
-        // Initialize API handlers
-        console.log('Initializing nodes feature handlers')
+    plugins: {
+      async initFeatureHandlers(nitroApp, handlers) {
+        for (const plugin of handlers) {
+          const fn = (await plugin.handler()).default
+
+          const instance = new fn.constructor({
+            agent: nitroApp.agent,
+            connection: nitroApp.agentClient.get('redis'),
+            pubSub: nitroApp.agentClient.get('pubsub'),
+            projectId: nitroApp.agent.projectId,
+          })
+
+          nitroApp.agent.pluginManager.registerPlugin(instance)
+        }
       },
-      getVirtualHandlers: () => {
-        // Return virtual handlers for the API feature
+      getVirtualHandlers() {
         return []
       },
     },
-    // ... other features
   },
 })
 
-// export default defineNitroPlugin(async nitroApp => {
-//   const app = (await initApp()) as any
-
-//   const runtimeConfig = useRuntimeConfig()
-
-//   nitroApp.agentServer = app
-
-//   // get agent data from agent server from configured agent id
-//   const agentData = await app.service('agents').get(runtimeConfig.agentId)
-
-//   const agentConfig: AgentConfig = {
-//     pubsub: app.get('pubsub'),
-//     app,
-//     useInternalPlugins: false,
-//   }
-
-//   // // use data and app to create agent
-//   const agent = new Agent(agentData, agentConfig)
-
-//   magickPlugins.forEach((plugin: any) => {
-//     // TODo we will clean this up and make it better
-//     // maybe put a register plugin directly on the agent
-//     const instance = new plugin.constructor({
-//       agent,
-//       connection: app.get('redis'),
-//       pubSub: app.get('pubsub'),
-//       projectId: agent.projectId,
-//     })
-
-//     agent.pluginManager.registerPlugin(instance)
-//   })
-
-//   nitroApp.agent = agent
-// })
