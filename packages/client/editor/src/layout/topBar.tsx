@@ -144,7 +144,7 @@ const TopBar: React.FC<TopBarProps> = ({
 
   return (
     <TooltipProvider>
-      <div className="bg-gray-800 text-white py-4 px-2 flex items-center justify-between w-full relative h-12 border-b-2 border-[--background-color]">
+      <div className="bg-[#040405] text-white py-4 px-2 flex items-center justify-between w-full relative h-12 border-b-2 border-[--background-color]">
         <div className="flex items-center space-x-2">
           <Button
             onClick={toggleFileDrawer}
