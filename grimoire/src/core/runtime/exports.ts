@@ -1,8 +1,8 @@
 // This whole file looks messed up, but its not.
 // You should not import this at any point before the runtime is initalized.
 
-import type { NodeHandlerVirtual } from '../../types/grimoire'
 // @ts-ignore
 import { handlers as nodes } from '#grimoire-virtual/nodes'
+import type { BaseVirtualHandler } from 'nova/runtime'
 
-export const getNodes = (): NodeHandlerVirtual[] => nodes
+export const getNodes = (): BaseVirtualHandler[] => nodes
