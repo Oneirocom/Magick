@@ -10,6 +10,10 @@
       "types": "./dist/cli/index.d.ts",
       "import": "./dist/cli/index.mjs"
     },
+    "./cga": {
+      "types": "./dist/cga/index.d.ts",
+      "import": "./dist/cga/index.mjs"
+    },
     ".": {
       "types": "./dist/core/index.d.ts",
       "import": "./dist/core/index.mjs"
@@ -28,7 +32,8 @@
   "types": "./dist/core/index.d.ts",
   "bin": {
     "grimoire": "./dist/cli/index.mjs",
-    "magick": "./dist/cli/index.mjs"
+    "magick": "./dist/cli/index.mjs",
+    "create-grimoire-app": "./dist/cga/index.mjs"
   },
   "files": [
     "dist",
@@ -43,6 +48,8 @@
     "lint": "eslint --cache . && biome check .",
     "lint:fix": "eslint --cache --fix . && biome check . --write",
     "grimoire": "jiti ./src/cli/index.ts",
+    "create-grimoire-app": "jiti ./src/cga/index.ts",
+    "cga": "pnpm create-grimoire-app",
     "prepack": "pnpm build",
     "gen-mirror": "pnpm jiti scripts/gen-mirror.ts",
     "gen-presets": "pnpm jiti scripts/gen-presets.ts",
@@ -59,6 +66,7 @@
   },
   "dependencies": {
     "@cloudflare/kv-asset-handler": "^0.3.3",
+    "@magickml/agent-plugin": "^0.0.1",
     "@magickml/agent-service": "0.0.1",
     "@magickml/core-plugin": "^0.0.1",
     "@magickml/discord-plugin": "^0.0.1",
@@ -69,6 +77,7 @@
     "@magickml/slack-plugin": "^0.0.1",
     "@magickml/storage": "^0.0.1",
     "@magickml/utils": "^0.0.1",
+    "@magickml/vercel-sdk-core": "^0.0.1",
     "@netlify/functions": "^2.7.0",
     "@rollup/plugin-alias": "^5.1.0",
     "@rollup/plugin-commonjs": "^26.0.1",
@@ -99,6 +108,7 @@
     "escape-string-regexp": "^5.0.0",
     "etag": "^1.8.1",
     "fs-extra": "^11.2.0",
+    "giget": "^1.2.3",
     "globby": "^14.0.1",
     "gzip-size": "^7.0.0",
     "h3": "^1.11.1",

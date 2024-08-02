@@ -30,6 +30,8 @@ export default defineBuildConfig({
     { input: 'src/config/index.ts' },
     // Core
     { input: 'src/core/index.ts' },
+    // CGA
+    { input: 'src/cga/index.ts' },
     // // Runtime
     // { input: 'src/runtime/', outDir: 'dist/runtime', format: 'esm' },
     // // Kit

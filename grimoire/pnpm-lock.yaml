@@ -15,6 +15,9 @@ importers:
       '@cloudflare/kv-asset-handler':
         specifier: ^0.3.3
         version: 0.3.4
+      '@magickml/agent-plugin':
+        specifier: ^0.0.1
+        version: 0.0.1(@babel/traverse@7.25.3)(@faker-js/faker@8.4.1)(@types/node@22.0.2)(axios@1.6.8)(encoding@0.1.13)(nx@19.2.1)(rollup@4.19.2)(terser@5.31.3)(typescript@5.5.4)(vitest@1.6.0(@edge-runtime/vm@3.2.0)(@types/node@22.0.2)(terser@5.31.3))
       '@magickml/agent-service':
         specifier: 0.0.1
         version: 0.0.1(@babel/traverse@7.25.3)(@faker-js/faker@8.4.1)(@types/node@22.0.2)(axios@1.6.8)(encoding@0.1.13)(nx@19.2.1)(rollup@4.19.2)(terser@5.31.3)(typescript@5.5.4)(vitest@1.6.0(@edge-runtime/vm@3.2.0)(@types/node@22.0.2)(terser@5.31.3))
@@ -43,6 +46,9 @@ importers:
         specifier: ^0.0.1
         version: 0.0.1(encoding@0.1.13)
       '@magickml/utils':
+        specifier: ^0.0.1
+        version: 0.0.1
+      '@magickml/vercel-sdk-core':
         specifier: ^0.0.1
         version: 0.0.1
       '@netlify/functions':
@@ -135,6 +141,9 @@ importers:
       fs-extra:
         specifier: ^11.2.0
         version: 11.2.0
+      giget:
+        specifier: ^1.2.3
+        version: 1.2.3
       globby:
         specifier: ^14.0.1
         version: 14.0.2
@@ -14554,12 +14563,6 @@ snapshots:
       '@nodelib/fs.scandir': 2.1.5
       fastq: 1.17.1
 
-  '@nrwl/devkit@19.2.1(nx@19.2.1(debug@4.3.5))':
-    dependencies:
-      '@nx/devkit': 19.2.1(nx@19.2.1(debug@4.3.5))
-    transitivePeerDependencies:
-      - nx
-
   '@nrwl/devkit@19.2.1(nx@19.2.1)':
     dependencies:
       '@nx/devkit': 19.2.1(nx@19.2.1)
@@ -14666,7 +14669,7 @@ snapshots:
 
   '@nx/devkit@19.2.1(nx@19.2.1(debug@4.3.5))':
     dependencies:
-      '@nrwl/devkit': 19.2.1(nx@19.2.1(debug@4.3.5))
+      '@nrwl/devkit': 19.2.1(nx@19.2.1)
       ejs: 3.1.10
       enquirer: 2.3.6
       ignore: 5.3.1
