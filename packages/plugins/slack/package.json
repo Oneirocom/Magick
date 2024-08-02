@@ -10,7 +10,7 @@
     "tslib": "^2.3.0",
     "@magickml/agent-plugin": "0.0.1",
     "@magickml/credentials": "0.0.1",
-    "@magickml/grimoire": "0.0.1",
+    "@magickml/agent-service": "0.0.1",
     "@magickml/redis-pubsub": "0.0.1",
     "@magickml/server-config": "0.0.1",
     "@magickml/server-logger": "0.0.1",

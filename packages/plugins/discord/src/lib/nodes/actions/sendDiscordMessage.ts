@@ -6,7 +6,7 @@ import {
   type SendMessage,
 } from '../../configx'
 import { SocketDefinition } from '@magickml/behave-graph'
-import { IEventStore } from '@magickml/grimoire'
+import { IEventStore } from '@magickml/agent-service'
 import { Client } from 'discord.js'
 
 type Inputs = {

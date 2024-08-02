@@ -1,5 +1,5 @@
 import { Assert, NodeCategory } from '@magickml/behave-graph'
-import { makeMagickEventNodeDefinition } from '@magickml/grimoire'
+import { makeMagickEventNodeDefinition } from '@magickml/agent-service'
 import { CORE_DEP_KEYS } from '@magickml/shared-services'
 import { Memory, MemoryStreamService } from '../../services/memoryStreamService'
 

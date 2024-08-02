@@ -2,3 +2,4 @@ packages/server/db/src/lib/prisma/client-core/package.json
 packages/server/db/src/lib/prisma/client-core/client-core/package.json
 portal/cloud/packages/db/src/lib/prisma/client-portal/package.json
 portal/cloud/packages/templates/src/lib/seed.ts
+grimoire

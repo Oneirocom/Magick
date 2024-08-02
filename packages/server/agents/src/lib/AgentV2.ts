@@ -9,7 +9,7 @@ import {
 import { Application } from '@magickml/agent-server'
 import { getLogger } from '@magickml/server-logger'
 import { EventMetadata } from '@magickml/server-event-tracker'
-import { Spellbook } from '@magickml/grimoire'
+import { Spellbook } from '@magickml/agent-service'
 import { AgentInterface } from '@magickml/agent-server-schemas'
 import { RedisPubSub } from '@magickml/redis-pubsub'
 import { PluginManager } from '@magickml/agent-plugin-manager'
@@ -25,11 +25,16 @@ import EventEmitter from 'events'
 import TypedEmitter from 'typed-emitter'
 
 import CorePlugin from '@magickml/core-plugin'
-import KnowledgePlugin from '@magickml/knowledge-plugin'
+// import KnowledgePlugin from '@magickml/knowledge-plugin'
 import DiscordPlugin from '@magickml/discord-plugin'
 import SlackPlugin from '@magickml/slack-plugin'
 
-const plugins = [CorePlugin, KnowledgePlugin, DiscordPlugin, SlackPlugin]
+const plugins = [
+  CorePlugin,
+  // KnowledgePlugin,
+  DiscordPlugin,
+  SlackPlugin,
+]
 
 export type AgentEventPayloadV2<
   Data = Record<string, unknown>,

@@ -1,5 +1,5 @@
 import { NodeCategory } from '@magickml/behave-graph'
-import { makeMagickAsyncNodeDefinition } from '@magickml/grimoire'
+import { makeMagickAsyncNodeDefinition } from '@magickml/agent-service'
 
 export const delay = makeMagickAsyncNodeDefinition({
   typeName: 'flow/delay',

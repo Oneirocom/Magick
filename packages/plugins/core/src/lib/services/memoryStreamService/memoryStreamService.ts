@@ -2,7 +2,7 @@ import { EventEmitter } from 'events'
 import { v4 as uuidv4 } from 'uuid'
 import { EventPayload } from '@magickml/shared-services'
 import { prismaCore } from '@magickml/server-db'
-import { EventStore, SpellCaster } from '@magickml/grimoire'
+import { EventStore, SpellCaster } from '@magickml/agent-service'
 import { CORE_DEP_KEYS } from '@magickml/shared-services'
 
 export type Memory = {

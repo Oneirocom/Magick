@@ -1,5 +1,5 @@
 import { NodeCategory } from '@magickml/behave-graph'
-import { makeMagickEventNodeDefinition } from '@magickml/grimoire'
+import { makeMagickEventNodeDefinition } from '@magickml/agent-service'
 import { EventTypes } from '@magickml/agent-communication'
 import { type CoreWebhookEventPayload, corePluginName } from '../../config'
 

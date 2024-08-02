@@ -1,6 +1,6 @@
 import { NodeCategory, makeFlowNodeDefinition } from '@magickml/behave-graph'
 import { EventTypes } from '@magickml/agent-communication'
-import { IEventStore } from '@magickml/grimoire'
+import { IEventStore } from '@magickml/agent-service'
 
 export const queryEventHistory = makeFlowNodeDefinition({
   typeName: 'queries/events/eventHistory',

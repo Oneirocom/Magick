@@ -1,17 +1,17 @@
 {
-  "name": "server/grimoire",
+  "name": "server/agent-service",
   "$schema": "../../../node_modules/nx/schemas/project-schema.json",
   "tags": ["release"],
-  "sourceRoot": "packages/server/grimoire/src",
+  "sourceRoot": "packages/server/agent-service/src",
   "projectType": "library",
   "targets": {
     "build": {
       "executor": "@nx/js:tsc",
       "outputs": ["{options.outputPath}"],
       "options": {
-        "outputPath": "dist/packages/server/grimoire",
-        "tsConfig": "packages/server/grimoire/tsconfig.lib.json",
-        "main": "packages/server/grimoire/src/index.ts"
+        "outputPath": "dist/packages/server/agent-service",
+        "tsConfig": "packages/server/agent-service/tsconfig.lib.json",
+        "main": "packages/server/agent-service/src/index.ts"
       }
     },
     "lint": {
@@ -22,7 +22,7 @@
       "executor": "@nx/jest:jest",
       "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
       "options": {
-        "jestConfig": "packages/server/grimoire/jest.config.ts"
+        "jestConfig": "packages/server/agent-service/jest.config.ts"
       }
     }
   }
