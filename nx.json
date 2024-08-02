@@ -180,7 +180,8 @@
       "!packages/server/cloud-agent-worker",
       "!packages/server/communication",
       "!packages/server/meter",
-      "!portal/cloud/packages/ideClient"
+      "!portal/cloud/packages/ideClient",
+      "packages/server/agent-service"
     ],
     "version": {
       "preVersionCommand": "npm run build-release",
