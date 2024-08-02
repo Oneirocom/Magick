@@ -9,7 +9,6 @@ It uses the exact same build system/tooling as Nitro so this should be the best 
 You'll notice this uses pnpm, this is to leave two options open for us to use in the future:
 - continue this as its own repo within the monorepo utilizing pnpm workspaces. We know this will work if this is the case.
 - integrate this as an nx package. This is the ideal solution, but nx has some issues with nitro.
-Its also to set this up nearly identical to how the unjs ecosystem packages are set up.
 
 
 ## In root of monorepo repo:
