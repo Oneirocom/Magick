@@ -20,6 +20,7 @@ export const subpaths = [
 ]
 
 export default defineBuildConfig({
+  failOnWarn: false,
   declaration: true,
   name: 'nitro',
   entries: [
