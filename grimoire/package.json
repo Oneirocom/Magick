@@ -53,6 +53,7 @@
     "prepack": "pnpm build",
     "gen-mirror": "pnpm jiti scripts/gen-mirror.ts",
     "gen-presets": "pnpm jiti scripts/gen-presets.ts",
+    "release:local": "pnpm publish --no-git-checks --registry http://localhost:4873",
     "release": "pnpm test && pnpm build && changelogen --release && pnpm publish && git push --follow-tags",
     "stub": "unbuild --stub",
     "test": "pnpm lint && pnpm vitest-es run --silent",
