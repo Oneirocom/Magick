@@ -1,7 +1,5 @@
 import type { NitroConfig } from 'nitro/types'
 
-export type { NitroConfig } from 'nitro/types'
-
 type GrimoireConfig = {
   agent: {
     name: string
@@ -13,3 +11,5 @@ type GrimoireConfig = {
 export function defineGrimoireConfig(config: GrimoireConfig): GrimoireConfig {
   return config
 }
+
+export type { NitroConfig, GrimoireConfig }
