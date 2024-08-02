@@ -1,6 +1,6 @@
 {
   "name": "grimoire-starter",
-  "defaultDir": ".",
+  "defaultDir": "my-agent",
   "url": "https://github.com/oneirocom/create-grimoire-app",
   "tar": "https://codeload.github.com/oneirocom/create-grimoire-app/tar.gz/refs/heads/main"
 }
