@@ -243,7 +243,7 @@
     "@xyflow/react": "^12.0.0-next.18",
     "@zodios/core": "^10.9.6",
     "@zodios/react": "^10.4.5",
-    "ai": "^3.2.33",
+    "ai": "^3.3.0",
     "arr-flatten": "^1.1.0",
     "axios": "1.6.8",
     "axios-retry": "^3.8.0",

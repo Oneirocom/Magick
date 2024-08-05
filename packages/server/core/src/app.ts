@@ -79,19 +79,24 @@ export async function initApp(environment: Environment = 'default') {
 
   const prompt = 'You are seraph, a helpful AI angel.'
 
-  const seraph = new SeraphCore({
-    prompt,
-    openAIApiKey: process.env['OPENAI_API_KEY'] as string,
-    anthropicApiKey: process.env['ANTHROPIC_API_KEY'] as string,
-  })
+  if (process.env['ENABLE_SERAPH']) {
+    logger.info('INITIALIZING SERAPH')
+    const seraph = new SeraphCore({
+      prompt,
+      openAIApiKey: process.env['OPENAI_API_KEY'] as string,
+      anthropicApiKey: process.env['ANTHROPIC_API_KEY'] as string,
+    })
+    app.set('seraphCore', seraph)
+  }
 
   // seraph.registerMiddleware(new MemoryStorageMiddleware(seraph))
   // seraph.registerCognitiveFunction(new MemoryStorage(seraph))
   // seraph.registerCognitiveFunction(new MemoryRetrieval(seraph))
 
-  app.set('seraphCore', seraph)
-
-  app.set('posthog', createPosthogClient(app))
+  if (process.env['POSTHOG_API_KEY']) {
+    logger.info('INITIALIZING POSTHOG')
+    app.set('posthog', createPosthogClient(app))
+  }
 
   const port = parseInt(process.env.PORT || '3030', 10)
   app.set('port', port)
@@ -154,7 +159,7 @@ export async function initApp(environment: Environment = 'default') {
     authStrategies: ['jwt'],
     jwtOptions: {
       header: { type: 'access' },
-      audience: 'https://yourdomain.com',
+      audience: 'https://yourdomain.com', //TODO: should this be magickml.com?
       issuer: 'feathers',
       algorithm: 'A256GCM',
       expiresIn: '1d',

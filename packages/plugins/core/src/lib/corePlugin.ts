@@ -125,7 +125,6 @@ export class CorePlugin extends CoreEventsPlugin<
     clearMemories,
     clearMessageHistory,
     delay,
-
     DoOnceAsync,
     FetchNode,
     flowSplit,
@@ -168,7 +167,7 @@ export class CorePlugin extends CoreEventsPlugin<
   credentials = corePluginCredentials
   coreLLMService: CoreLLMService
   coreMemoryService = new CoreMemoryService(true)
-  userService: CoreUserService
+  userService?: CoreUserService
 
   constructor({
     connection,
@@ -190,7 +189,9 @@ export class CorePlugin extends CoreEventsPlugin<
       agent,
     })
 
-    this.userService = new CoreUserService({ projectId })
+    if (process.env['ENABLE_USER_SERVICE']) {
+      this.userService = new CoreUserService({ projectId })
+    }
   }
 
   getPluginConfig() {

@@ -25,7 +25,7 @@ export class CoreLLMService implements ICoreLLMService {
   protected projectId: string
   protected agentId: string
   protected agent: ISharedAgent
-  protected userService: CoreUserService
+  protected userService?: CoreUserService
   protected logger: pino.Logger<pino.LoggerOptions> | undefined
   protected userData: UserResponse | undefined
 
@@ -33,13 +33,15 @@ export class CoreLLMService implements ICoreLLMService {
     this.agent = agent
     this.projectId = projectId
     this.agentId = agentId || ''
-    this.userService = new CoreUserService({ projectId })
+    if (process.env['ENABLE_USER_SERVICE'] === 'true') {
+      this.userService = new CoreUserService({ projectId })
+    }
   }
 
   async initialize() {
     try {
       this.logger = getLogger()
-      const userData = await this.userService.getUser()
+      const userData = await this.userService?.getUser()
       this.userData = userData
     } catch (error: any) {
       console.error('Error initializing CoreLLMService:', error)
@@ -66,41 +68,49 @@ export class CoreLLMService implements ICoreLLMService {
     let useWallet = this.userData?.user.useWallet
     const mpUser = this.userData?.user.mpUser
     const walletUser = this.userData?.user.walletUser
+    const USER_SERVICE_ENABLED = process.env['ENABLE_USER_SERVICE'] === 'true'
 
     while (attempts < actualMaxRetries) {
       try {
+        // If user service is not enabled, we don't want to try to get the user data
         const userData =
-          attempts > 0 && !this.userData?.user.useWallet
-            ? await this.userService.getUser()
-            : this.userData
-
+          USER_SERVICE_ENABLED && attempts > 0 && !this.userData?.user.useWallet
+            ? await this.userService?.getUser()
+            : USER_SERVICE_ENABLED
+            ? this.userData
+            : undefined
         const providerApiKeyName = request.providerApiKeyName
 
-        const credential = await this.getCredentialForUser({
-          userData,
-          providerApiKeyName,
-          model: request.model,
-        })
+        const credential = USER_SERVICE_ENABLED
+          ? await this.getCredentialForUser({
+              userData,
+              providerApiKeyName,
+              model: request.model,
+            })
+          : undefined
+
+        const extraMetaData = USER_SERVICE_ENABLED
+          ? {
+              customer_identifier: useWallet
+                ? walletUser?.customer_identifier
+                : mpUser?.customer_identifier,
+              ...(credential
+                ? {
+                    customer_credentials: {
+                      // Assuming `request.provider` is the id field of the provider
+                      [request.provider]: {
+                        api_key: credential,
+                      },
+                    },
+                  }
+                : {}),
+            }
+          : {}
 
         const openai = createOpenAI({
           baseURL: process.env['KEYWORDS_API_URL'],
           apiKey: process.env['KEYWORDS_API_KEY'],
-          extraMetaData: {
-            customer_identifier: useWallet
-              ? walletUser?.customer_identifier
-              : mpUser?.customer_identifier,
-
-            ...(credential
-              ? {
-                  customer_credentials: {
-                    // Assuming `request.provider` is the id field of the provider
-                    [request.provider]: {
-                      api_key: credential,
-                    },
-                  },
-                }
-              : {}),
-          },
+          ...extraMetaData,
         })
 
         const _body: Parameters<typeof streamText>[0] = {
@@ -109,8 +119,6 @@ export class CoreLLMService implements ICoreLLMService {
           temperature: request.temperature || undefined,
           ...request.options,
         }
-
-        console.log('BODY', _body)
 
         const { textStream } = await streamText(_body)
 
@@ -146,28 +154,29 @@ export class CoreLLMService implements ICoreLLMService {
         return chatCompletion as any
       } catch (error: any) {
         console.error(`Attempt ${attempts + 1} failed:`, error)
-
-        if (
-          (error?.responseBody?.includes(
-            'has exceeded their budget for this period'
-          ) ||
-            error?.message?.includes('Payment Required')) &&
-          !useWallet &&
-          attempts === 0 // Only switch to wallet on the first attempt
-        ) {
-          const userData = await clerkClient.users.getUser(
-            this.userData?.user.id || ''
-          )
-          await clerkClient.users.updateUserMetadata(
-            this.userData?.user.id || '',
-            {
-              publicMetadata: {
-                ...userData.publicMetadata,
-                useWallet: true,
-              },
-            }
-          )
-          useWallet = true
+        if (USER_SERVICE_ENABLED) {
+          if (
+            (error?.responseBody?.includes(
+              'has exceeded their budget for this period'
+            ) ||
+              error?.message?.includes('Payment Required')) &&
+            !useWallet &&
+            attempts === 0 // Only switch to wallet on the first attempt
+          ) {
+            const userData = await clerkClient.users.getUser(
+              this.userData?.user.id || ''
+            )
+            await clerkClient.users.updateUserMetadata(
+              this.userData?.user.id || '',
+              {
+                publicMetadata: {
+                  ...userData.publicMetadata,
+                  useWallet: true,
+                },
+              }
+            )
+            useWallet = true
+          }
         }
         attempts++
         if (attempts < actualMaxRetries) {
