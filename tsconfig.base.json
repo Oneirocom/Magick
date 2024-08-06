@@ -215,8 +215,6 @@
       "@magickml/types": ["packages/@types/src/index.ts"],
       "@magickml/utils": ["packages/shared/utils/src/index.ts"],
       "@magickml/vercel-sdk-core": ["packages/server/vercel/core/src/index.ts"],
-      "@magickml/zode": ["packages/zode/src/index.ts"],
-      "@magickml/zodekit": ["nx/zodekit/src/index.ts"],
       "@packmvp": ["../anne/server/client/sdk.ts"],
       "chat-window": ["packages/client/chat/src/index.ts"],
       "client/core": ["packages/client/core/src/index.ts"],
