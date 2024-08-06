@@ -10,22 +10,17 @@
       "types": "./dist/cli/index.d.ts",
       "import": "./dist/cli/index.mjs"
     },
-    ".": {
-      "types": "./dist/core/index.d.ts",
-      "import": "./dist/core/index.mjs"
-    },
-    "./core": {
-      "types": "./dist/core/index.d.ts",
-      "import": "./dist/core/index.mjs"
+    "./config": {
+      "types": "./dist/config/index.d.ts",
+      "import": "./dist/config/index.mjs"
     },
     "./package.json": "./package.json"
   },
-  "main": "./dist/core/index.mjs",
-  "types": "./dist/core/index.d.ts",
+  "main": "./dist/config/index.mjs",
+  "types": "./dist/config/index.d.ts",
   "bin": {
     "grimoire": "./dist/cli/index.mjs",
-    "magick": "./dist/cli/index.mjs",
-    "create-grimoire-app": "./dist/cga/index.mjs"
+    "magick": "./dist/cli/index.mjs"
   },
   "files": [
     "dist",
@@ -52,10 +47,6 @@
     "test:fixture:types": "pnpm stub && jiti ./test/scripts/gen-fixture-types.ts && cd test/fixture && tsc --noEmit",
     "test:types": "tsc --noEmit && pnpm test:fixture:types",
     "vitest-es": "NODE_OPTIONS=\"--enable-source-maps --experimental-vm-modules\" vitest"
-  },
-  "resolutions": {
-    "undici": "^6.19.2",
-    "jiti": "2.0.0-beta.3"
   },
   "dependencies": {
     "@cloudflare/kv-asset-handler": "^0.3.3",
@@ -130,7 +121,8 @@
     "unimport": "^3.7.2",
     "unstorage": "^1.10.2",
     "untyped": "^1.4.2",
-    "unwasm": "^0.3.9"
+    "unwasm": "^0.3.9",
+    "@magickml/nodes": "workspace:*"
   },
   "devDependencies": {
     "@azure/functions": "^3.5.1",

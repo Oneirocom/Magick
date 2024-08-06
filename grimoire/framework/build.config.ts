@@ -8,9 +8,9 @@ const srcDir = resolve(__dirname, 'src')
 
 export const subpaths = [
   'cli',
-  'cga',
+  // 'cga',
   'config',
-  'core',
+  // 'core',
   // 'kit',
   // 'presets',
   // 'rollup',
@@ -22,7 +22,7 @@ export const subpaths = [
 export default defineBuildConfig({
   failOnWarn: false,
   declaration: true,
-  name: 'nitro',
+  name: 'grimoire',
   entries: [
     // CLI
     { input: 'src/cli/index.ts' },
