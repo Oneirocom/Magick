@@ -1,0 +1,32 @@
+{
+  "compilerOptions": {
+    /* Base options: */
+    "types": ["node"],
+    "esModuleInterop": false,
+    "allowSyntheticDefaultImports": true,
+    "skipLibCheck": true,
+    "target": "es2022",
+    "allowJs": true,
+    "resolveJsonModule": true,
+    "moduleDetection": "force",
+    "isolatedModules": true,
+    "verbatimModuleSyntax": true,
+    "strict": true,
+    // "noUncheckedIndexedAccess": true,
+    "forceConsistentCasingInFileNames": true,
+    "noImplicitOverride": true,
+    /* If NOT transpiling with TypeScript: */
+    "module": "preserve",
+    "noEmit": true,
+    "jsx": "preserve",
+    "jsxFactory": "h",
+    "jsxFragmentFactory": "Fragment",
+    "lib": ["es2022", "webworker", "dom.iterable"],
+    "paths": {
+      "grimoire/cli": ["./src/cli"],
+      "grimoire/config": ["./src/config"]
+    }
+  },
+  "include": ["src", "test"],
+  "exclude": ["dist", "examples", "playground", "test/fixture"]
+}

@@ -1,5 +1,4 @@
-import { writeFile } from 'node:fs/promises'
-import { fileURLToPath } from 'node:url'
+import { writeFile } from 'fs-extra'
 import { resolve } from 'pathe'
 import { normalize } from 'pathe'
 import { defineBuildConfig } from 'unbuild'
@@ -9,6 +8,7 @@ const srcDir = resolve(__dirname, 'src')
 
 export const subpaths = [
   'cli',
+  'cga',
   'config',
   'core',
   // 'kit',
@@ -28,22 +28,6 @@ export default defineBuildConfig({
     { input: 'src/cli/index.ts' },
     // Config
     { input: 'src/config/index.ts' },
-    // Core
-    { input: 'src/core/index.ts' },
-    // CGA
-    { input: 'src/cga/index.ts' },
-    // // Runtime
-    // { input: 'src/runtime/', outDir: 'dist/runtime', format: 'esm' },
-    // // Kit
-    // { input: 'src/kit/index.ts' },
-    // // Meta
-    // { input: 'src/meta/index.ts' },
-    // // Presets
-    // { input: 'src/presets/', outDir: 'dist/presets', format: 'esm' },
-    // // Rollup
-    // { input: 'src/rollup/index.ts' },
-    // // Types
-    // { input: 'src/types/index.ts' },
   ],
   alias: {
     nitro: 'nitro',
@@ -69,7 +53,7 @@ export default defineBuildConfig({
   externals: [
     'nitro',
     'nitro/runtime/meta',
-    ...subpaths.map(subpath => `nitro/${subpath}`),
+    ...subpaths.map(subpath => `@magickml/grimoire/${subpath}`),
     'firebase-functions',
     '@scalar/api-reference',
   ],
