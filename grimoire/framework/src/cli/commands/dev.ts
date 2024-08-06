@@ -5,7 +5,7 @@ import { build, createDevServer, createNitro, prepare } from 'nitro/core'
 import type { Nitro } from 'nitro/types'
 import { resolve } from 'pathe'
 import { commonArgs } from '../common'
-import { agentModule } from '../../core'
+import { nodeModule } from '@magickml/nodes'
 
 const hmrKeyRe = /^runtimeConfig\.|routeRules\./
 
@@ -35,7 +35,7 @@ export default defineCommand({
           dev: true,
           preset: 'nitro-dev',
           _cli: { command: 'dev' },
-          modules: [agentModule],
+          modules: [nodeModule],
         },
         {
           watch: true,
