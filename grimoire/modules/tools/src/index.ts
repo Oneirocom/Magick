@@ -1,7 +1,7 @@
 import { defineNovaModule } from '@gtc-nova/kit'
 import { toolFeatures, type ToolFeatures } from './features'
 
-export const toolModule = defineNovaModule<ToolFeatures>({
+export const toolsModule = defineNovaModule<ToolFeatures>({
   name: 'tools',
   features: toolFeatures,
   featureTypeFunctions: {
