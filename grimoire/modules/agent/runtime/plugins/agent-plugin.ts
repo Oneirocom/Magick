@@ -1,12 +1,7 @@
 import consola from 'consola'
-import { useRuntimeConfig } from 'nitropack/runtime'
-import { defineNovaPlugin } from 'nova/runtime'
+import { useRuntimeConfig } from 'nitro/runtime'
+import { defineNovaPlugin } from 'nitropack'
 
-/**
-** pnpm add @magickml/agents -w
-** ERR_PNPM_LINKED_PKG_DIR_NOT_FOUND  Could not install from "/home/coffee/Desktop/packages/server/plugin" as it does not exist.
-**/
-import { initApp } from '../../../../../packages/server/core/src'
 import {
   AgentV2 as Agent,
   type AgentConfig,
