@@ -21,7 +21,10 @@
   "dependencies": {
     "@gtc-nova/kit": "^0.0.1",
     "ai": "^3.3.0",
-    "nitro": "npm:nitro-nightly@3x"
+    "json-schema": "^0.4.0",
+    "nitro": "npm:nitro-nightly@3x",
+    "zod": "^3.23.8",
+    "zod-to-json-schema": "^3.23.2"
   },
   "devDependencies": {
     "unbuild": "3.0.0-rc.7"
