@@ -10,6 +10,7 @@ import {
 import { resolve } from 'pathe'
 import { commonArgs } from '../common'
 import { nodeModule } from '@magickml/nodes'
+import { schemasModule } from '@magickml/schemas'
 
 export default defineCommand({
   meta: {
@@ -42,7 +43,7 @@ export default defineCommand({
         dev: false,
         minify: args.minify,
         preset: args.preset,
-        modules: [nodeModule],
+        modules: [nodeModule, schemasModule],
       },
       {
         compatibilityDate: args.compatibilityDate as DateString,

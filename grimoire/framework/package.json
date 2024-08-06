@@ -122,7 +122,8 @@
     "unstorage": "^1.10.2",
     "untyped": "^1.4.2",
     "unwasm": "^0.3.9",
-    "@magickml/nodes": "workspace:*"
+    "@magickml/nodes": "workspace:*",
+    "@magickml/schemas": "workspace:*"
   },
   "devDependencies": {
     "@azure/functions": "^3.5.1",
