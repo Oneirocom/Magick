@@ -5,7 +5,7 @@ import {
 } from '@magickml/schemas/runtime/utils'
 import { z } from 'zod'
 
-export defaultConfig defineObjectSchema(
+export default defineObjectSchema(
   {
     id: defineStringSchema({ description: "User's unique identifier" }).schema,
     name: defineStringSchema({
