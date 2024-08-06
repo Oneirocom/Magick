@@ -39,6 +39,9 @@ importers:
       '@magickml/schemas':
         specifier: workspace:*
         version: link:../modules/schemas
+      '@magickml/spells':
+        specifier: workspace:*
+        version: link:../modules/spells
       '@netlify/functions':
         specifier: ^2.7.0
         version: 2.8.1

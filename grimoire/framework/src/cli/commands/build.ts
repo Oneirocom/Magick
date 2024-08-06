@@ -9,8 +9,7 @@ import {
 } from 'nitro/core'
 import { resolve } from 'pathe'
 import { commonArgs } from '../common'
-import { nodeModule } from '@magickml/nodes'
-import { schemasModule } from '@magickml/schemas'
+import { modules } from '../mod'
 
 export default defineCommand({
   meta: {
@@ -43,7 +42,7 @@ export default defineCommand({
         dev: false,
         minify: args.minify,
         preset: args.preset,
-        modules: [nodeModule, schemasModule],
+        modules,
       },
       {
         compatibilityDate: args.compatibilityDate as DateString,
