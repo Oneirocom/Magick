@@ -8,6 +8,7 @@ import { useRuntimeConfig } from 'nitro/runtime'
 // NOTE: These paths need to be tested out. We should to seperate off utils that are used in runtime and the module.
 // The module will exist in the users node_modules folder so its a bit different.
 // TODO: look for unjs approved way to handle json imports if there is one
+// UPDATE: confbox and destr
 
 export async function serializeSpell(spell: Spell): Promise<SerializedSpell> {
   return {
