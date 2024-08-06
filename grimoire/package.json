@@ -1,5 +1,9 @@
 {
   "name": "grimoire-monorepo",
   "version": "0.0.1",
-  "scripts": {}
+  "scripts": {},
+  "resolutions": {
+    "undici": "^6.19.2",
+    "jiti": "2.0.0-beta.3"
+  }
 }
