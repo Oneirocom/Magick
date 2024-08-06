@@ -1,7 +1,7 @@
 import { defineNovaModule } from '@gtc-nova/kit'
 import { schemaFeatures, type SchemaFeatures } from './features'
 
-export const schemaModule = defineNovaModule<SchemaFeatures>({
+export const schemasModule = defineNovaModule<SchemaFeatures>({
   name: 'schemas',
   features: schemaFeatures,
   featureTypeFunctions: {
