@@ -1,4 +1,4 @@
-import { defineGrimoireConfig } from 'grimoire/config'
+import { defineGrimoireConfig } from '@magickml/grimoire/config'
 
 export default defineGrimoireConfig({
   agent: {
