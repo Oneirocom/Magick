@@ -67,6 +67,9 @@
       "@magickml/embedder-api-packs": [
         "packages/embedder/api/packs/src/index.ts"
       ],
+      "@magickml/embedder-api-auth": [
+        "packages/embedder/api/auth/src/index.ts"
+      ],
       "@magickml/embedder-auth-plugin": [
         "packages/embedder/auth/plugin/src/index.ts"
       ],
