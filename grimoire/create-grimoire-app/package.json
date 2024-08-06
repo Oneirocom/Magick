@@ -1,0 +1,19 @@
+{
+  "name": "create-grimoire-app",
+  "version": "0.0.1",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "citty": "^0.1.6",
+    "giget": "^1.2.3"
+  },
+  "devDependencies": {
+    "unbuild": "^2.0.0"
+  }
+}
