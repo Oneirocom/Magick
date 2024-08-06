@@ -1,18 +1,21 @@
-import type { NitroApp } from "nitro/types";
-import type { EmbedJSConfig } from "../../types";
-import { RAGApplicationBuilder } from "@llm-tools/embedjs";
+import type { NitroApp } from 'nitro/types'
+import type { KnowledgeRuntimeConfig } from '../../types'
+import { RAGApplicationBuilder } from '@llm-tools/embedjs'
 
-export async function initKnowledgeRuntime(nitroApp: NitroApp, config: EmbedJSConfig) {
+export async function initKnowledgeRuntime(
+  nitroApp: NitroApp,
+  config: KnowledgeRuntimeConfig
+) {
   if (nitroApp?.knowledge?.ragApp) {
-    console.warn("EmbedJS already initialized");
-    return;
+    console.warn('Knowledge plugin already initialized')
+    return
   }
 
-  nitroApp.knowledge ={
+  nitroApp.knowledge = {
     ragApp: new RAGApplicationBuilder(),
-  };
+  }
 
-  nitroApp.hooks.hook("close", async () => {
+  nitroApp.hooks.hook('close', async () => {
     // TODO: cleanup
-  });
+  })
 }

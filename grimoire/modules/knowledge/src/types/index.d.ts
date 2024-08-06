@@ -1,5 +1,6 @@
 import type { RAGApplicationBuilder } from '@llm-tools/embedjs'
 
+export interface KnowledgeRuntimeConfig {}
 
 export interface LoaderOptions {
   chunkSize?: number
