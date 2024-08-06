@@ -16,7 +16,8 @@
     "src/**/*d.ts"
   ],
   "scripts": {
-    "build": "unbuild"
+    "build": "unbuild",
+    "automd": "automd"
   },
   "dependencies": {
     "@gtc-nova/kit": "^0.0.1",
@@ -27,6 +28,7 @@
   },
   "devDependencies": {
     "@types/md5": "^2.3.5",
+    "automd": "^0.3.7",
     "unbuild": "3.0.0-rc.7"
   }
 }
