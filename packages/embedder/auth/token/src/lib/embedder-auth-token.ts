@@ -6,6 +6,7 @@ import { z } from 'zod'
 export const TokenPayloadSchema = z.object({
   owner: z.string(),
   entity: z.string(),
+  noExpiresAt: z.boolean().optional(),
 })
 
 export type TokenPayload = z.infer<typeof TokenPayloadSchema>
@@ -13,35 +14,51 @@ export type TokenPayload = z.infer<typeof TokenPayloadSchema>
 export function generateToken(payload: TokenPayload) {
   try {
     const val = TokenPayloadSchema.parse(payload)
+    const { noExpiresAt } = val
 
     const secret = process.env['EMBEDDER_JWT_SECRET']
     const exp = process.env['EMBEDDER_JWT_EXPIRES_IN']
-    if (!secret || !exp) {
-      throw err('EMBEDDER_JWT_SECRET or EMBEDDER_JWT_EXPIRES_IN not set')
+
+    if (!secret) {
+      console.error('EMBEDDER_JWT_SECRET not set')
+      throw createError({
+        statusCode: 500,
+        statusMessage: 'EMBEDDER_JWT_SECRET not set',
+      })
+    }
+
+    if (!noExpiresAt) {
+      if (!exp) {
+        console.error('EMBEDDER_JWT_EXPIRES_IN not set')
+        throw createError({
+          statusCode: 500,
+          statusMessage: 'EMBEDDER_JWT_EXPIRES_IN not set',
+        })
+      }
     }
 
     // Include standard claims
     const token = jwt.sign(val, secret, {
       algorithm: 'HS256',
-      expiresIn: exp,
+      ...(noExpiresAt ? {} : { expiresIn: exp }),
       // put these in envs?
       // issuer: "your-app",
       // audience: "your-audience",
     })
+
     return token
   } catch (error) {
     throw createError({
       statusCode: 500,
-      statusMessage: 'Internal Server Error',
+      statusMessage: `Internal Server Error, ${error}`,
     })
   }
 }
 
 export function validateToken(token: string) {
   const secret = process.env['EMBEDDER_JWT_SECRET']
-  const exp = process.env['EMBEDDER_JWT_EXPIRES_IN']
-  if (!secret || !exp) {
-    throw err('EMBEDDER_JWT_SECRET or EMBEDDER_JWT_EXPIRES_IN not set')
+  if (!secret) {
+    throw err('EMBEDDER_JWT_SECRET not set')
   }
 
   try {
