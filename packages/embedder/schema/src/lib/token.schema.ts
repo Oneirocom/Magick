@@ -4,6 +4,7 @@ export const GenerateTokenRequestSchema = z.object({
   noExpiresAt: z.boolean().optional(),
   owner: z.string(),
   entity: z.string(),
+  agentId: z.string(),
 })
 
 export const GenerateTokenResponseSchema = z.object({
