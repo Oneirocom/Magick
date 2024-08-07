@@ -31,10 +31,11 @@ export const KnowledgePlugin = createSimplePluginClass({
   provideDependencies: function (plugin: BasePlugin) {
     return {
       [CORE_DEP_KEYS.EMBEDDER_CLIENT]: makeEmbedderClient(
-        generateToken({
-          owner: plugin.projectId,
-          entity: plugin.projectId,
-        })
+        process.env.AGENT_EMBEDDER_API_KEY ??
+          generateToken({
+            owner: plugin.projectId,
+            entity: plugin.projectId,
+          })
       ),
     }
   },
