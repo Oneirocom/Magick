@@ -29,9 +29,10 @@ export const KnowledgePlugin = createSimplePluginClass({
   ],
   values: [],
   provideDependencies: function (plugin: BasePlugin) {
+    const apiKey = process.env.AGENT_EMBEDDER_API_KEY
     return {
       [CORE_DEP_KEYS.EMBEDDER_CLIENT]: makeEmbedderClient(
-        process.env.AGENT_EMBEDDER_API_KEY ??
+        apiKey ??
           generateToken({
             owner: plugin.projectId,
             entity: plugin.projectId,
