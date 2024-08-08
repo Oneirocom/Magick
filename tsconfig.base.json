@@ -217,7 +217,7 @@
       "@magickml/types": ["packages/@types/src/index.ts"],
       "@magickml/utils": ["packages/shared/utils/src/index.ts"],
       "@magickml/vercel-sdk-core": ["packages/server/vercel/core/src/index.ts"],
-      "@mamgickml/embedder-api-auth": [
+      "@magickml/embedder-api-auth": [
         "packages/embedder/api/auth/src/index.ts"
       ],
       "@packmvp": ["../anne/server/client/sdk.ts"],
