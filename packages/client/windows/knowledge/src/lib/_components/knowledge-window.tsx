@@ -33,8 +33,6 @@ export const KnowledgeWindow: React.FC<KnowledgeWindowProps> = () => {
   const config = useConfig()
   const { projectId, embedderToken } = config
 
-  const token = process.env.AGENT_EMBEDDER_TOKEN || embedderToken
-
   const { currentAgentId } = useSelector(
     (state: RootState) => state.globalConfig
   )
@@ -51,7 +49,7 @@ export const KnowledgeWindow: React.FC<KnowledgeWindowProps> = () => {
       axiosConfig: {
         withCredentials: true,
         headers: {
-          Authorization: `Bearer ${token}`,
+          Authorization: `Bearer ${embedderToken}`,
         },
       },
     },
