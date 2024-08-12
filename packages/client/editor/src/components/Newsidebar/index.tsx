@@ -123,7 +123,7 @@ export function NewSidebar(): React.JSX.Element {
             // data: agent.data || {}, // TODO: Deprecated
             runState: newAgent?.runState,
             image: agent.image || '',
-            default: true,
+            // default: true, // TODO: Deprecated
             currentSpellReleaseId: null,
             isDraft: true,
           }).unwrap()

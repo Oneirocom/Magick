@@ -68,9 +68,6 @@ export interface SpellInterfaceWithGraph extends SpellInterface {
  * @property {boolean} [enabled] - Whether the agent is enabled or not (optional).
  * @property {string} runState - The run state of the agent.
  * @property {string} updatedAt - The date when the agent was last updated.
- * @property {string} [pingedAt] - The date when the agent was last pinged (optional). @deprecated
- * @property {any} [data] - The data stored in the agent (optional). @deprecated
- * @property {any} [publicVariables] - The public variables of the agent (optional). @deprecated
  * @property {string} [secrets] - The secrets of the agent (optional).
  * @property {string} [image] - The image of the agent (optional).
  */
@@ -79,30 +76,29 @@ export const agentSchema = Type.Object(
     id: Type.String(),
     projectId: Type.String(),
     worldId: Type.Optional(Type.String()),
-    rootSpellId: Type.Optional(Type.String() || Type.Null()),
     name: Type.String(),
     enabled: Type.Optional(Type.Boolean()),
     runState: Type.Optional(Type.String()), // TODO: THe database restricts this to a set of values, but we don't have a way to express that in typebox afaik
     updatedAt: Type.Optional(Type.String() || Type.Null()),
     createdAt: Type.Optional(Type.String() || Type.Null()),
-    // TODO: Deprecated
-    // pingedAt: Type.Optional(Type.String()),
-    // data: Type.Optional(Type.Any()),
-    // publicVariables: Type.Optional(Type.Any()),
     secrets: Type.Optional(Type.String()),
     frozen: Type.Optional(Type.Boolean()),
-    default: Type.Optional(Type.Boolean()),
     version: Type.String(),
     currentSpellReleaseId: Type.Optional(
       Type.Union([Type.Null(), Type.String()])
     ),
     isDraft: Type.Optional(Type.Boolean()),
     draftAgentId: Type.Optional(Type.String()),
-    // embedModel: Type.Optional(Type.Union([Type.Null(), Type.String()])), // DEPRECATED
-    // rootSpell: Type.Optional(Type.Union([Type.Null(), Type.String()])), // DEPRECATED
-
     image: Type.Optional(Type.Union([Type.Null(), Type.String()])),
     description: Type.Optional(Type.Union([Type.Null(), Type.String()])),
+    // TODO: Deprecated
+    // default: Type.Optional(Type.Boolean()), // DEPRECATED
+    // embedModel: Type.Optional(Type.Union([Type.Null(), Type.String()])), // DEPRECATED
+    // rootSpell: Type.Optional(Type.Union([Type.Null(), Type.String()])), // DEPRECATED
+    // rootSpellId: Type.Optional(Type.String() || Type.Null()),
+    // pingedAt: Type.Optional(Type.String()),
+    // data: Type.Optional(Type.Any()),
+    // publicVariables: Type.Optional(Type.Any()),
   },
   {
     $id: 'Agent',

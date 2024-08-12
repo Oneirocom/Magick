@@ -46,13 +46,13 @@ const AgentItem = ({
   }
 
   const renderDeleteButton = () => {
-    return !agent.default ? (
+    return (
       <IconBtn
         label="delete"
         Icon={<Icon name="trash" size={20} />}
         onClick={handleDeleteClick}
       />
-    ) : null
+    )
   }
 
   return (

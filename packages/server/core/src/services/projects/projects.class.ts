@@ -132,14 +132,14 @@ export class ProjectsService {
         name: name,
         projectId: projectId,
         enabled: true,
-        default: true,
         version: '2.0',
-        // TODO: Deprecated
-        // publicVariables: '{}',
         secrets: '{}',
         updatedAt: new Date().toISOString(),
         createdAt: new Date().toISOString(),
         isDraft: true,
+        // default: true, // TODO: Deprecated
+        // TODO: Deprecated
+        // publicVariables: '{}',
       })
 
       // Create a live agent
@@ -147,15 +147,15 @@ export class ProjectsService {
         name: name,
         projectId: projectId,
         enabled: true,
-        default: false,
         version: '2.0',
-        // TODO: Deprecated
-        // publicVariables: '{}',
         secrets: '{}',
         updatedAt: new Date().toISOString(),
         createdAt: new Date().toISOString(),
         isDraft: false,
         draftAgentId: draftAgent.id,
+        // default: false, // TODO: Deprecated
+        // TODO: Deprecated
+        // publicVariables: '{}',
       })
 
       // Create a release for the live agent

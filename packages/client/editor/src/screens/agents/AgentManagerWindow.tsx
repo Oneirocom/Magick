@@ -41,7 +41,7 @@ const AgentManagerWindow = () => {
       data.projectId = config.projectId
       data.enabled = data?.enabled ? true : false
       data.updatedAt = new Date().toISOString()
-      data.rootSpell = data?.rootSpell || {}
+      // data.rootSpell = data?.rootSpell || {}
       data.secrets = JSON.stringify(
         Array.isArray(data?.secrets) ? data.secrets : []
       )

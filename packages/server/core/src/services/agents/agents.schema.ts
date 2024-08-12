@@ -39,21 +39,20 @@ export const agentDataSchema = Type.Pick(
     'enabled',
     'updatedAt',
     'createdAt',
-    // 'pingedAt', // Deprecated
     'version',
-    // 'data', // Deprecated
-
-    // 'publicVariables', // Deprecated
     'secrets',
     'runState', //UNUSED right now
     'image',
     'currentSpellReleaseId',
     'isDraft',
     'default',
-    'rootSpell', //DEPRECATED
     'draftAgentId',
     'image',
     'description',
+    // 'pingedAt', // Deprecated
+    // 'data', // Deprecated
+    // 'publicVariables', // Deprecated
+    // 'rootSpell', //DEPRECATED
   ],
   { $id: 'AgentData' }
 )
@@ -129,12 +128,8 @@ export const agentQueryProperties = Type.Pick(agentSchema, [
   'name',
   'updatedAt',
   'createdAt',
-  // 'pingedAt', // Deprecated
-  // 'data', // Deprecated
-  // 'publicVariables',
   'secrets',
   'image',
-  'rootSpellId',
   'default',
   'version',
   'frozen',
@@ -142,6 +137,10 @@ export const agentQueryProperties = Type.Pick(agentSchema, [
   'isDraft',
   'draftAgentId',
   'description',
+  // 'pingedAt', // Deprecated
+  // 'data', // Deprecated
+  // 'publicVariables',
+  // 'rootSpellId', // Deprecated
 ])
 
 /**

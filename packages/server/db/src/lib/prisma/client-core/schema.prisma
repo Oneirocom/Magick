@@ -29,22 +29,18 @@ model agent_credentials {
 model agents {
   id                                                        String              @id @unique @db.Uuid
   rootSpell                                                 Json?
-  publicVariables                                           String? // Deprecated
   secrets                                                   String?
   name                                                      String?
   enabled                                                   Boolean?
   updatedAt                                                 String?
-  pingedAt                                                  String? // Deprecated
   projectId                                                 String?
   worldId                                                   String?
   data                                                      Json?
   runState                                                  String              @default("stopped")
   image                                                     String?
-  rootSpellId                                               String?             @db.Uuid
   default                                                   Boolean             @default(false)
   createdAt                                                 DateTime?           @default(now()) @db.Timestamptz(6)
   currentSpellReleaseId                                     String?             @db.Uuid
-  embedModel                                                String?             @db.VarChar(255) // Deprecated
   version                                                   String              @default("1.0") @db.VarChar(255)
   embeddingProvider                                         String?             @db.VarChar(255)
   embeddingModel                                            String?             @db.VarChar(255)
@@ -58,6 +54,10 @@ model agents {
   pluginState                                               pluginState[]
   spellReleases_spellReleases_agentIdToagents               spellReleases[]     @relation("spellReleases_agentIdToagents")
   Webhook                                                   Webhook[]
+  publicVariables                                           String? // Deprecated
+  pingedAt                                                  String? // Deprecated
+  embedModel                                                String?             @db.VarChar(255) // Deprecated
+  rootSpellId                                               String?             @db.Uuid // Deprecated
 
   @@schema("public")
 }
