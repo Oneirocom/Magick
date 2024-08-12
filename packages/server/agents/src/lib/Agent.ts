@@ -232,7 +232,8 @@ export class Agent
         this.currentSpellReleaseId || 'draft-agent'
       }`
     )
-    const spellsData = await (this.app.service('spells') as any).find({
+    const spellService = this.app.service('spells')
+    const spellsData = await spellService.find({
       query: {
         projectId: this.projectId,
         type: 'behave',
