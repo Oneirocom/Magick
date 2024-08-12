@@ -66,7 +66,6 @@ export interface SpellInterfaceWithGraph extends SpellInterface {
  * @property {string} projectId - The ID of the project that the agent belongs to.
  * @property {string} name - The name of the agent.
  * @property {boolean} [enabled] - Whether the agent is enabled or not (optional).
- * @property {string} runState - The run state of the agent.
  * @property {string} updatedAt - The date when the agent was last updated.
  * @property {string} [secrets] - The secrets of the agent (optional).
  * @property {string} [image] - The image of the agent (optional).
@@ -78,7 +77,6 @@ export const agentSchema = Type.Object(
     worldId: Type.Optional(Type.String()),
     name: Type.String(),
     enabled: Type.Optional(Type.Boolean()),
-    runState: Type.Optional(Type.String()), // TODO: THe database restricts this to a set of values, but we don't have a way to express that in typebox afaik
     updatedAt: Type.Optional(Type.String() || Type.Null()),
     createdAt: Type.Optional(Type.String() || Type.Null()),
     secrets: Type.Optional(Type.String()),
@@ -92,6 +90,7 @@ export const agentSchema = Type.Object(
     image: Type.Optional(Type.Union([Type.Null(), Type.String()])),
     description: Type.Optional(Type.Union([Type.Null(), Type.String()])),
     // TODO: Deprecated
+    // runState: Type.Optional(Type.String()), // DEPRECATED
     // default: Type.Optional(Type.Boolean()), // DEPRECATED
     // embedModel: Type.Optional(Type.Union([Type.Null(), Type.String()])), // DEPRECATED
     // rootSpell: Type.Optional(Type.Union([Type.Null(), Type.String()])), // DEPRECATED

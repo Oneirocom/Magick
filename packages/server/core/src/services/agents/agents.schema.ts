@@ -41,14 +41,14 @@ export const agentDataSchema = Type.Pick(
     'createdAt',
     'version',
     'secrets',
-    'runState', //UNUSED right now
     'image',
     'currentSpellReleaseId',
     'isDraft',
-    'default',
     'draftAgentId',
     'image',
     'description',
+    // 'runState', //Deprecated
+    // 'default',
     // 'pingedAt', // Deprecated
     // 'data', // Deprecated
     // 'publicVariables', // Deprecated
@@ -66,16 +66,16 @@ export const agentPatchDataSchema = Type.Partial(
     [
       'name',
       'enabled',
-      'runState',
       'updatedAt',
-      // 'pingedAt', // Deprecated
-      // 'data', // Deprecated
-      // TODO: Deprecated
-      // 'publicVariables',
       'secrets',
       'currentSpellReleaseId',
       'isDraft',
       'description',
+      // 'runState', // Deprecated
+      // 'pingedAt', // Deprecated
+      // 'data', // Deprecated
+      // TODO: Deprecated
+      // 'publicVariables',
     ],
     { $id: 'AgentPatch', additionalProperties: true }
   )
@@ -124,19 +124,19 @@ export const agentQueryProperties = Type.Pick(agentSchema, [
   'id',
   'projectId',
   'enabled',
-  'runState',
   'name',
   'updatedAt',
   'createdAt',
   'secrets',
   'image',
-  'default',
   'version',
   'frozen',
   'currentSpellReleaseId',
   'isDraft',
   'draftAgentId',
   'description',
+  // 'default', // Deprecated
+  // 'runState', // Deprecated
   // 'pingedAt', // Deprecated
   // 'data', // Deprecated
   // 'publicVariables',

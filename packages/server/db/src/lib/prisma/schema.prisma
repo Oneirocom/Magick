@@ -35,7 +35,6 @@ model agents {
   projectId                                                 String?
   worldId                                                   String?
   data                                                      Json?
-  runState                                                  String              @default("stopped")
   image                                                     String?
   default                                                   Boolean             @default(false)
   createdAt                                                 DateTime?           @default(now()) @db.Timestamptz(6)
@@ -58,6 +57,7 @@ model agents {
   pingedAt                                                  String? // Deprecated
   publicVariables                                           String? // Deprecated
   embedModel                                                String?             @db.VarChar(255) // Deprecated
+  runState                                                  String              @default("stopped") // Deprecated
 
   @@schema("public")
 }

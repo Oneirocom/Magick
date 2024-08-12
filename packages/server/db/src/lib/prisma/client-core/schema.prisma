@@ -28,17 +28,13 @@ model agent_credentials {
 
 model agents {
   id                                                        String              @id @unique @db.Uuid
-  rootSpell                                                 Json?
   secrets                                                   String?
   name                                                      String?
   enabled                                                   Boolean?
   updatedAt                                                 String?
   projectId                                                 String?
   worldId                                                   String?
-  data                                                      Json?
-  runState                                                  String              @default("stopped")
   image                                                     String?
-  default                                                   Boolean             @default(false)
   createdAt                                                 DateTime?           @default(now()) @db.Timestamptz(6)
   currentSpellReleaseId                                     String?             @db.Uuid
   version                                                   String              @default("1.0") @db.VarChar(255)
@@ -54,10 +50,14 @@ model agents {
   pluginState                                               pluginState[]
   spellReleases_spellReleases_agentIdToagents               spellReleases[]     @relation("spellReleases_agentIdToagents")
   Webhook                                                   Webhook[]
+  data                                                      Json? // Deprecated
+  rootSpell                                                 Json? // Deprecated
+  default                                                   Boolean             @default(false) // Deprecated
   publicVariables                                           String? // Deprecated
   pingedAt                                                  String? // Deprecated
   embedModel                                                String?             @db.VarChar(255) // Deprecated
   rootSpellId                                               String?             @db.Uuid // Deprecated
+  runState                                                  String              @default("stopped") // Deprecated
 
   @@schema("public")
 }

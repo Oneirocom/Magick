@@ -250,7 +250,7 @@ export class ProjectsService {
     if (mappedAgents.length > 0) {
       mappedAgents.forEach(async (agent: AgentInterface) => {
         // todo: clear this up so validation works
-        delete agent.runState
+        // delete agent.runState // TODO: Deprecated
 
         const r = await app.service('agents').create(agent)
         agentResponse.push(r)

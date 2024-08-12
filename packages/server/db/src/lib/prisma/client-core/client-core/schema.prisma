@@ -34,9 +34,7 @@ model agents {
   updatedAt                                                 String?
   projectId                                                 String?
   worldId                                                   String?
-  runState                                                  String              @default("stopped")
   image                                                     String?
-  default                                                   Boolean             @default(false)
   createdAt                                                 DateTime?           @default(now()) @db.Timestamptz(6)
   currentSpellReleaseId                                     String?             @db.Uuid
   version                                                   String              @default("1.0") @db.VarChar(255)
@@ -52,6 +50,8 @@ model agents {
   pluginState                                               pluginState[]
   spellReleases_spellReleases_agentIdToagents               spellReleases[]     @relation("spellReleases_agentIdToagents")
   Webhook                                                   Webhook[]
+  default                                                   Boolean             @default(false) // Deprecated
+  runState                                                  String              @default("stopped") // Deprecated
   rootSpellId                                               String?             @db.Uuid // Deprecated
   data                                                      Json? // Deprecated
   rootSpell                                                 Json? // Deprecated
