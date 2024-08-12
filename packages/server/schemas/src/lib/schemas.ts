@@ -67,7 +67,6 @@ export interface SpellInterfaceWithGraph extends SpellInterface {
  * @property {string} name - The name of the agent.
  * @property {boolean} [enabled] - Whether the agent is enabled or not (optional).
  * @property {string} updatedAt - The date when the agent was last updated.
- * @property {string} [secrets] - The secrets of the agent (optional).
  * @property {string} [image] - The image of the agent (optional).
  */
 export const agentSchema = Type.Object(
@@ -79,7 +78,6 @@ export const agentSchema = Type.Object(
     enabled: Type.Optional(Type.Boolean()),
     updatedAt: Type.Optional(Type.String() || Type.Null()),
     createdAt: Type.Optional(Type.String() || Type.Null()),
-    secrets: Type.Optional(Type.String()),
     version: Type.String(),
     currentSpellReleaseId: Type.Optional(
       Type.Union([Type.Null(), Type.String()])
@@ -89,6 +87,7 @@ export const agentSchema = Type.Object(
     image: Type.Optional(Type.Union([Type.Null(), Type.String()])),
     description: Type.Optional(Type.Union([Type.Null(), Type.String()])),
     // TODO: Deprecated
+    // secrets: Type.Optional(Type.String()), // Deprecated
     // frozen: Type.Optional(Type.Boolean()), // Deprecated
     // runState: Type.Optional(Type.String()), // DEPRECATED
     // default: Type.Optional(Type.Boolean()), // DEPRECATED

@@ -66,7 +66,7 @@ const AgentWindow = ({ data, onLoadFile }: Props) => {
                 enabled: false,
                 // TODO: Deprecated
                 // publicVariables: '{}',
-                secrets: '{}',
+                // secrets: '{}',
               })
                 .unwrap()
                 .then(() => {

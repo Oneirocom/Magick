@@ -28,7 +28,6 @@ model agent_credentials {
 
 model agents {
   id                                                        String              @id @unique @db.Uuid
-  secrets                                                   String?
   name                                                      String?
   enabled                                                   Boolean?
   updatedAt                                                 String?
@@ -53,6 +52,7 @@ model agents {
   spellReleases_spellReleases_agentIdToagents               spellReleases[]     @relation("spellReleases_agentIdToagents")
   Webhook                                                   Webhook[]
   rootSpellId                                               String?             @db.Uuid // Deprecated
+  secrets                                                   String? // Deprecated
   rootSpell                                                 Json? // Deprecated
   pingedAt                                                  String? // Deprecated
   publicVariables                                           String? // Deprecated

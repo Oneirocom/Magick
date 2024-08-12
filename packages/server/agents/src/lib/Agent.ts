@@ -210,7 +210,7 @@ export class Agent
     this.data = data
     this.version = data.version
     this.currentSpellReleaseId = data.currentSpellReleaseId || null
-    this.secrets = data?.secrets ? JSON.parse(data?.secrets) : {}
+    // this.secrets = data?.secrets ? JSON.parse(data?.secrets) : {}
     // TODO: Deprecated
     // this.publicVariables = data.publicVariables
     this.name = data.name ?? 'agent'

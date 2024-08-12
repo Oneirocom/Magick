@@ -71,9 +71,6 @@ export class AgentV2
 {
   name = ''
   id: any
-  secrets: any
-  // TODO: Deprecated
-  // publicVariables!: Record<string, string>
   currentSpellReleaseId: string | null = null
   data!: AgentInterface
   projectId!: string
@@ -89,6 +86,8 @@ export class AgentV2
   heartbeatInterval: NodeJS.Timer
   seraphManager: SeraphManager
   config: AgentConfig
+  // secrets: any // TODO: Deprecated
+  // publicVariables!: Record<string, string>
 
   /**
    * Agent constructor initializes properties and sets intervals for updating agents

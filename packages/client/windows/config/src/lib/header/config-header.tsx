@@ -43,8 +43,8 @@ export const ConfigHeader = ({
     const _data = { ...selectedAgentData, ...data }
     _data.enabled = !!_data.enabled
     _data.updatedAt = new Date().toISOString()
-    _data.secrets = _data.secrets || '{}'
-    // _data.pingedAt = new Date().toISOString()
+    // _data.secrets = _data.secrets || '{}' // TODO: Deprecated
+    // _data.pingedAt = new Date().toISOString() // TODO: Deprecated
 
     updateAgent(_data)
       .unwrap()

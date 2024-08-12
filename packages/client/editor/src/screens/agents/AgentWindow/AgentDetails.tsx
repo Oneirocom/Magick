@@ -57,8 +57,8 @@ const AgentDetails = ({
     // Avoid server-side validation error
     _data.enabled = _data.enabled ? true : false
     _data.updatedAt = new Date().toISOString()
-    _data.secrets = _data.secrets ? _data.secrets : '{}'
-    // _data.pingedAt = new Date().toISOString()
+    // _data.secrets = _data.secrets ? _data.secrets : '{}' // TODO: Deprecated
+    // _data.pingedAt = new Date().toISOString() // TODO: Deprecated
 
     updateAgent(_data)
       .unwrap()

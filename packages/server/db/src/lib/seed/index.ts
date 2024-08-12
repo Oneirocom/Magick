@@ -26,12 +26,12 @@ async function main() {
       name: AGENT_ID,
       enabled: true,
       version: '2.0',
-      secrets: '{}',
       updatedAt: new Date().toISOString(),
       createdAt: new Date().toISOString(),
       isDraft: false,
       projectId: WORLD_ID,
       worldId: WORLD_ID,
+      // secrets: '{}', // Deprecated
       // default: false, // TODO: Deprecated
       // TODO: Deprecated
       // publicVariables: '{}',

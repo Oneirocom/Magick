@@ -133,10 +133,10 @@ export class ProjectsService {
         projectId: projectId,
         enabled: true,
         version: '2.0',
-        secrets: '{}',
         updatedAt: new Date().toISOString(),
         createdAt: new Date().toISOString(),
         isDraft: true,
+        // secrets: '{}', // Deprecated
         // default: true, // TODO: Deprecated
         // TODO: Deprecated
         // publicVariables: '{}',
@@ -148,11 +148,11 @@ export class ProjectsService {
         projectId: projectId,
         enabled: true,
         version: '2.0',
-        secrets: '{}',
         updatedAt: new Date().toISOString(),
         createdAt: new Date().toISOString(),
         isDraft: false,
         draftAgentId: draftAgent.id,
+        // secrets: '{}', // Deprecated
         // default: false, // TODO: Deprecated
         // TODO: Deprecated
         // publicVariables: '{}',
@@ -212,11 +212,11 @@ export class ProjectsService {
     const mappedAgents = (agents ?? []).map((agent: AgentInterface) => {
       // @ts-ignore
       delete agent.id
-      // if (!agent.data) agent.data = '{}' // TODO: Deprecated
       if ('spells' in agent) delete agent.spells // <-- Updated to fix eliza import
       agent.enabled = false
       agent.projectId = projectId
-      agent.secrets = JSON.stringify(agent.secrets || {})
+      // if (!agent.data) agent.data = '{}' // TODO: Deprecated
+      // agent.secrets = JSON.stringify(agent.secrets || {}) // Deprecated
       return agent
     })
 

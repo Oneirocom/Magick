@@ -40,13 +40,13 @@ export const agentDataSchema = Type.Pick(
     'updatedAt',
     'createdAt',
     'version',
-    'secrets',
     'image',
     'currentSpellReleaseId',
     'isDraft',
     'draftAgentId',
     'image',
     'description',
+    // 'secrets', // Deprecated
     // 'runState', //Deprecated
     // 'default',
     // 'pingedAt', // Deprecated
@@ -67,10 +67,10 @@ export const agentPatchDataSchema = Type.Partial(
       'name',
       'enabled',
       'updatedAt',
-      'secrets',
       'currentSpellReleaseId',
       'isDraft',
       'description',
+      // 'secrets', // Deprecated
       // 'runState', // Deprecated
       // 'pingedAt', // Deprecated
       // 'data', // Deprecated
@@ -127,13 +127,13 @@ export const agentQueryProperties = Type.Pick(agentSchema, [
   'name',
   'updatedAt',
   'createdAt',
-  'secrets',
   'image',
   'version',
   'currentSpellReleaseId',
   'isDraft',
   'draftAgentId',
   'description',
+  // 'secrets', // Deprecated
   // 'frozen', // Deprecated
   // 'default', // Deprecated
   // 'runState', // Deprecated

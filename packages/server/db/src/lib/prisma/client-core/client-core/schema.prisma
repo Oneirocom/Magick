@@ -28,7 +28,6 @@ model agent_credentials {
 
 model agents {
   id                                                        String              @id @unique @db.Uuid
-  secrets                                                   String?
   name                                                      String?
   enabled                                                   Boolean?
   updatedAt                                                 String?
@@ -50,6 +49,7 @@ model agents {
   pluginState                                               pluginState[]
   spellReleases_spellReleases_agentIdToagents               spellReleases[]     @relation("spellReleases_agentIdToagents")
   Webhook                                                   Webhook[]
+  secrets                                                   String? // deprecated
   default                                                   Boolean             @default(false) // Deprecated
   runState                                                  String              @default("stopped") // Deprecated
   rootSpellId                                               String?             @db.Uuid // Deprecated
