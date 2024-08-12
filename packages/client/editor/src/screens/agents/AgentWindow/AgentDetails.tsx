@@ -58,7 +58,7 @@ const AgentDetails = ({
     _data.enabled = _data.enabled ? true : false
     _data.updatedAt = new Date().toISOString()
     _data.secrets = _data.secrets ? _data.secrets : '{}'
-    _data.pingedAt = new Date().toISOString()
+    // _data.pingedAt = new Date().toISOString()
 
     updateAgent(_data)
       .unwrap()

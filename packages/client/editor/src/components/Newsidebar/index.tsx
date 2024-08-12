@@ -118,7 +118,7 @@ export function NewSidebar(): React.JSX.Element {
             secrets: '{}',
             name: agent.name,
             enabled: true,
-            pingedAt: '',
+            // pingedAt: '', // TODO: Deprecated
             projectId: agent.projectId,
             // data: agent.data || {}, // TODO: Deprecated
             runState: newAgent?.runState,

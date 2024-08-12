@@ -39,11 +39,11 @@ export const agentDataSchema = Type.Pick(
     'enabled',
     'updatedAt',
     'createdAt',
-    'pingedAt',
+    // 'pingedAt', // Deprecated
     'version',
-    'data',
-    // TODO: Deprecated
-    // 'publicVariables',
+    // 'data', // Deprecated
+
+    // 'publicVariables', // Deprecated
     'secrets',
     'runState', //UNUSED right now
     'image',
@@ -69,8 +69,8 @@ export const agentPatchDataSchema = Type.Partial(
       'enabled',
       'runState',
       'updatedAt',
-      'pingedAt',
-      'data',
+      // 'pingedAt', // Deprecated
+      // 'data', // Deprecated
       // TODO: Deprecated
       // 'publicVariables',
       'secrets',
@@ -129,9 +129,8 @@ export const agentQueryProperties = Type.Pick(agentSchema, [
   'name',
   'updatedAt',
   'createdAt',
-  'pingedAt',
-  'data',
-  // TODO: Deprecated
+  // 'pingedAt', // Deprecated
+  // 'data', // Deprecated
   // 'publicVariables',
   'secrets',
   'image',

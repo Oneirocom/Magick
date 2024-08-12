@@ -34,7 +34,7 @@ model agents {
   name                                                      String?
   enabled                                                   Boolean?
   updatedAt                                                 String?
-  pingedAt                                                  String?
+  pingedAt                                                  String? // Deprecated
   projectId                                                 String?
   worldId                                                   String?
   data                                                      Json?
