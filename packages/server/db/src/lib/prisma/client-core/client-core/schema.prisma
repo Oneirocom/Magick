@@ -44,7 +44,7 @@ model agents {
   default                                                   Boolean             @default(false)
   createdAt                                                 DateTime?           @default(now()) @db.Timestamptz(6)
   currentSpellReleaseId                                     String?             @db.Uuid
-  embedModel                                                String?             @db.VarChar(255)
+  embedModel                                                String?             @db.VarChar(255) // Deprecated
   version                                                   String              @default("1.0") @db.VarChar(255)
   embeddingProvider                                         String?             @db.VarChar(255)
   embeddingModel                                            String?             @db.VarChar(255)
