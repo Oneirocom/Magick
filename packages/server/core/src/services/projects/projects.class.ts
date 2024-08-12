@@ -212,7 +212,7 @@ export class ProjectsService {
     const mappedAgents = (agents ?? []).map((agent: AgentInterface) => {
       // @ts-ignore
       delete agent.id
-      if (!agent.data) agent.data = '{}'
+      // if (!agent.data) agent.data = '{}' // TODO: Deprecated
       if ('spells' in agent) delete agent.spells // <-- Updated to fix eliza import
       agent.enabled = false
       agent.projectId = projectId
