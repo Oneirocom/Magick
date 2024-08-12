@@ -87,7 +87,8 @@ export const agentSchema = Type.Object(
     createdAt: Type.Optional(Type.String() || Type.Null()),
     pingedAt: Type.Optional(Type.String()),
     data: Type.Optional(Type.Any()),
-    publicVariables: Type.Optional(Type.Any()),
+    // TODO: Deprecated
+    // publicVariables: Type.Optional(Type.Any()),
     secrets: Type.Optional(Type.String()),
     frozen: Type.Optional(Type.Boolean()),
     default: Type.Optional(Type.Boolean()),

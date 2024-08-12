@@ -95,7 +95,8 @@ export class Agent
   name = ''
   id: any
   secrets: any
-  publicVariables!: Record<string, string>
+  // TODO: Deprecated
+  // publicVariables!: Record<string, string>
   currentSpellReleaseId: string | null = null
   data!: AgentInterface
   projectId!: string
@@ -210,7 +211,8 @@ export class Agent
     this.version = data.version
     this.currentSpellReleaseId = data.currentSpellReleaseId || null
     this.secrets = data?.secrets ? JSON.parse(data?.secrets) : {}
-    this.publicVariables = data.publicVariables
+    // TODO: Deprecated
+    // this.publicVariables = data.publicVariables
     this.name = data.name ?? 'agent'
     this.projectId = data.projectId
     this.logger.info('AGENT: Updated agent: %s | %s', this.name, this.id)

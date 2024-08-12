@@ -29,7 +29,7 @@ model agent_credentials {
 model agents {
   id                                                        String              @id @unique @db.Uuid
   rootSpell                                                 Json?
-  publicVariables                                           String?
+  publicVariables                                           String? // Deprecated
   secrets                                                   String?
   name                                                      String?
   enabled                                                   Boolean?

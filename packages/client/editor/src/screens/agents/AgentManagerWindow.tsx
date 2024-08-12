@@ -45,12 +45,13 @@ const AgentManagerWindow = () => {
       data.secrets = JSON.stringify(
         Array.isArray(data?.secrets) ? data.secrets : []
       )
-      // if the agent's public variable keys don't match the spell's public variable keys, update the agent
-      if (!data.publicVariables && data?.rootSpell?.graph?.nodes) {
-        data.publicVariables = data?.rootSpell?.graph?.nodes.filter(
-          (node: { data: { isPublic: any } }) => node?.data?.isPublic
-        )
-      }
+      // TODO: Deprecated
+      // // if the agent's public variable keys don't match the spell's public variable keys, update the agent
+      // if (!data.publicVariables && data?.rootSpell?.graph?.nodes) {
+      //   data.publicVariables = data?.rootSpell?.graph?.nodes.filter(
+      //     (node: { data: { isPublic: any } }) => node?.data?.isPublic
+      //   )
+      // }
 
       // Check if the "id" property exists in the object
       if (data.hasOwnProperty('id')) {

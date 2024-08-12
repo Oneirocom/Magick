@@ -134,7 +134,8 @@ export class ProjectsService {
         enabled: true,
         default: true,
         version: '2.0',
-        publicVariables: '{}',
+        // TODO: Deprecated
+        // publicVariables: '{}',
         secrets: '{}',
         updatedAt: new Date().toISOString(),
         createdAt: new Date().toISOString(),
@@ -148,7 +149,8 @@ export class ProjectsService {
         enabled: true,
         default: false,
         version: '2.0',
-        publicVariables: '{}',
+        // TODO: Deprecated
+        // publicVariables: '{}',
         secrets: '{}',
         updatedAt: new Date().toISOString(),
         createdAt: new Date().toISOString(),

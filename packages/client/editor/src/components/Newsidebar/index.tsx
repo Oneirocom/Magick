@@ -100,7 +100,7 @@ export function NewSidebar(): React.JSX.Element {
               enabled: true,
               default: false,
               version: '2.0',
-              publicVariables: '{}',
+              // publicVariables: '{}',
               secrets: '{}',
               updatedAt: new Date().toISOString(),
               createdAt: new Date().toISOString(),
@@ -114,7 +114,7 @@ export function NewSidebar(): React.JSX.Element {
           if (!agent) throw new Error('No agent found during setup')
 
           const newDraftAgent = await createNewAgent({
-            publicVariables: '{}',
+            // publicVariables: '{}',
             secrets: '{}',
             name: agent.name,
             enabled: true,
