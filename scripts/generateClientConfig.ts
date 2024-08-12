@@ -8,7 +8,7 @@ import * as pluginModules from '../packages/plugins'
 import { writeNodeSpecsToJSON } from '@magickml/behave-graph'
 import Redis from 'ioredis'
 import { PluginCredential } from 'packages/server/credentials/src'
-import { getBaseregistryNodeSpecs } from 'packages/server/grimoire/src/lib/baseRegistry'
+import { getBaseregistryNodeSpecs } from 'packages/server/agent-service/src'
 import { RedisPubSub } from 'packages/server/redis-pubsub/src'
 
 let plugins = []
