@@ -80,7 +80,6 @@ export const agentSchema = Type.Object(
     updatedAt: Type.Optional(Type.String() || Type.Null()),
     createdAt: Type.Optional(Type.String() || Type.Null()),
     secrets: Type.Optional(Type.String()),
-    frozen: Type.Optional(Type.Boolean()),
     version: Type.String(),
     currentSpellReleaseId: Type.Optional(
       Type.Union([Type.Null(), Type.String()])
@@ -90,6 +89,7 @@ export const agentSchema = Type.Object(
     image: Type.Optional(Type.Union([Type.Null(), Type.String()])),
     description: Type.Optional(Type.Union([Type.Null(), Type.String()])),
     // TODO: Deprecated
+    // frozen: Type.Optional(Type.Boolean()), // Deprecated
     // runState: Type.Optional(Type.String()), // DEPRECATED
     // default: Type.Optional(Type.Boolean()), // DEPRECATED
     // embedModel: Type.Optional(Type.Union([Type.Null(), Type.String()])), // DEPRECATED

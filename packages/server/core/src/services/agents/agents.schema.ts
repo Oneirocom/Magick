@@ -130,11 +130,11 @@ export const agentQueryProperties = Type.Pick(agentSchema, [
   'secrets',
   'image',
   'version',
-  'frozen',
   'currentSpellReleaseId',
   'isDraft',
   'draftAgentId',
   'description',
+  // 'frozen', // Deprecated
   // 'default', // Deprecated
   // 'runState', // Deprecated
   // 'pingedAt', // Deprecated
