@@ -84,5 +84,9 @@ export default defineNitroConfig({
       __dirname,
       '../../packages/embedder/api/packs/src/index.ts'
     ),
+    '@magickml/embedder-api-auth': resolve(
+      __dirname,
+      '../../packages/embedder/api/auth/src/index.ts'
+    ),
   },
 })

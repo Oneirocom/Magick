@@ -9,6 +9,7 @@ import {
   Checkbox,
   Badge,
   DropdownMenuItem,
+  Input,
 } from '@magickml/client-ui'
 import { createEmbedderReactClient } from '@magickml/embedder-client-react'
 import { useAtom } from 'jotai'
@@ -22,14 +23,23 @@ import { ColumnDef, Row } from '@tanstack/react-table'
 import { useEffect, useState } from 'react'
 import { useConfig } from '@magickml/providers'
 import { ChunksDialog } from '../_pkg/chunks-dialog'
-import toast from 'react-hot-toast'
+import { CopyIcon } from '@radix-ui/react-icons'
+import { RootState } from 'client/state'
+import { useSelector } from 'react-redux'
+import { enqueueSnackbar } from 'notistack'
 
 type KnowledgeWindowProps = {}
 export const KnowledgeWindow: React.FC<KnowledgeWindowProps> = () => {
-  const token = useConfig().embedderToken
+  const config = useConfig()
+  const { projectId, embedderToken } = config
+
+  const { currentAgentId } = useSelector(
+    (state: RootState) => state.globalConfig
+  )
   const createDialogState = useState(false)
   const chunksDialogState = useState(false)
   const [rowSelection, setRowSelection] = useState<Record<string, any>>({})
+  const [apiKey, setApiKey] = useState<string | null>(null)
   const client = createEmbedderReactClient({
     tsqPrefix: 'embedder',
     baseUrl:
@@ -39,7 +49,7 @@ export const KnowledgeWindow: React.FC<KnowledgeWindowProps> = () => {
       axiosConfig: {
         withCredentials: true,
         headers: {
-          Authorization: `Bearer ${token}`,
+          Authorization: `Bearer ${embedderToken}`,
         },
       },
     },
@@ -151,9 +161,13 @@ export const KnowledgeWindow: React.FC<KnowledgeWindowProps> = () => {
       )
       setRowSelection({})
       setAwaitingDeletionUpdate(true)
-      toast.success('Selected loaders deleted successfully.')
+      enqueueSnackbar('Selected loaders deleted successfully.', {
+        variant: 'success',
+      })
     } catch (error) {
-      toast.error('Failed to delete selected loaders.')
+      enqueueSnackbar('Failed to delete selected loaders.', {
+        variant: 'error',
+      })
     }
   }
 
@@ -175,7 +189,9 @@ export const KnowledgeWindow: React.FC<KnowledgeWindowProps> = () => {
 
       setAwaitingDeletionUpdate(true)
     } catch (error) {
-      toast.error('Failed to delete loader.')
+      enqueueSnackbar('Failed to delete loader.', {
+        variant: 'error',
+      })
     }
   }
 
@@ -184,12 +200,46 @@ export const KnowledgeWindow: React.FC<KnowledgeWindowProps> = () => {
       await deletePack({ packId })
       setAwaitingPackDeletion(true)
       setActivePackId(null)
-      toast.success('Knowledge pack deleted successfully.')
+      enqueueSnackbar('Knowledge pack deleted successfully.', {
+        variant: 'success',
+      })
     } catch (error) {
-      toast.error('Failed to delete knowledge pack.')
+      enqueueSnackbar('Failed to delete knowledge pack.', {
+        variant: 'error',
+      })
     }
   }
 
+  const { mutateAsync: getApiKey } = client.useGenerateToken() as {
+    mutateAsync: (arg: any) => Promise<{ token: string }>
+  }
+
+  const generateApiKey = async () => {
+    const newApiKey = await getApiKey({
+      noExpiresAt: true,
+      owner: projectId,
+      entity: projectId,
+      agentId: currentAgentId,
+    })
+
+    setApiKey(newApiKey.token)
+  }
+
+  const copyApiKey = () => {
+    if (!apiKey) return
+    navigator.clipboard.writeText(apiKey)
+    enqueueSnackbar('API key copied to clipboard', {
+      variant: 'success',
+    })
+
+    // Highlight the input text
+    const inputElement = document.querySelector(
+      'input[value="' + apiKey + '"]'
+    ) as HTMLInputElement
+    if (inputElement) {
+      inputElement.select()
+    }
+  }
   const columns: ColumnDef<Loader, unknown>[] = [
     {
       id: 'select',
@@ -304,6 +354,27 @@ export const KnowledgeWindow: React.FC<KnowledgeWindowProps> = () => {
                 </TabsTrigger>
               </TabsList>
               <TabsContent value="yours">
+                <div className="mt-6">
+                  <h3 className="text-lg font-semibold mb-2">API Key</h3>
+                  <div className="flex items-center space-x-2">
+                    <Input
+                      value={apiKey || ''}
+                      readOnly
+                      placeholder="Generate an API key"
+                      className="flex-grow"
+                    />
+                    <Button onClick={generateApiKey} variant="outline">
+                      Generate
+                    </Button>
+                    <Button
+                      onClick={copyApiKey}
+                      variant="outline"
+                      disabled={!apiKey}
+                    >
+                      <CopyIcon className="mr-2 h-4 w-4" /> Copy
+                    </Button>
+                  </div>
+                </div>
                 <div className="flex items-center justify-between py-2">
                   <h2 className="text-xl font-semibold">Knowledge Packs</h2>
                   <Button
@@ -314,6 +385,7 @@ export const KnowledgeWindow: React.FC<KnowledgeWindowProps> = () => {
                     Create
                   </Button>
                 </div>
+
                 <div className="grid grid-cols-4 gap-4">
                   {knowledgePacks?.map((pack, index) => (
                     <KnowledgePackCard

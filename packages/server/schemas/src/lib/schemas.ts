@@ -78,6 +78,7 @@ export const agentSchema = Type.Object(
   {
     id: Type.String(),
     projectId: Type.String(),
+    worldId: Type.Optional(Type.String()),
     rootSpellId: Type.Optional(Type.String() || Type.Null()),
     name: Type.String(),
     enabled: Type.Optional(Type.Boolean()),

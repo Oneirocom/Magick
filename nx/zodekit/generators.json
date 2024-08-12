@@ -1,9 +1,0 @@
-{
-  "generators": {
-    "generate-zode": {
-      "factory": "./src/generators/generate-zode/generator",
-      "schema": "./src/generators/generate-zode/schema.json",
-      "description": "generate-zode generator"
-    }
-  }
-}

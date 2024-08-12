@@ -50,6 +50,7 @@
       "@magickml/agent-server-schemas": [
         "packages/server/schemas/src/index.ts"
       ],
+      "@magickml/agent-service": ["packages/server/agent-service/src/index.ts"],
       "@magickml/agents": ["packages/server/agents/src/index.ts"],
       "@magickml/agents-v2": ["packages/server/agents-v2/src/index.ts"],
       "@magickml/client": ["apps/client/src/index.ts"],
@@ -67,6 +68,7 @@
       "@magickml/embedder-api-packs": [
         "packages/embedder/api/packs/src/index.ts"
       ],
+      "@magickml/embedder-auth": ["packages/embedder/auth/src/index.ts"],
       "@magickml/embedder-auth-plugin": [
         "packages/embedder/auth/plugin/src/index.ts"
       ],
@@ -101,8 +103,8 @@
         "packages/client/feathers-redux-toolkit/src/index.ts"
       ],
       "@magickml/flow-core": ["packages/client/flow/core/src/index.ts"],
-      "@magickml/agent-service": ["packages/server/agent-service/src/index.ts"],
       "@magickml/icons": ["packages/client/icons/src/index.ts"],
+      "@magickml/keywords-service": ["packages/server/keywords/src/index.ts"],
       "@magickml/knowledge-plugin": ["packages/plugins/knowledge/src/index.ts"],
       "@magickml/llm-service-types": [
         "packages/shared/llm-service-types/src/index.ts"
@@ -215,8 +217,9 @@
       "@magickml/types": ["packages/@types/src/index.ts"],
       "@magickml/utils": ["packages/shared/utils/src/index.ts"],
       "@magickml/vercel-sdk-core": ["packages/server/vercel/core/src/index.ts"],
-      "@magickml/zode": ["packages/zode/src/index.ts"],
-      "@magickml/zodekit": ["nx/zodekit/src/index.ts"],
+      "@magickml/embedder-api-auth": [
+        "packages/embedder/api/auth/src/index.ts"
+      ],
       "@packmvp": ["../anne/server/client/sdk.ts"],
       "chat-window": ["packages/client/chat/src/index.ts"],
       "client/core": ["packages/client/core/src/index.ts"],
@@ -238,7 +241,6 @@
       ],
       "server/communication": ["packages/server/communication/src/index.ts"],
       "server/grimoire-types": ["packages/server/grimoire/src/index.ts"],
-      "@magickml/keywords-service": ["packages/server/keywords/src/index.ts"],
       "stylesheets": ["packages/client/stylesheets/src/index.ts"],
       "window-agent-channels": [
         "packages/client/windows/agentChannels/src/index.ts"

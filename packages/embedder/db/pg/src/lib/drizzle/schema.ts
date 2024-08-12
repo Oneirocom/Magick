@@ -1,11 +1,4 @@
-import {
-  pgSchema,
-  pgEnum,
-  timestamp,
-  text,
-  boolean,
-  jsonb,
-} from 'drizzle-orm/pg-core'
+import { pgSchema, timestamp, text, boolean, jsonb } from 'drizzle-orm/pg-core'
 import { relations } from 'drizzle-orm/relations'
 import { z } from 'zod'
 import { createInsertSchema, createSelectSchema } from 'drizzle-zod'
@@ -78,6 +71,15 @@ export const Job = rag.table('Job', {
     .notNull(),
   finishedAt: timestamp('finishedAt', { precision: 3, mode: 'string' }),
   status: PackStatus('status').notNull().default('pending'),
+})
+
+export const ApiKey = rag.table('ApiKey', {
+  id: text('id').primaryKey().notNull(),
+  key: text('key').notNull(),
+  createdAt: timestamp('createdAt', { precision: 3, mode: 'string' })
+    .defaultNow()
+    .notNull(),
+  agentId: text('agentId').notNull(),
 })
 
 export const PackRelations = relations(Pack, ({ many }) => ({

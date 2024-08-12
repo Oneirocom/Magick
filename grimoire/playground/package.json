@@ -1,0 +1,19 @@
+{
+  "name": "playground",
+  "version": "0.0.1",
+  "type": "module",
+  "scripts": {
+    "dev": "nitro dev",
+    "grimoire": "grimoire"
+  },
+  "dependencies": {
+    "@gtc-nova/kit": "^0.0.1",
+    "@magickml/behave-graph": "^0.14.15",
+    "@magickml/grimoire": "workspace:*",
+    "@magickml/nodes": "workspace:*",
+    "@magickml/schemas": "workspace:*",
+    "@magickml/spells": "workspace:*",
+    "@magickml/tools": "workspace:*",
+    "nitro": "npm:nitro-nightly@3x"
+  }
+}

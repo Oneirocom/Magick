@@ -1,0 +1,33 @@
+{
+  "name": "@magickml/knowledge",
+  "version": "0.0.1",
+  "main": "dist/index.mjs",
+  "exports": {
+    ".": {
+      "import": "./dist/index.mjs",
+      "types": "./dist/index.d.ts"
+    },
+    "./runtime/utils": {
+      "import": "./dist/runtime/utils/index.mjs",
+      "types": "./dist/runtime/utils/index.d.ts"
+    }
+  },
+  "include": [
+    "src/**/*d.ts"
+  ],
+  "scripts": {
+    "build": "unbuild"
+  },
+  "dependencies": {
+    "@gtc-nova/kit": "^0.0.1",
+    "@llm-tools/embedjs": "^0.0.94",
+    "consola": "^3.2.3",
+    "md5": "^2.3.0",
+    "nitro": "npm:nitro-nightly@3x"
+  },
+  "devDependencies": {
+    "@types/md5": "^2.3.5",
+    "unbuild": "3.0.0-rc.7"
+
+  }
+}
