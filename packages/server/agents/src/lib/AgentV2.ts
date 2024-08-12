@@ -188,12 +188,12 @@ export class AgentV2
     this.data = data
     this.version = data.version
     this.currentSpellReleaseId = data.currentSpellReleaseId || null
-    this.secrets = data?.secrets ? JSON.parse(data?.secrets) : {}
-    // TODO: Deprecated
-    // this.publicVariables = data.publicVariables
     this.name = data.name ?? 'agent'
     this.projectId = data.projectId
     this.logger.info('AGENT: Updated agent: %s | %s', this.name, this.id)
+    // TODO: Deprecated
+    // this.secrets = data?.secrets ? JSON.parse(data?.secrets) : {}
+    // this.publicVariables = data.publicVariables
   }
 
   // async updateData(data: Record<string, any>) {

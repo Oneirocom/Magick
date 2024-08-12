@@ -3662,158 +3662,158 @@ export namespace Prisma {
 
   export type AgentsMinAggregateOutputType = {
     id: string | null
-    publicVariables: string | null
-    secrets: string | null
     name: string | null
     enabled: boolean | null
     updatedAt: string | null
-    pingedAt: string | null
     projectId: string | null
     worldId: string | null
-    runState: string | null
     image: string | null
-    rootSpellId: string | null
     default: boolean | null
     createdAt: Date | null
     currentSpellReleaseId: string | null
-    embedModel: string | null
     version: string | null
     embeddingProvider: string | null
     embeddingModel: string | null
     isDraft: boolean | null
     draftAgentId: string | null
     description: string | null
+    rootSpellId: string | null
+    secrets: string | null
+    pingedAt: string | null
+    publicVariables: string | null
+    embedModel: string | null
+    runState: string | null
   }
 
   export type AgentsMaxAggregateOutputType = {
     id: string | null
-    publicVariables: string | null
-    secrets: string | null
     name: string | null
     enabled: boolean | null
     updatedAt: string | null
-    pingedAt: string | null
     projectId: string | null
     worldId: string | null
-    runState: string | null
     image: string | null
-    rootSpellId: string | null
     default: boolean | null
     createdAt: Date | null
     currentSpellReleaseId: string | null
-    embedModel: string | null
     version: string | null
     embeddingProvider: string | null
     embeddingModel: string | null
     isDraft: boolean | null
     draftAgentId: string | null
     description: string | null
+    rootSpellId: string | null
+    secrets: string | null
+    pingedAt: string | null
+    publicVariables: string | null
+    embedModel: string | null
+    runState: string | null
   }
 
   export type AgentsCountAggregateOutputType = {
     id: number
-    rootSpell: number
-    publicVariables: number
-    secrets: number
     name: number
     enabled: number
     updatedAt: number
-    pingedAt: number
     projectId: number
     worldId: number
     data: number
-    runState: number
     image: number
-    rootSpellId: number
     default: number
     createdAt: number
     currentSpellReleaseId: number
-    embedModel: number
     version: number
     embeddingProvider: number
     embeddingModel: number
     isDraft: number
     draftAgentId: number
     description: number
+    rootSpellId: number
+    secrets: number
+    rootSpell: number
+    pingedAt: number
+    publicVariables: number
+    embedModel: number
+    runState: number
     _all: number
   }
 
 
   export type AgentsMinAggregateInputType = {
     id?: true
-    publicVariables?: true
-    secrets?: true
     name?: true
     enabled?: true
     updatedAt?: true
-    pingedAt?: true
     projectId?: true
     worldId?: true
-    runState?: true
     image?: true
-    rootSpellId?: true
     default?: true
     createdAt?: true
     currentSpellReleaseId?: true
-    embedModel?: true
     version?: true
     embeddingProvider?: true
     embeddingModel?: true
     isDraft?: true
     draftAgentId?: true
     description?: true
+    rootSpellId?: true
+    secrets?: true
+    pingedAt?: true
+    publicVariables?: true
+    embedModel?: true
+    runState?: true
   }
 
   export type AgentsMaxAggregateInputType = {
     id?: true
-    publicVariables?: true
-    secrets?: true
     name?: true
     enabled?: true
     updatedAt?: true
-    pingedAt?: true
     projectId?: true
     worldId?: true
-    runState?: true
     image?: true
-    rootSpellId?: true
     default?: true
     createdAt?: true
     currentSpellReleaseId?: true
-    embedModel?: true
     version?: true
     embeddingProvider?: true
     embeddingModel?: true
     isDraft?: true
     draftAgentId?: true
     description?: true
+    rootSpellId?: true
+    secrets?: true
+    pingedAt?: true
+    publicVariables?: true
+    embedModel?: true
+    runState?: true
   }
 
   export type AgentsCountAggregateInputType = {
     id?: true
-    rootSpell?: true
-    publicVariables?: true
-    secrets?: true
     name?: true
     enabled?: true
     updatedAt?: true
-    pingedAt?: true
     projectId?: true
     worldId?: true
     data?: true
-    runState?: true
     image?: true
-    rootSpellId?: true
     default?: true
     createdAt?: true
     currentSpellReleaseId?: true
-    embedModel?: true
     version?: true
     embeddingProvider?: true
     embeddingModel?: true
     isDraft?: true
     draftAgentId?: true
     description?: true
+    rootSpellId?: true
+    secrets?: true
+    rootSpell?: true
+    pingedAt?: true
+    publicVariables?: true
+    embedModel?: true
+    runState?: true
     _all?: true
   }
 
@@ -3891,29 +3891,29 @@ export namespace Prisma {
 
   export type AgentsGroupByOutputType = {
     id: string
-    rootSpell: JsonValue | null
-    publicVariables: string | null
-    secrets: string | null
     name: string | null
     enabled: boolean | null
     updatedAt: string | null
-    pingedAt: string | null
     projectId: string | null
     worldId: string | null
     data: JsonValue | null
-    runState: string
     image: string | null
-    rootSpellId: string | null
     default: boolean
     createdAt: Date | null
     currentSpellReleaseId: string | null
-    embedModel: string | null
     version: string
     embeddingProvider: string | null
     embeddingModel: string | null
     isDraft: boolean
     draftAgentId: string | null
     description: string | null
+    rootSpellId: string | null
+    secrets: string | null
+    rootSpell: JsonValue | null
+    pingedAt: string | null
+    publicVariables: string | null
+    embedModel: string | null
+    runState: string
     _count: AgentsCountAggregateOutputType | null
     _min: AgentsMinAggregateOutputType | null
     _max: AgentsMaxAggregateOutputType | null
@@ -3935,29 +3935,29 @@ export namespace Prisma {
 
   export type agentsSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
-    rootSpell?: boolean
-    publicVariables?: boolean
-    secrets?: boolean
     name?: boolean
     enabled?: boolean
     updatedAt?: boolean
-    pingedAt?: boolean
     projectId?: boolean
     worldId?: boolean
     data?: boolean
-    runState?: boolean
     image?: boolean
-    rootSpellId?: boolean
     default?: boolean
     createdAt?: boolean
     currentSpellReleaseId?: boolean
-    embedModel?: boolean
     version?: boolean
     embeddingProvider?: boolean
     embeddingModel?: boolean
     isDraft?: boolean
     draftAgentId?: boolean
     description?: boolean
+    rootSpellId?: boolean
+    secrets?: boolean
+    rootSpell?: boolean
+    pingedAt?: boolean
+    publicVariables?: boolean
+    embedModel?: boolean
+    runState?: boolean
     agent_credentials?: boolean | agents$agent_credentialsArgs<ExtArgs>
     spellReleases_agents_currentSpellReleaseIdTospellReleases?: boolean | agents$spellReleases_agents_currentSpellReleaseIdTospellReleasesArgs<ExtArgs>
     chatMessages?: boolean | agents$chatMessagesArgs<ExtArgs>
@@ -3970,57 +3970,57 @@ export namespace Prisma {
 
   export type agentsSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
-    rootSpell?: boolean
-    publicVariables?: boolean
-    secrets?: boolean
     name?: boolean
     enabled?: boolean
     updatedAt?: boolean
-    pingedAt?: boolean
     projectId?: boolean
     worldId?: boolean
     data?: boolean
-    runState?: boolean
     image?: boolean
-    rootSpellId?: boolean
     default?: boolean
     createdAt?: boolean
     currentSpellReleaseId?: boolean
-    embedModel?: boolean
     version?: boolean
     embeddingProvider?: boolean
     embeddingModel?: boolean
     isDraft?: boolean
     draftAgentId?: boolean
     description?: boolean
+    rootSpellId?: boolean
+    secrets?: boolean
+    rootSpell?: boolean
+    pingedAt?: boolean
+    publicVariables?: boolean
+    embedModel?: boolean
+    runState?: boolean
     spellReleases_agents_currentSpellReleaseIdTospellReleases?: boolean | agents$spellReleases_agents_currentSpellReleaseIdTospellReleasesArgs<ExtArgs>
   }, ExtArgs["result"]["agents"]>
 
   export type agentsSelectScalar = {
     id?: boolean
-    rootSpell?: boolean
-    publicVariables?: boolean
-    secrets?: boolean
     name?: boolean
     enabled?: boolean
     updatedAt?: boolean
-    pingedAt?: boolean
     projectId?: boolean
     worldId?: boolean
     data?: boolean
-    runState?: boolean
     image?: boolean
-    rootSpellId?: boolean
     default?: boolean
     createdAt?: boolean
     currentSpellReleaseId?: boolean
-    embedModel?: boolean
     version?: boolean
     embeddingProvider?: boolean
     embeddingModel?: boolean
     isDraft?: boolean
     draftAgentId?: boolean
     description?: boolean
+    rootSpellId?: boolean
+    secrets?: boolean
+    rootSpell?: boolean
+    pingedAt?: boolean
+    publicVariables?: boolean
+    embedModel?: boolean
+    runState?: boolean
   }
 
   export type agentsInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -4050,29 +4050,29 @@ export namespace Prisma {
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
-      rootSpell: Prisma.JsonValue | null
-      publicVariables: string | null
-      secrets: string | null
       name: string | null
       enabled: boolean | null
       updatedAt: string | null
-      pingedAt: string | null
       projectId: string | null
       worldId: string | null
       data: Prisma.JsonValue | null
-      runState: string
       image: string | null
-      rootSpellId: string | null
       default: boolean
       createdAt: Date | null
       currentSpellReleaseId: string | null
-      embedModel: string | null
       version: string
       embeddingProvider: string | null
       embeddingModel: string | null
       isDraft: boolean
       draftAgentId: string | null
       description: string | null
+      rootSpellId: string | null
+      secrets: string | null
+      rootSpell: Prisma.JsonValue | null
+      pingedAt: string | null
+      publicVariables: string | null
+      embedModel: string | null
+      runState: string
     }, ExtArgs["result"]["agents"]>
     composites: {}
   }
@@ -4506,29 +4506,29 @@ export namespace Prisma {
    */ 
   interface agentsFieldRefs {
     readonly id: FieldRef<"agents", 'String'>
-    readonly rootSpell: FieldRef<"agents", 'Json'>
-    readonly publicVariables: FieldRef<"agents", 'String'>
-    readonly secrets: FieldRef<"agents", 'String'>
     readonly name: FieldRef<"agents", 'String'>
     readonly enabled: FieldRef<"agents", 'Boolean'>
     readonly updatedAt: FieldRef<"agents", 'String'>
-    readonly pingedAt: FieldRef<"agents", 'String'>
     readonly projectId: FieldRef<"agents", 'String'>
     readonly worldId: FieldRef<"agents", 'String'>
     readonly data: FieldRef<"agents", 'Json'>
-    readonly runState: FieldRef<"agents", 'String'>
     readonly image: FieldRef<"agents", 'String'>
-    readonly rootSpellId: FieldRef<"agents", 'String'>
     readonly default: FieldRef<"agents", 'Boolean'>
     readonly createdAt: FieldRef<"agents", 'DateTime'>
     readonly currentSpellReleaseId: FieldRef<"agents", 'String'>
-    readonly embedModel: FieldRef<"agents", 'String'>
     readonly version: FieldRef<"agents", 'String'>
     readonly embeddingProvider: FieldRef<"agents", 'String'>
     readonly embeddingModel: FieldRef<"agents", 'String'>
     readonly isDraft: FieldRef<"agents", 'Boolean'>
     readonly draftAgentId: FieldRef<"agents", 'String'>
     readonly description: FieldRef<"agents", 'String'>
+    readonly rootSpellId: FieldRef<"agents", 'String'>
+    readonly secrets: FieldRef<"agents", 'String'>
+    readonly rootSpell: FieldRef<"agents", 'Json'>
+    readonly pingedAt: FieldRef<"agents", 'String'>
+    readonly publicVariables: FieldRef<"agents", 'String'>
+    readonly embedModel: FieldRef<"agents", 'String'>
+    readonly runState: FieldRef<"agents", 'String'>
   }
     
 
@@ -22710,29 +22710,29 @@ export namespace Prisma {
 
   export const AgentsScalarFieldEnum: {
     id: 'id',
-    rootSpell: 'rootSpell',
-    publicVariables: 'publicVariables',
-    secrets: 'secrets',
     name: 'name',
     enabled: 'enabled',
     updatedAt: 'updatedAt',
-    pingedAt: 'pingedAt',
     projectId: 'projectId',
     worldId: 'worldId',
     data: 'data',
-    runState: 'runState',
     image: 'image',
-    rootSpellId: 'rootSpellId',
     default: 'default',
     createdAt: 'createdAt',
     currentSpellReleaseId: 'currentSpellReleaseId',
-    embedModel: 'embedModel',
     version: 'version',
     embeddingProvider: 'embeddingProvider',
     embeddingModel: 'embeddingModel',
     isDraft: 'isDraft',
     draftAgentId: 'draftAgentId',
-    description: 'description'
+    description: 'description',
+    rootSpellId: 'rootSpellId',
+    secrets: 'secrets',
+    rootSpell: 'rootSpell',
+    pingedAt: 'pingedAt',
+    publicVariables: 'publicVariables',
+    embedModel: 'embedModel',
+    runState: 'runState'
   };
 
   export type AgentsScalarFieldEnum = (typeof AgentsScalarFieldEnum)[keyof typeof AgentsScalarFieldEnum]
@@ -23061,23 +23061,23 @@ export namespace Prisma {
 
   export const agentsOrderByRelevanceFieldEnum: {
     id: 'id',
-    publicVariables: 'publicVariables',
-    secrets: 'secrets',
     name: 'name',
     updatedAt: 'updatedAt',
-    pingedAt: 'pingedAt',
     projectId: 'projectId',
     worldId: 'worldId',
-    runState: 'runState',
     image: 'image',
-    rootSpellId: 'rootSpellId',
     currentSpellReleaseId: 'currentSpellReleaseId',
-    embedModel: 'embedModel',
     version: 'version',
     embeddingProvider: 'embeddingProvider',
     embeddingModel: 'embeddingModel',
     draftAgentId: 'draftAgentId',
-    description: 'description'
+    description: 'description',
+    rootSpellId: 'rootSpellId',
+    secrets: 'secrets',
+    pingedAt: 'pingedAt',
+    publicVariables: 'publicVariables',
+    embedModel: 'embedModel',
+    runState: 'runState'
   };
 
   export type agentsOrderByRelevanceFieldEnum = (typeof agentsOrderByRelevanceFieldEnum)[keyof typeof agentsOrderByRelevanceFieldEnum]
@@ -23329,16 +23329,16 @@ export namespace Prisma {
 
 
   /**
-   * Reference to a field of type 'Json'
+   * Reference to a field of type 'Boolean'
    */
-  export type JsonFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Json'>
+  export type BooleanFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Boolean'>
     
 
 
   /**
-   * Reference to a field of type 'Boolean'
+   * Reference to a field of type 'Json'
    */
-  export type BooleanFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Boolean'>
+  export type JsonFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Json'>
     
 
 
@@ -23461,29 +23461,29 @@ export namespace Prisma {
     OR?: agentsWhereInput[]
     NOT?: agentsWhereInput | agentsWhereInput[]
     id?: UuidFilter<"agents"> | string
-    rootSpell?: JsonNullableFilter<"agents">
-    publicVariables?: StringNullableFilter<"agents"> | string | null
-    secrets?: StringNullableFilter<"agents"> | string | null
     name?: StringNullableFilter<"agents"> | string | null
     enabled?: BoolNullableFilter<"agents"> | boolean | null
     updatedAt?: StringNullableFilter<"agents"> | string | null
-    pingedAt?: StringNullableFilter<"agents"> | string | null
     projectId?: StringNullableFilter<"agents"> | string | null
     worldId?: StringNullableFilter<"agents"> | string | null
     data?: JsonNullableFilter<"agents">
-    runState?: StringFilter<"agents"> | string
     image?: StringNullableFilter<"agents"> | string | null
-    rootSpellId?: UuidNullableFilter<"agents"> | string | null
     default?: BoolFilter<"agents"> | boolean
     createdAt?: DateTimeNullableFilter<"agents"> | Date | string | null
     currentSpellReleaseId?: UuidNullableFilter<"agents"> | string | null
-    embedModel?: StringNullableFilter<"agents"> | string | null
     version?: StringFilter<"agents"> | string
     embeddingProvider?: StringNullableFilter<"agents"> | string | null
     embeddingModel?: StringNullableFilter<"agents"> | string | null
     isDraft?: BoolFilter<"agents"> | boolean
     draftAgentId?: UuidNullableFilter<"agents"> | string | null
     description?: StringNullableFilter<"agents"> | string | null
+    rootSpellId?: UuidNullableFilter<"agents"> | string | null
+    secrets?: StringNullableFilter<"agents"> | string | null
+    rootSpell?: JsonNullableFilter<"agents">
+    pingedAt?: StringNullableFilter<"agents"> | string | null
+    publicVariables?: StringNullableFilter<"agents"> | string | null
+    embedModel?: StringNullableFilter<"agents"> | string | null
+    runState?: StringFilter<"agents"> | string
     agent_credentials?: Agent_credentialsListRelationFilter
     spellReleases_agents_currentSpellReleaseIdTospellReleases?: XOR<SpellReleasesNullableRelationFilter, spellReleasesWhereInput> | null
     chatMessages?: ChatMessagesListRelationFilter
@@ -23495,29 +23495,29 @@ export namespace Prisma {
 
   export type agentsOrderByWithRelationAndSearchRelevanceInput = {
     id?: SortOrder
-    rootSpell?: SortOrderInput | SortOrder
-    publicVariables?: SortOrderInput | SortOrder
-    secrets?: SortOrderInput | SortOrder
     name?: SortOrderInput | SortOrder
     enabled?: SortOrderInput | SortOrder
     updatedAt?: SortOrderInput | SortOrder
-    pingedAt?: SortOrderInput | SortOrder
     projectId?: SortOrderInput | SortOrder
     worldId?: SortOrderInput | SortOrder
     data?: SortOrderInput | SortOrder
-    runState?: SortOrder
     image?: SortOrderInput | SortOrder
-    rootSpellId?: SortOrderInput | SortOrder
     default?: SortOrder
     createdAt?: SortOrderInput | SortOrder
     currentSpellReleaseId?: SortOrderInput | SortOrder
-    embedModel?: SortOrderInput | SortOrder
     version?: SortOrder
     embeddingProvider?: SortOrderInput | SortOrder
     embeddingModel?: SortOrderInput | SortOrder
     isDraft?: SortOrder
     draftAgentId?: SortOrderInput | SortOrder
     description?: SortOrderInput | SortOrder
+    rootSpellId?: SortOrderInput | SortOrder
+    secrets?: SortOrderInput | SortOrder
+    rootSpell?: SortOrderInput | SortOrder
+    pingedAt?: SortOrderInput | SortOrder
+    publicVariables?: SortOrderInput | SortOrder
+    embedModel?: SortOrderInput | SortOrder
+    runState?: SortOrder
     agent_credentials?: agent_credentialsOrderByRelationAggregateInput
     spellReleases_agents_currentSpellReleaseIdTospellReleases?: spellReleasesOrderByWithRelationAndSearchRelevanceInput
     chatMessages?: chatMessagesOrderByRelationAggregateInput
@@ -23533,29 +23533,29 @@ export namespace Prisma {
     AND?: agentsWhereInput | agentsWhereInput[]
     OR?: agentsWhereInput[]
     NOT?: agentsWhereInput | agentsWhereInput[]
-    rootSpell?: JsonNullableFilter<"agents">
-    publicVariables?: StringNullableFilter<"agents"> | string | null
-    secrets?: StringNullableFilter<"agents"> | string | null
     name?: StringNullableFilter<"agents"> | string | null
     enabled?: BoolNullableFilter<"agents"> | boolean | null
     updatedAt?: StringNullableFilter<"agents"> | string | null
-    pingedAt?: StringNullableFilter<"agents"> | string | null
     projectId?: StringNullableFilter<"agents"> | string | null
     worldId?: StringNullableFilter<"agents"> | string | null
     data?: JsonNullableFilter<"agents">
-    runState?: StringFilter<"agents"> | string
     image?: StringNullableFilter<"agents"> | string | null
-    rootSpellId?: UuidNullableFilter<"agents"> | string | null
     default?: BoolFilter<"agents"> | boolean
     createdAt?: DateTimeNullableFilter<"agents"> | Date | string | null
     currentSpellReleaseId?: UuidNullableFilter<"agents"> | string | null
-    embedModel?: StringNullableFilter<"agents"> | string | null
     version?: StringFilter<"agents"> | string
     embeddingProvider?: StringNullableFilter<"agents"> | string | null
     embeddingModel?: StringNullableFilter<"agents"> | string | null
     isDraft?: BoolFilter<"agents"> | boolean
     draftAgentId?: UuidNullableFilter<"agents"> | string | null
     description?: StringNullableFilter<"agents"> | string | null
+    rootSpellId?: UuidNullableFilter<"agents"> | string | null
+    secrets?: StringNullableFilter<"agents"> | string | null
+    rootSpell?: JsonNullableFilter<"agents">
+    pingedAt?: StringNullableFilter<"agents"> | string | null
+    publicVariables?: StringNullableFilter<"agents"> | string | null
+    embedModel?: StringNullableFilter<"agents"> | string | null
+    runState?: StringFilter<"agents"> | string
     agent_credentials?: Agent_credentialsListRelationFilter
     spellReleases_agents_currentSpellReleaseIdTospellReleases?: XOR<SpellReleasesNullableRelationFilter, spellReleasesWhereInput> | null
     chatMessages?: ChatMessagesListRelationFilter
@@ -23567,29 +23567,29 @@ export namespace Prisma {
 
   export type agentsOrderByWithAggregationInput = {
     id?: SortOrder
-    rootSpell?: SortOrderInput | SortOrder
-    publicVariables?: SortOrderInput | SortOrder
-    secrets?: SortOrderInput | SortOrder
     name?: SortOrderInput | SortOrder
     enabled?: SortOrderInput | SortOrder
     updatedAt?: SortOrderInput | SortOrder
-    pingedAt?: SortOrderInput | SortOrder
     projectId?: SortOrderInput | SortOrder
     worldId?: SortOrderInput | SortOrder
     data?: SortOrderInput | SortOrder
-    runState?: SortOrder
     image?: SortOrderInput | SortOrder
-    rootSpellId?: SortOrderInput | SortOrder
     default?: SortOrder
     createdAt?: SortOrderInput | SortOrder
     currentSpellReleaseId?: SortOrderInput | SortOrder
-    embedModel?: SortOrderInput | SortOrder
     version?: SortOrder
     embeddingProvider?: SortOrderInput | SortOrder
     embeddingModel?: SortOrderInput | SortOrder
     isDraft?: SortOrder
     draftAgentId?: SortOrderInput | SortOrder
     description?: SortOrderInput | SortOrder
+    rootSpellId?: SortOrderInput | SortOrder
+    secrets?: SortOrderInput | SortOrder
+    rootSpell?: SortOrderInput | SortOrder
+    pingedAt?: SortOrderInput | SortOrder
+    publicVariables?: SortOrderInput | SortOrder
+    embedModel?: SortOrderInput | SortOrder
+    runState?: SortOrder
     _count?: agentsCountOrderByAggregateInput
     _max?: agentsMaxOrderByAggregateInput
     _min?: agentsMinOrderByAggregateInput
@@ -23600,29 +23600,29 @@ export namespace Prisma {
     OR?: agentsScalarWhereWithAggregatesInput[]
     NOT?: agentsScalarWhereWithAggregatesInput | agentsScalarWhereWithAggregatesInput[]
     id?: UuidWithAggregatesFilter<"agents"> | string
-    rootSpell?: JsonNullableWithAggregatesFilter<"agents">
-    publicVariables?: StringNullableWithAggregatesFilter<"agents"> | string | null
-    secrets?: StringNullableWithAggregatesFilter<"agents"> | string | null
     name?: StringNullableWithAggregatesFilter<"agents"> | string | null
     enabled?: BoolNullableWithAggregatesFilter<"agents"> | boolean | null
     updatedAt?: StringNullableWithAggregatesFilter<"agents"> | string | null
-    pingedAt?: StringNullableWithAggregatesFilter<"agents"> | string | null
     projectId?: StringNullableWithAggregatesFilter<"agents"> | string | null
     worldId?: StringNullableWithAggregatesFilter<"agents"> | string | null
     data?: JsonNullableWithAggregatesFilter<"agents">
-    runState?: StringWithAggregatesFilter<"agents"> | string
     image?: StringNullableWithAggregatesFilter<"agents"> | string | null
-    rootSpellId?: UuidNullableWithAggregatesFilter<"agents"> | string | null
     default?: BoolWithAggregatesFilter<"agents"> | boolean
     createdAt?: DateTimeNullableWithAggregatesFilter<"agents"> | Date | string | null
     currentSpellReleaseId?: UuidNullableWithAggregatesFilter<"agents"> | string | null
-    embedModel?: StringNullableWithAggregatesFilter<"agents"> | string | null
     version?: StringWithAggregatesFilter<"agents"> | string
     embeddingProvider?: StringNullableWithAggregatesFilter<"agents"> | string | null
     embeddingModel?: StringNullableWithAggregatesFilter<"agents"> | string | null
     isDraft?: BoolWithAggregatesFilter<"agents"> | boolean
     draftAgentId?: UuidNullableWithAggregatesFilter<"agents"> | string | null
     description?: StringNullableWithAggregatesFilter<"agents"> | string | null
+    rootSpellId?: UuidNullableWithAggregatesFilter<"agents"> | string | null
+    secrets?: StringNullableWithAggregatesFilter<"agents"> | string | null
+    rootSpell?: JsonNullableWithAggregatesFilter<"agents">
+    pingedAt?: StringNullableWithAggregatesFilter<"agents"> | string | null
+    publicVariables?: StringNullableWithAggregatesFilter<"agents"> | string | null
+    embedModel?: StringNullableWithAggregatesFilter<"agents"> | string | null
+    runState?: StringWithAggregatesFilter<"agents"> | string
   }
 
   export type chatMessagesWhereInput = {
@@ -25000,28 +25000,28 @@ export namespace Prisma {
 
   export type agentsCreateInput = {
     id: string
-    rootSpell?: NullableJsonNullValueInput | InputJsonValue
-    publicVariables?: string | null
-    secrets?: string | null
     name?: string | null
     enabled?: boolean | null
     updatedAt?: string | null
-    pingedAt?: string | null
     projectId?: string | null
     worldId?: string | null
     data?: NullableJsonNullValueInput | InputJsonValue
-    runState?: string
     image?: string | null
-    rootSpellId?: string | null
     default?: boolean
     createdAt?: Date | string | null
-    embedModel?: string | null
     version?: string
     embeddingProvider?: string | null
     embeddingModel?: string | null
     isDraft?: boolean
     draftAgentId?: string | null
     description?: string | null
+    rootSpellId?: string | null
+    secrets?: string | null
+    rootSpell?: NullableJsonNullValueInput | InputJsonValue
+    pingedAt?: string | null
+    publicVariables?: string | null
+    embedModel?: string | null
+    runState?: string
     agent_credentials?: agent_credentialsCreateNestedManyWithoutAgentsInput
     spellReleases_agents_currentSpellReleaseIdTospellReleases?: spellReleasesCreateNestedOneWithoutAgents_agents_currentSpellReleaseIdTospellReleasesInput
     chatMessages?: chatMessagesCreateNestedManyWithoutAgentsInput
@@ -25033,29 +25033,29 @@ export namespace Prisma {
 
   export type agentsUncheckedCreateInput = {
     id: string
-    rootSpell?: NullableJsonNullValueInput | InputJsonValue
-    publicVariables?: string | null
-    secrets?: string | null
     name?: string | null
     enabled?: boolean | null
     updatedAt?: string | null
-    pingedAt?: string | null
     projectId?: string | null
     worldId?: string | null
     data?: NullableJsonNullValueInput | InputJsonValue
-    runState?: string
     image?: string | null
-    rootSpellId?: string | null
     default?: boolean
     createdAt?: Date | string | null
     currentSpellReleaseId?: string | null
-    embedModel?: string | null
     version?: string
     embeddingProvider?: string | null
     embeddingModel?: string | null
     isDraft?: boolean
     draftAgentId?: string | null
     description?: string | null
+    rootSpellId?: string | null
+    secrets?: string | null
+    rootSpell?: NullableJsonNullValueInput | InputJsonValue
+    pingedAt?: string | null
+    publicVariables?: string | null
+    embedModel?: string | null
+    runState?: string
     agent_credentials?: agent_credentialsUncheckedCreateNestedManyWithoutAgentsInput
     chatMessages?: chatMessagesUncheckedCreateNestedManyWithoutAgentsInput
     graphEvents?: graphEventsUncheckedCreateNestedManyWithoutAgentsInput
@@ -25066,28 +25066,28 @@ export namespace Prisma {
 
   export type agentsUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
-    rootSpell?: NullableJsonNullValueInput | InputJsonValue
-    publicVariables?: NullableStringFieldUpdateOperationsInput | string | null
-    secrets?: NullableStringFieldUpdateOperationsInput | string | null
     name?: NullableStringFieldUpdateOperationsInput | string | null
     enabled?: NullableBoolFieldUpdateOperationsInput | boolean | null
     updatedAt?: NullableStringFieldUpdateOperationsInput | string | null
-    pingedAt?: NullableStringFieldUpdateOperationsInput | string | null
     projectId?: NullableStringFieldUpdateOperationsInput | string | null
     worldId?: NullableStringFieldUpdateOperationsInput | string | null
     data?: NullableJsonNullValueInput | InputJsonValue
-    runState?: StringFieldUpdateOperationsInput | string
     image?: NullableStringFieldUpdateOperationsInput | string | null
-    rootSpellId?: NullableStringFieldUpdateOperationsInput | string | null
     default?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    embedModel?: NullableStringFieldUpdateOperationsInput | string | null
     version?: StringFieldUpdateOperationsInput | string
     embeddingProvider?: NullableStringFieldUpdateOperationsInput | string | null
     embeddingModel?: NullableStringFieldUpdateOperationsInput | string | null
     isDraft?: BoolFieldUpdateOperationsInput | boolean
     draftAgentId?: NullableStringFieldUpdateOperationsInput | string | null
     description?: NullableStringFieldUpdateOperationsInput | string | null
+    rootSpellId?: NullableStringFieldUpdateOperationsInput | string | null
+    secrets?: NullableStringFieldUpdateOperationsInput | string | null
+    rootSpell?: NullableJsonNullValueInput | InputJsonValue
+    pingedAt?: NullableStringFieldUpdateOperationsInput | string | null
+    publicVariables?: NullableStringFieldUpdateOperationsInput | string | null
+    embedModel?: NullableStringFieldUpdateOperationsInput | string | null
+    runState?: StringFieldUpdateOperationsInput | string
     agent_credentials?: agent_credentialsUpdateManyWithoutAgentsNestedInput
     spellReleases_agents_currentSpellReleaseIdTospellReleases?: spellReleasesUpdateOneWithoutAgents_agents_currentSpellReleaseIdTospellReleasesNestedInput
     chatMessages?: chatMessagesUpdateManyWithoutAgentsNestedInput
@@ -25099,29 +25099,29 @@ export namespace Prisma {
 
   export type agentsUncheckedUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
-    rootSpell?: NullableJsonNullValueInput | InputJsonValue
-    publicVariables?: NullableStringFieldUpdateOperationsInput | string | null
-    secrets?: NullableStringFieldUpdateOperationsInput | string | null
     name?: NullableStringFieldUpdateOperationsInput | string | null
     enabled?: NullableBoolFieldUpdateOperationsInput | boolean | null
     updatedAt?: NullableStringFieldUpdateOperationsInput | string | null
-    pingedAt?: NullableStringFieldUpdateOperationsInput | string | null
     projectId?: NullableStringFieldUpdateOperationsInput | string | null
     worldId?: NullableStringFieldUpdateOperationsInput | string | null
     data?: NullableJsonNullValueInput | InputJsonValue
-    runState?: StringFieldUpdateOperationsInput | string
     image?: NullableStringFieldUpdateOperationsInput | string | null
-    rootSpellId?: NullableStringFieldUpdateOperationsInput | string | null
     default?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     currentSpellReleaseId?: NullableStringFieldUpdateOperationsInput | string | null
-    embedModel?: NullableStringFieldUpdateOperationsInput | string | null
     version?: StringFieldUpdateOperationsInput | string
     embeddingProvider?: NullableStringFieldUpdateOperationsInput | string | null
     embeddingModel?: NullableStringFieldUpdateOperationsInput | string | null
     isDraft?: BoolFieldUpdateOperationsInput | boolean
     draftAgentId?: NullableStringFieldUpdateOperationsInput | string | null
     description?: NullableStringFieldUpdateOperationsInput | string | null
+    rootSpellId?: NullableStringFieldUpdateOperationsInput | string | null
+    secrets?: NullableStringFieldUpdateOperationsInput | string | null
+    rootSpell?: NullableJsonNullValueInput | InputJsonValue
+    pingedAt?: NullableStringFieldUpdateOperationsInput | string | null
+    publicVariables?: NullableStringFieldUpdateOperationsInput | string | null
+    embedModel?: NullableStringFieldUpdateOperationsInput | string | null
+    runState?: StringFieldUpdateOperationsInput | string
     agent_credentials?: agent_credentialsUncheckedUpdateManyWithoutAgentsNestedInput
     chatMessages?: chatMessagesUncheckedUpdateManyWithoutAgentsNestedInput
     graphEvents?: graphEventsUncheckedUpdateManyWithoutAgentsNestedInput
@@ -25132,82 +25132,82 @@ export namespace Prisma {
 
   export type agentsCreateManyInput = {
     id: string
-    rootSpell?: NullableJsonNullValueInput | InputJsonValue
-    publicVariables?: string | null
-    secrets?: string | null
     name?: string | null
     enabled?: boolean | null
     updatedAt?: string | null
-    pingedAt?: string | null
     projectId?: string | null
     worldId?: string | null
     data?: NullableJsonNullValueInput | InputJsonValue
-    runState?: string
     image?: string | null
-    rootSpellId?: string | null
     default?: boolean
     createdAt?: Date | string | null
     currentSpellReleaseId?: string | null
-    embedModel?: string | null
     version?: string
     embeddingProvider?: string | null
     embeddingModel?: string | null
     isDraft?: boolean
     draftAgentId?: string | null
     description?: string | null
+    rootSpellId?: string | null
+    secrets?: string | null
+    rootSpell?: NullableJsonNullValueInput | InputJsonValue
+    pingedAt?: string | null
+    publicVariables?: string | null
+    embedModel?: string | null
+    runState?: string
   }
 
   export type agentsUpdateManyMutationInput = {
     id?: StringFieldUpdateOperationsInput | string
-    rootSpell?: NullableJsonNullValueInput | InputJsonValue
-    publicVariables?: NullableStringFieldUpdateOperationsInput | string | null
-    secrets?: NullableStringFieldUpdateOperationsInput | string | null
     name?: NullableStringFieldUpdateOperationsInput | string | null
     enabled?: NullableBoolFieldUpdateOperationsInput | boolean | null
     updatedAt?: NullableStringFieldUpdateOperationsInput | string | null
-    pingedAt?: NullableStringFieldUpdateOperationsInput | string | null
     projectId?: NullableStringFieldUpdateOperationsInput | string | null
     worldId?: NullableStringFieldUpdateOperationsInput | string | null
     data?: NullableJsonNullValueInput | InputJsonValue
-    runState?: StringFieldUpdateOperationsInput | string
     image?: NullableStringFieldUpdateOperationsInput | string | null
-    rootSpellId?: NullableStringFieldUpdateOperationsInput | string | null
     default?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    embedModel?: NullableStringFieldUpdateOperationsInput | string | null
     version?: StringFieldUpdateOperationsInput | string
     embeddingProvider?: NullableStringFieldUpdateOperationsInput | string | null
     embeddingModel?: NullableStringFieldUpdateOperationsInput | string | null
     isDraft?: BoolFieldUpdateOperationsInput | boolean
     draftAgentId?: NullableStringFieldUpdateOperationsInput | string | null
     description?: NullableStringFieldUpdateOperationsInput | string | null
+    rootSpellId?: NullableStringFieldUpdateOperationsInput | string | null
+    secrets?: NullableStringFieldUpdateOperationsInput | string | null
+    rootSpell?: NullableJsonNullValueInput | InputJsonValue
+    pingedAt?: NullableStringFieldUpdateOperationsInput | string | null
+    publicVariables?: NullableStringFieldUpdateOperationsInput | string | null
+    embedModel?: NullableStringFieldUpdateOperationsInput | string | null
+    runState?: StringFieldUpdateOperationsInput | string
   }
 
   export type agentsUncheckedUpdateManyInput = {
     id?: StringFieldUpdateOperationsInput | string
-    rootSpell?: NullableJsonNullValueInput | InputJsonValue
-    publicVariables?: NullableStringFieldUpdateOperationsInput | string | null
-    secrets?: NullableStringFieldUpdateOperationsInput | string | null
     name?: NullableStringFieldUpdateOperationsInput | string | null
     enabled?: NullableBoolFieldUpdateOperationsInput | boolean | null
     updatedAt?: NullableStringFieldUpdateOperationsInput | string | null
-    pingedAt?: NullableStringFieldUpdateOperationsInput | string | null
     projectId?: NullableStringFieldUpdateOperationsInput | string | null
     worldId?: NullableStringFieldUpdateOperationsInput | string | null
     data?: NullableJsonNullValueInput | InputJsonValue
-    runState?: StringFieldUpdateOperationsInput | string
     image?: NullableStringFieldUpdateOperationsInput | string | null
-    rootSpellId?: NullableStringFieldUpdateOperationsInput | string | null
     default?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     currentSpellReleaseId?: NullableStringFieldUpdateOperationsInput | string | null
-    embedModel?: NullableStringFieldUpdateOperationsInput | string | null
     version?: StringFieldUpdateOperationsInput | string
     embeddingProvider?: NullableStringFieldUpdateOperationsInput | string | null
     embeddingModel?: NullableStringFieldUpdateOperationsInput | string | null
     isDraft?: BoolFieldUpdateOperationsInput | boolean
     draftAgentId?: NullableStringFieldUpdateOperationsInput | string | null
     description?: NullableStringFieldUpdateOperationsInput | string | null
+    rootSpellId?: NullableStringFieldUpdateOperationsInput | string | null
+    secrets?: NullableStringFieldUpdateOperationsInput | string | null
+    rootSpell?: NullableJsonNullValueInput | InputJsonValue
+    pingedAt?: NullableStringFieldUpdateOperationsInput | string | null
+    publicVariables?: NullableStringFieldUpdateOperationsInput | string | null
+    embedModel?: NullableStringFieldUpdateOperationsInput | string | null
+    runState?: StringFieldUpdateOperationsInput | string
   }
 
   export type chatMessagesCreateInput = {
@@ -26776,6 +26776,27 @@ export namespace Prisma {
     _min?: NestedDateTimeFilter<$PrismaModel>
     _max?: NestedDateTimeFilter<$PrismaModel>
   }
+
+  export type StringNullableFilter<$PrismaModel = never> = {
+    equals?: string | StringFieldRefInput<$PrismaModel> | null
+    in?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    notIn?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    lt?: string | StringFieldRefInput<$PrismaModel>
+    lte?: string | StringFieldRefInput<$PrismaModel>
+    gt?: string | StringFieldRefInput<$PrismaModel>
+    gte?: string | StringFieldRefInput<$PrismaModel>
+    contains?: string | StringFieldRefInput<$PrismaModel>
+    startsWith?: string | StringFieldRefInput<$PrismaModel>
+    endsWith?: string | StringFieldRefInput<$PrismaModel>
+    search?: string
+    mode?: QueryMode
+    not?: NestedStringNullableFilter<$PrismaModel> | string | null
+  }
+
+  export type BoolNullableFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel> | null
+    not?: NestedBoolNullableFilter<$PrismaModel> | boolean | null
+  }
   export type JsonNullableFilter<$PrismaModel = never> = 
     | PatchUndefined<
         Either<Required<JsonNullableFilterBase<$PrismaModel>>, Exclude<keyof Required<JsonNullableFilterBase<$PrismaModel>>, 'path'>>,
@@ -26799,7 +26820,23 @@ export namespace Prisma {
     not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
   }
 
-  export type StringNullableFilter<$PrismaModel = never> = {
+  export type BoolFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
+    not?: NestedBoolFilter<$PrismaModel> | boolean
+  }
+
+  export type DateTimeNullableFilter<$PrismaModel = never> = {
+    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
+    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    not?: NestedDateTimeNullableFilter<$PrismaModel> | Date | string | null
+  }
+
+  export type UuidNullableFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel> | null
     in?: string[] | ListStringFieldRefInput<$PrismaModel> | null
     notIn?: string[] | ListStringFieldRefInput<$PrismaModel> | null
@@ -26807,17 +26844,9 @@ export namespace Prisma {
     lte?: string | StringFieldRefInput<$PrismaModel>
     gt?: string | StringFieldRefInput<$PrismaModel>
     gte?: string | StringFieldRefInput<$PrismaModel>
-    contains?: string | StringFieldRefInput<$PrismaModel>
-    startsWith?: string | StringFieldRefInput<$PrismaModel>
-    endsWith?: string | StringFieldRefInput<$PrismaModel>
     search?: string
     mode?: QueryMode
-    not?: NestedStringNullableFilter<$PrismaModel> | string | null
-  }
-
-  export type BoolNullableFilter<$PrismaModel = never> = {
-    equals?: boolean | BooleanFieldRefInput<$PrismaModel> | null
-    not?: NestedBoolNullableFilter<$PrismaModel> | boolean | null
+    not?: NestedUuidNullableFilter<$PrismaModel> | string | null
   }
 
   export type StringFilter<$PrismaModel = never> = {
@@ -26834,35 +26863,6 @@ export namespace Prisma {
     search?: string
     mode?: QueryMode
     not?: NestedStringFilter<$PrismaModel> | string
-  }
-
-  export type UuidNullableFilter<$PrismaModel = never> = {
-    equals?: string | StringFieldRefInput<$PrismaModel> | null
-    in?: string[] | ListStringFieldRefInput<$PrismaModel> | null
-    notIn?: string[] | ListStringFieldRefInput<$PrismaModel> | null
-    lt?: string | StringFieldRefInput<$PrismaModel>
-    lte?: string | StringFieldRefInput<$PrismaModel>
-    gt?: string | StringFieldRefInput<$PrismaModel>
-    gte?: string | StringFieldRefInput<$PrismaModel>
-    search?: string
-    mode?: QueryMode
-    not?: NestedUuidNullableFilter<$PrismaModel> | string | null
-  }
-
-  export type BoolFilter<$PrismaModel = never> = {
-    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
-    not?: NestedBoolFilter<$PrismaModel> | boolean
-  }
-
-  export type DateTimeNullableFilter<$PrismaModel = never> = {
-    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
-    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
-    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
-    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    not?: NestedDateTimeNullableFilter<$PrismaModel> | Date | string | null
   }
 
   export type Agent_credentialsListRelationFilter = {
@@ -26943,104 +26943,79 @@ export namespace Prisma {
 
   export type agentsCountOrderByAggregateInput = {
     id?: SortOrder
-    rootSpell?: SortOrder
-    publicVariables?: SortOrder
-    secrets?: SortOrder
     name?: SortOrder
     enabled?: SortOrder
     updatedAt?: SortOrder
-    pingedAt?: SortOrder
     projectId?: SortOrder
     worldId?: SortOrder
     data?: SortOrder
-    runState?: SortOrder
     image?: SortOrder
-    rootSpellId?: SortOrder
     default?: SortOrder
     createdAt?: SortOrder
     currentSpellReleaseId?: SortOrder
-    embedModel?: SortOrder
     version?: SortOrder
     embeddingProvider?: SortOrder
     embeddingModel?: SortOrder
     isDraft?: SortOrder
     draftAgentId?: SortOrder
     description?: SortOrder
+    rootSpellId?: SortOrder
+    secrets?: SortOrder
+    rootSpell?: SortOrder
+    pingedAt?: SortOrder
+    publicVariables?: SortOrder
+    embedModel?: SortOrder
+    runState?: SortOrder
   }
 
   export type agentsMaxOrderByAggregateInput = {
     id?: SortOrder
-    publicVariables?: SortOrder
-    secrets?: SortOrder
     name?: SortOrder
     enabled?: SortOrder
     updatedAt?: SortOrder
-    pingedAt?: SortOrder
     projectId?: SortOrder
     worldId?: SortOrder
-    runState?: SortOrder
     image?: SortOrder
-    rootSpellId?: SortOrder
     default?: SortOrder
     createdAt?: SortOrder
     currentSpellReleaseId?: SortOrder
-    embedModel?: SortOrder
     version?: SortOrder
     embeddingProvider?: SortOrder
     embeddingModel?: SortOrder
     isDraft?: SortOrder
     draftAgentId?: SortOrder
     description?: SortOrder
+    rootSpellId?: SortOrder
+    secrets?: SortOrder
+    pingedAt?: SortOrder
+    publicVariables?: SortOrder
+    embedModel?: SortOrder
+    runState?: SortOrder
   }
 
   export type agentsMinOrderByAggregateInput = {
     id?: SortOrder
-    publicVariables?: SortOrder
-    secrets?: SortOrder
     name?: SortOrder
     enabled?: SortOrder
     updatedAt?: SortOrder
-    pingedAt?: SortOrder
     projectId?: SortOrder
     worldId?: SortOrder
-    runState?: SortOrder
     image?: SortOrder
-    rootSpellId?: SortOrder
     default?: SortOrder
     createdAt?: SortOrder
     currentSpellReleaseId?: SortOrder
-    embedModel?: SortOrder
     version?: SortOrder
     embeddingProvider?: SortOrder
     embeddingModel?: SortOrder
     isDraft?: SortOrder
     draftAgentId?: SortOrder
     description?: SortOrder
-  }
-  export type JsonNullableWithAggregatesFilter<$PrismaModel = never> = 
-    | PatchUndefined<
-        Either<Required<JsonNullableWithAggregatesFilterBase<$PrismaModel>>, Exclude<keyof Required<JsonNullableWithAggregatesFilterBase<$PrismaModel>>, 'path'>>,
-        Required<JsonNullableWithAggregatesFilterBase<$PrismaModel>>
-      >
-    | OptionalFlat<Omit<Required<JsonNullableWithAggregatesFilterBase<$PrismaModel>>, 'path'>>
-
-  export type JsonNullableWithAggregatesFilterBase<$PrismaModel = never> = {
-    equals?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
-    path?: string[]
-    string_contains?: string | StringFieldRefInput<$PrismaModel>
-    string_starts_with?: string | StringFieldRefInput<$PrismaModel>
-    string_ends_with?: string | StringFieldRefInput<$PrismaModel>
-    array_contains?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
-    array_starts_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
-    array_ends_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
-    lt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
-    lte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
-    gt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
-    gte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
-    not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
-    _count?: NestedIntNullableFilter<$PrismaModel>
-    _min?: NestedJsonNullableFilter<$PrismaModel>
-    _max?: NestedJsonNullableFilter<$PrismaModel>
+    rootSpellId?: SortOrder
+    secrets?: SortOrder
+    pingedAt?: SortOrder
+    publicVariables?: SortOrder
+    embedModel?: SortOrder
+    runState?: SortOrder
   }
 
   export type StringNullableWithAggregatesFilter<$PrismaModel = never> = {
@@ -27069,40 +27044,30 @@ export namespace Prisma {
     _min?: NestedBoolNullableFilter<$PrismaModel>
     _max?: NestedBoolNullableFilter<$PrismaModel>
   }
+  export type JsonNullableWithAggregatesFilter<$PrismaModel = never> = 
+    | PatchUndefined<
+        Either<Required<JsonNullableWithAggregatesFilterBase<$PrismaModel>>, Exclude<keyof Required<JsonNullableWithAggregatesFilterBase<$PrismaModel>>, 'path'>>,
+        Required<JsonNullableWithAggregatesFilterBase<$PrismaModel>>
+      >
+    | OptionalFlat<Omit<Required<JsonNullableWithAggregatesFilterBase<$PrismaModel>>, 'path'>>
 
-  export type StringWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: string | StringFieldRefInput<$PrismaModel>
-    in?: string[] | ListStringFieldRefInput<$PrismaModel>
-    notIn?: string[] | ListStringFieldRefInput<$PrismaModel>
-    lt?: string | StringFieldRefInput<$PrismaModel>
-    lte?: string | StringFieldRefInput<$PrismaModel>
-    gt?: string | StringFieldRefInput<$PrismaModel>
-    gte?: string | StringFieldRefInput<$PrismaModel>
-    contains?: string | StringFieldRefInput<$PrismaModel>
-    startsWith?: string | StringFieldRefInput<$PrismaModel>
-    endsWith?: string | StringFieldRefInput<$PrismaModel>
-    search?: string
-    mode?: QueryMode
-    not?: NestedStringWithAggregatesFilter<$PrismaModel> | string
-    _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedStringFilter<$PrismaModel>
-    _max?: NestedStringFilter<$PrismaModel>
-  }
-
-  export type UuidNullableWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: string | StringFieldRefInput<$PrismaModel> | null
-    in?: string[] | ListStringFieldRefInput<$PrismaModel> | null
-    notIn?: string[] | ListStringFieldRefInput<$PrismaModel> | null
-    lt?: string | StringFieldRefInput<$PrismaModel>
-    lte?: string | StringFieldRefInput<$PrismaModel>
-    gt?: string | StringFieldRefInput<$PrismaModel>
-    gte?: string | StringFieldRefInput<$PrismaModel>
-    search?: string
-    mode?: QueryMode
-    not?: NestedUuidNullableWithAggregatesFilter<$PrismaModel> | string | null
+  export type JsonNullableWithAggregatesFilterBase<$PrismaModel = never> = {
+    equals?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+    path?: string[]
+    string_contains?: string | StringFieldRefInput<$PrismaModel>
+    string_starts_with?: string | StringFieldRefInput<$PrismaModel>
+    string_ends_with?: string | StringFieldRefInput<$PrismaModel>
+    array_contains?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_starts_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_ends_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    lt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    lte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
     _count?: NestedIntNullableFilter<$PrismaModel>
-    _min?: NestedStringNullableFilter<$PrismaModel>
-    _max?: NestedStringNullableFilter<$PrismaModel>
+    _min?: NestedJsonNullableFilter<$PrismaModel>
+    _max?: NestedJsonNullableFilter<$PrismaModel>
   }
 
   export type BoolWithAggregatesFilter<$PrismaModel = never> = {
@@ -27125,6 +27090,41 @@ export namespace Prisma {
     _count?: NestedIntNullableFilter<$PrismaModel>
     _min?: NestedDateTimeNullableFilter<$PrismaModel>
     _max?: NestedDateTimeNullableFilter<$PrismaModel>
+  }
+
+  export type UuidNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: string | StringFieldRefInput<$PrismaModel> | null
+    in?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    notIn?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    lt?: string | StringFieldRefInput<$PrismaModel>
+    lte?: string | StringFieldRefInput<$PrismaModel>
+    gt?: string | StringFieldRefInput<$PrismaModel>
+    gte?: string | StringFieldRefInput<$PrismaModel>
+    search?: string
+    mode?: QueryMode
+    not?: NestedUuidNullableWithAggregatesFilter<$PrismaModel> | string | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedStringNullableFilter<$PrismaModel>
+    _max?: NestedStringNullableFilter<$PrismaModel>
+  }
+
+  export type StringWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: string | StringFieldRefInput<$PrismaModel>
+    in?: string[] | ListStringFieldRefInput<$PrismaModel>
+    notIn?: string[] | ListStringFieldRefInput<$PrismaModel>
+    lt?: string | StringFieldRefInput<$PrismaModel>
+    lte?: string | StringFieldRefInput<$PrismaModel>
+    gt?: string | StringFieldRefInput<$PrismaModel>
+    gte?: string | StringFieldRefInput<$PrismaModel>
+    contains?: string | StringFieldRefInput<$PrismaModel>
+    startsWith?: string | StringFieldRefInput<$PrismaModel>
+    endsWith?: string | StringFieldRefInput<$PrismaModel>
+    search?: string
+    mode?: QueryMode
+    not?: NestedStringWithAggregatesFilter<$PrismaModel> | string
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedStringFilter<$PrismaModel>
+    _max?: NestedStringFilter<$PrismaModel>
   }
 
   export type chatMessagesOrderByRelevanceInput = {
@@ -28755,18 +28755,6 @@ export namespace Prisma {
     not?: NestedBoolNullableFilter<$PrismaModel> | boolean | null
   }
 
-  export type NestedUuidNullableFilter<$PrismaModel = never> = {
-    equals?: string | StringFieldRefInput<$PrismaModel> | null
-    in?: string[] | ListStringFieldRefInput<$PrismaModel> | null
-    notIn?: string[] | ListStringFieldRefInput<$PrismaModel> | null
-    lt?: string | StringFieldRefInput<$PrismaModel>
-    lte?: string | StringFieldRefInput<$PrismaModel>
-    gt?: string | StringFieldRefInput<$PrismaModel>
-    gte?: string | StringFieldRefInput<$PrismaModel>
-    search?: string
-    not?: NestedUuidNullableFilter<$PrismaModel> | string | null
-  }
-
   export type NestedBoolFilter<$PrismaModel = never> = {
     equals?: boolean | BooleanFieldRefInput<$PrismaModel>
     not?: NestedBoolFilter<$PrismaModel> | boolean
@@ -28783,6 +28771,36 @@ export namespace Prisma {
     not?: NestedDateTimeNullableFilter<$PrismaModel> | Date | string | null
   }
 
+  export type NestedUuidNullableFilter<$PrismaModel = never> = {
+    equals?: string | StringFieldRefInput<$PrismaModel> | null
+    in?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    notIn?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    lt?: string | StringFieldRefInput<$PrismaModel>
+    lte?: string | StringFieldRefInput<$PrismaModel>
+    gt?: string | StringFieldRefInput<$PrismaModel>
+    gte?: string | StringFieldRefInput<$PrismaModel>
+    search?: string
+    not?: NestedUuidNullableFilter<$PrismaModel> | string | null
+  }
+
+  export type NestedStringNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: string | StringFieldRefInput<$PrismaModel> | null
+    in?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    notIn?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    lt?: string | StringFieldRefInput<$PrismaModel>
+    lte?: string | StringFieldRefInput<$PrismaModel>
+    gt?: string | StringFieldRefInput<$PrismaModel>
+    gte?: string | StringFieldRefInput<$PrismaModel>
+    contains?: string | StringFieldRefInput<$PrismaModel>
+    startsWith?: string | StringFieldRefInput<$PrismaModel>
+    endsWith?: string | StringFieldRefInput<$PrismaModel>
+    search?: string
+    not?: NestedStringNullableWithAggregatesFilter<$PrismaModel> | string | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedStringNullableFilter<$PrismaModel>
+    _max?: NestedStringNullableFilter<$PrismaModel>
+  }
+
   export type NestedIntNullableFilter<$PrismaModel = never> = {
     equals?: number | IntFieldRefInput<$PrismaModel> | null
     in?: number[] | ListIntFieldRefInput<$PrismaModel> | null
@@ -28792,6 +28810,14 @@ export namespace Prisma {
     gt?: number | IntFieldRefInput<$PrismaModel>
     gte?: number | IntFieldRefInput<$PrismaModel>
     not?: NestedIntNullableFilter<$PrismaModel> | number | null
+  }
+
+  export type NestedBoolNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel> | null
+    not?: NestedBoolNullableWithAggregatesFilter<$PrismaModel> | boolean | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedBoolNullableFilter<$PrismaModel>
+    _max?: NestedBoolNullableFilter<$PrismaModel>
   }
   export type NestedJsonNullableFilter<$PrismaModel = never> = 
     | PatchUndefined<
@@ -28816,65 +28842,6 @@ export namespace Prisma {
     not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
   }
 
-  export type NestedStringNullableWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: string | StringFieldRefInput<$PrismaModel> | null
-    in?: string[] | ListStringFieldRefInput<$PrismaModel> | null
-    notIn?: string[] | ListStringFieldRefInput<$PrismaModel> | null
-    lt?: string | StringFieldRefInput<$PrismaModel>
-    lte?: string | StringFieldRefInput<$PrismaModel>
-    gt?: string | StringFieldRefInput<$PrismaModel>
-    gte?: string | StringFieldRefInput<$PrismaModel>
-    contains?: string | StringFieldRefInput<$PrismaModel>
-    startsWith?: string | StringFieldRefInput<$PrismaModel>
-    endsWith?: string | StringFieldRefInput<$PrismaModel>
-    search?: string
-    not?: NestedStringNullableWithAggregatesFilter<$PrismaModel> | string | null
-    _count?: NestedIntNullableFilter<$PrismaModel>
-    _min?: NestedStringNullableFilter<$PrismaModel>
-    _max?: NestedStringNullableFilter<$PrismaModel>
-  }
-
-  export type NestedBoolNullableWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: boolean | BooleanFieldRefInput<$PrismaModel> | null
-    not?: NestedBoolNullableWithAggregatesFilter<$PrismaModel> | boolean | null
-    _count?: NestedIntNullableFilter<$PrismaModel>
-    _min?: NestedBoolNullableFilter<$PrismaModel>
-    _max?: NestedBoolNullableFilter<$PrismaModel>
-  }
-
-  export type NestedStringWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: string | StringFieldRefInput<$PrismaModel>
-    in?: string[] | ListStringFieldRefInput<$PrismaModel>
-    notIn?: string[] | ListStringFieldRefInput<$PrismaModel>
-    lt?: string | StringFieldRefInput<$PrismaModel>
-    lte?: string | StringFieldRefInput<$PrismaModel>
-    gt?: string | StringFieldRefInput<$PrismaModel>
-    gte?: string | StringFieldRefInput<$PrismaModel>
-    contains?: string | StringFieldRefInput<$PrismaModel>
-    startsWith?: string | StringFieldRefInput<$PrismaModel>
-    endsWith?: string | StringFieldRefInput<$PrismaModel>
-    search?: string
-    not?: NestedStringWithAggregatesFilter<$PrismaModel> | string
-    _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedStringFilter<$PrismaModel>
-    _max?: NestedStringFilter<$PrismaModel>
-  }
-
-  export type NestedUuidNullableWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: string | StringFieldRefInput<$PrismaModel> | null
-    in?: string[] | ListStringFieldRefInput<$PrismaModel> | null
-    notIn?: string[] | ListStringFieldRefInput<$PrismaModel> | null
-    lt?: string | StringFieldRefInput<$PrismaModel>
-    lte?: string | StringFieldRefInput<$PrismaModel>
-    gt?: string | StringFieldRefInput<$PrismaModel>
-    gte?: string | StringFieldRefInput<$PrismaModel>
-    search?: string
-    not?: NestedUuidNullableWithAggregatesFilter<$PrismaModel> | string | null
-    _count?: NestedIntNullableFilter<$PrismaModel>
-    _min?: NestedStringNullableFilter<$PrismaModel>
-    _max?: NestedStringNullableFilter<$PrismaModel>
-  }
-
   export type NestedBoolWithAggregatesFilter<$PrismaModel = never> = {
     equals?: boolean | BooleanFieldRefInput<$PrismaModel>
     not?: NestedBoolWithAggregatesFilter<$PrismaModel> | boolean
@@ -28895,6 +28862,39 @@ export namespace Prisma {
     _count?: NestedIntNullableFilter<$PrismaModel>
     _min?: NestedDateTimeNullableFilter<$PrismaModel>
     _max?: NestedDateTimeNullableFilter<$PrismaModel>
+  }
+
+  export type NestedUuidNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: string | StringFieldRefInput<$PrismaModel> | null
+    in?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    notIn?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    lt?: string | StringFieldRefInput<$PrismaModel>
+    lte?: string | StringFieldRefInput<$PrismaModel>
+    gt?: string | StringFieldRefInput<$PrismaModel>
+    gte?: string | StringFieldRefInput<$PrismaModel>
+    search?: string
+    not?: NestedUuidNullableWithAggregatesFilter<$PrismaModel> | string | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedStringNullableFilter<$PrismaModel>
+    _max?: NestedStringNullableFilter<$PrismaModel>
+  }
+
+  export type NestedStringWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: string | StringFieldRefInput<$PrismaModel>
+    in?: string[] | ListStringFieldRefInput<$PrismaModel>
+    notIn?: string[] | ListStringFieldRefInput<$PrismaModel>
+    lt?: string | StringFieldRefInput<$PrismaModel>
+    lte?: string | StringFieldRefInput<$PrismaModel>
+    gt?: string | StringFieldRefInput<$PrismaModel>
+    gte?: string | StringFieldRefInput<$PrismaModel>
+    contains?: string | StringFieldRefInput<$PrismaModel>
+    startsWith?: string | StringFieldRefInput<$PrismaModel>
+    endsWith?: string | StringFieldRefInput<$PrismaModel>
+    search?: string
+    not?: NestedStringWithAggregatesFilter<$PrismaModel> | string
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedStringFilter<$PrismaModel>
+    _max?: NestedStringFilter<$PrismaModel>
   }
 
   export type NestedIntWithAggregatesFilter<$PrismaModel = never> = {
@@ -29025,28 +29025,28 @@ export namespace Prisma {
 
   export type agentsCreateWithoutAgent_credentialsInput = {
     id: string
-    rootSpell?: NullableJsonNullValueInput | InputJsonValue
-    publicVariables?: string | null
-    secrets?: string | null
     name?: string | null
     enabled?: boolean | null
     updatedAt?: string | null
-    pingedAt?: string | null
     projectId?: string | null
     worldId?: string | null
     data?: NullableJsonNullValueInput | InputJsonValue
-    runState?: string
     image?: string | null
-    rootSpellId?: string | null
     default?: boolean
     createdAt?: Date | string | null
-    embedModel?: string | null
     version?: string
     embeddingProvider?: string | null
     embeddingModel?: string | null
     isDraft?: boolean
     draftAgentId?: string | null
     description?: string | null
+    rootSpellId?: string | null
+    secrets?: string | null
+    rootSpell?: NullableJsonNullValueInput | InputJsonValue
+    pingedAt?: string | null
+    publicVariables?: string | null
+    embedModel?: string | null
+    runState?: string
     spellReleases_agents_currentSpellReleaseIdTospellReleases?: spellReleasesCreateNestedOneWithoutAgents_agents_currentSpellReleaseIdTospellReleasesInput
     chatMessages?: chatMessagesCreateNestedManyWithoutAgentsInput
     graphEvents?: graphEventsCreateNestedManyWithoutAgentsInput
@@ -29057,29 +29057,29 @@ export namespace Prisma {
 
   export type agentsUncheckedCreateWithoutAgent_credentialsInput = {
     id: string
-    rootSpell?: NullableJsonNullValueInput | InputJsonValue
-    publicVariables?: string | null
-    secrets?: string | null
     name?: string | null
     enabled?: boolean | null
     updatedAt?: string | null
-    pingedAt?: string | null
     projectId?: string | null
     worldId?: string | null
     data?: NullableJsonNullValueInput | InputJsonValue
-    runState?: string
     image?: string | null
-    rootSpellId?: string | null
     default?: boolean
     createdAt?: Date | string | null
     currentSpellReleaseId?: string | null
-    embedModel?: string | null
     version?: string
     embeddingProvider?: string | null
     embeddingModel?: string | null
     isDraft?: boolean
     draftAgentId?: string | null
     description?: string | null
+    rootSpellId?: string | null
+    secrets?: string | null
+    rootSpell?: NullableJsonNullValueInput | InputJsonValue
+    pingedAt?: string | null
+    publicVariables?: string | null
+    embedModel?: string | null
+    runState?: string
     chatMessages?: chatMessagesUncheckedCreateNestedManyWithoutAgentsInput
     graphEvents?: graphEventsUncheckedCreateNestedManyWithoutAgentsInput
     pluginState?: pluginStateUncheckedCreateNestedManyWithoutAgentsInput
@@ -29140,28 +29140,28 @@ export namespace Prisma {
 
   export type agentsUpdateWithoutAgent_credentialsInput = {
     id?: StringFieldUpdateOperationsInput | string
-    rootSpell?: NullableJsonNullValueInput | InputJsonValue
-    publicVariables?: NullableStringFieldUpdateOperationsInput | string | null
-    secrets?: NullableStringFieldUpdateOperationsInput | string | null
     name?: NullableStringFieldUpdateOperationsInput | string | null
     enabled?: NullableBoolFieldUpdateOperationsInput | boolean | null
     updatedAt?: NullableStringFieldUpdateOperationsInput | string | null
-    pingedAt?: NullableStringFieldUpdateOperationsInput | string | null
     projectId?: NullableStringFieldUpdateOperationsInput | string | null
     worldId?: NullableStringFieldUpdateOperationsInput | string | null
     data?: NullableJsonNullValueInput | InputJsonValue
-    runState?: StringFieldUpdateOperationsInput | string
     image?: NullableStringFieldUpdateOperationsInput | string | null
-    rootSpellId?: NullableStringFieldUpdateOperationsInput | string | null
     default?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    embedModel?: NullableStringFieldUpdateOperationsInput | string | null
     version?: StringFieldUpdateOperationsInput | string
     embeddingProvider?: NullableStringFieldUpdateOperationsInput | string | null
     embeddingModel?: NullableStringFieldUpdateOperationsInput | string | null
     isDraft?: BoolFieldUpdateOperationsInput | boolean
     draftAgentId?: NullableStringFieldUpdateOperationsInput | string | null
     description?: NullableStringFieldUpdateOperationsInput | string | null
+    rootSpellId?: NullableStringFieldUpdateOperationsInput | string | null
+    secrets?: NullableStringFieldUpdateOperationsInput | string | null
+    rootSpell?: NullableJsonNullValueInput | InputJsonValue
+    pingedAt?: NullableStringFieldUpdateOperationsInput | string | null
+    publicVariables?: NullableStringFieldUpdateOperationsInput | string | null
+    embedModel?: NullableStringFieldUpdateOperationsInput | string | null
+    runState?: StringFieldUpdateOperationsInput | string
     spellReleases_agents_currentSpellReleaseIdTospellReleases?: spellReleasesUpdateOneWithoutAgents_agents_currentSpellReleaseIdTospellReleasesNestedInput
     chatMessages?: chatMessagesUpdateManyWithoutAgentsNestedInput
     graphEvents?: graphEventsUpdateManyWithoutAgentsNestedInput
@@ -29172,29 +29172,29 @@ export namespace Prisma {
 
   export type agentsUncheckedUpdateWithoutAgent_credentialsInput = {
     id?: StringFieldUpdateOperationsInput | string
-    rootSpell?: NullableJsonNullValueInput | InputJsonValue
-    publicVariables?: NullableStringFieldUpdateOperationsInput | string | null
-    secrets?: NullableStringFieldUpdateOperationsInput | string | null
     name?: NullableStringFieldUpdateOperationsInput | string | null
     enabled?: NullableBoolFieldUpdateOperationsInput | boolean | null
     updatedAt?: NullableStringFieldUpdateOperationsInput | string | null
-    pingedAt?: NullableStringFieldUpdateOperationsInput | string | null
     projectId?: NullableStringFieldUpdateOperationsInput | string | null
     worldId?: NullableStringFieldUpdateOperationsInput | string | null
     data?: NullableJsonNullValueInput | InputJsonValue
-    runState?: StringFieldUpdateOperationsInput | string
     image?: NullableStringFieldUpdateOperationsInput | string | null
-    rootSpellId?: NullableStringFieldUpdateOperationsInput | string | null
     default?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     currentSpellReleaseId?: NullableStringFieldUpdateOperationsInput | string | null
-    embedModel?: NullableStringFieldUpdateOperationsInput | string | null
     version?: StringFieldUpdateOperationsInput | string
     embeddingProvider?: NullableStringFieldUpdateOperationsInput | string | null
     embeddingModel?: NullableStringFieldUpdateOperationsInput | string | null
     isDraft?: BoolFieldUpdateOperationsInput | boolean
     draftAgentId?: NullableStringFieldUpdateOperationsInput | string | null
     description?: NullableStringFieldUpdateOperationsInput | string | null
+    rootSpellId?: NullableStringFieldUpdateOperationsInput | string | null
+    secrets?: NullableStringFieldUpdateOperationsInput | string | null
+    rootSpell?: NullableJsonNullValueInput | InputJsonValue
+    pingedAt?: NullableStringFieldUpdateOperationsInput | string | null
+    publicVariables?: NullableStringFieldUpdateOperationsInput | string | null
+    embedModel?: NullableStringFieldUpdateOperationsInput | string | null
+    runState?: StringFieldUpdateOperationsInput | string
     chatMessages?: chatMessagesUncheckedUpdateManyWithoutAgentsNestedInput
     graphEvents?: graphEventsUncheckedUpdateManyWithoutAgentsNestedInput
     pluginState?: pluginStateUncheckedUpdateManyWithoutAgentsNestedInput
@@ -29666,28 +29666,28 @@ export namespace Prisma {
 
   export type agentsCreateWithoutChatMessagesInput = {
     id: string
-    rootSpell?: NullableJsonNullValueInput | InputJsonValue
-    publicVariables?: string | null
-    secrets?: string | null
     name?: string | null
     enabled?: boolean | null
     updatedAt?: string | null
-    pingedAt?: string | null
     projectId?: string | null
     worldId?: string | null
     data?: NullableJsonNullValueInput | InputJsonValue
-    runState?: string
     image?: string | null
-    rootSpellId?: string | null
     default?: boolean
     createdAt?: Date | string | null
-    embedModel?: string | null
     version?: string
     embeddingProvider?: string | null
     embeddingModel?: string | null
     isDraft?: boolean
     draftAgentId?: string | null
     description?: string | null
+    rootSpellId?: string | null
+    secrets?: string | null
+    rootSpell?: NullableJsonNullValueInput | InputJsonValue
+    pingedAt?: string | null
+    publicVariables?: string | null
+    embedModel?: string | null
+    runState?: string
     agent_credentials?: agent_credentialsCreateNestedManyWithoutAgentsInput
     spellReleases_agents_currentSpellReleaseIdTospellReleases?: spellReleasesCreateNestedOneWithoutAgents_agents_currentSpellReleaseIdTospellReleasesInput
     graphEvents?: graphEventsCreateNestedManyWithoutAgentsInput
@@ -29698,29 +29698,29 @@ export namespace Prisma {
 
   export type agentsUncheckedCreateWithoutChatMessagesInput = {
     id: string
-    rootSpell?: NullableJsonNullValueInput | InputJsonValue
-    publicVariables?: string | null
-    secrets?: string | null
     name?: string | null
     enabled?: boolean | null
     updatedAt?: string | null
-    pingedAt?: string | null
     projectId?: string | null
     worldId?: string | null
     data?: NullableJsonNullValueInput | InputJsonValue
-    runState?: string
     image?: string | null
-    rootSpellId?: string | null
     default?: boolean
     createdAt?: Date | string | null
     currentSpellReleaseId?: string | null
-    embedModel?: string | null
     version?: string
     embeddingProvider?: string | null
     embeddingModel?: string | null
     isDraft?: boolean
     draftAgentId?: string | null
     description?: string | null
+    rootSpellId?: string | null
+    secrets?: string | null
+    rootSpell?: NullableJsonNullValueInput | InputJsonValue
+    pingedAt?: string | null
+    publicVariables?: string | null
+    embedModel?: string | null
+    runState?: string
     agent_credentials?: agent_credentialsUncheckedCreateNestedManyWithoutAgentsInput
     graphEvents?: graphEventsUncheckedCreateNestedManyWithoutAgentsInput
     pluginState?: pluginStateUncheckedCreateNestedManyWithoutAgentsInput
@@ -29746,28 +29746,28 @@ export namespace Prisma {
 
   export type agentsUpdateWithoutChatMessagesInput = {
     id?: StringFieldUpdateOperationsInput | string
-    rootSpell?: NullableJsonNullValueInput | InputJsonValue
-    publicVariables?: NullableStringFieldUpdateOperationsInput | string | null
-    secrets?: NullableStringFieldUpdateOperationsInput | string | null
     name?: NullableStringFieldUpdateOperationsInput | string | null
     enabled?: NullableBoolFieldUpdateOperationsInput | boolean | null
     updatedAt?: NullableStringFieldUpdateOperationsInput | string | null
-    pingedAt?: NullableStringFieldUpdateOperationsInput | string | null
     projectId?: NullableStringFieldUpdateOperationsInput | string | null
     worldId?: NullableStringFieldUpdateOperationsInput | string | null
     data?: NullableJsonNullValueInput | InputJsonValue
-    runState?: StringFieldUpdateOperationsInput | string
     image?: NullableStringFieldUpdateOperationsInput | string | null
-    rootSpellId?: NullableStringFieldUpdateOperationsInput | string | null
     default?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    embedModel?: NullableStringFieldUpdateOperationsInput | string | null
     version?: StringFieldUpdateOperationsInput | string
     embeddingProvider?: NullableStringFieldUpdateOperationsInput | string | null
     embeddingModel?: NullableStringFieldUpdateOperationsInput | string | null
     isDraft?: BoolFieldUpdateOperationsInput | boolean
     draftAgentId?: NullableStringFieldUpdateOperationsInput | string | null
     description?: NullableStringFieldUpdateOperationsInput | string | null
+    rootSpellId?: NullableStringFieldUpdateOperationsInput | string | null
+    secrets?: NullableStringFieldUpdateOperationsInput | string | null
+    rootSpell?: NullableJsonNullValueInput | InputJsonValue
+    pingedAt?: NullableStringFieldUpdateOperationsInput | string | null
+    publicVariables?: NullableStringFieldUpdateOperationsInput | string | null
+    embedModel?: NullableStringFieldUpdateOperationsInput | string | null
+    runState?: StringFieldUpdateOperationsInput | string
     agent_credentials?: agent_credentialsUpdateManyWithoutAgentsNestedInput
     spellReleases_agents_currentSpellReleaseIdTospellReleases?: spellReleasesUpdateOneWithoutAgents_agents_currentSpellReleaseIdTospellReleasesNestedInput
     graphEvents?: graphEventsUpdateManyWithoutAgentsNestedInput
@@ -29778,29 +29778,29 @@ export namespace Prisma {
 
   export type agentsUncheckedUpdateWithoutChatMessagesInput = {
     id?: StringFieldUpdateOperationsInput | string
-    rootSpell?: NullableJsonNullValueInput | InputJsonValue
-    publicVariables?: NullableStringFieldUpdateOperationsInput | string | null
-    secrets?: NullableStringFieldUpdateOperationsInput | string | null
     name?: NullableStringFieldUpdateOperationsInput | string | null
     enabled?: NullableBoolFieldUpdateOperationsInput | boolean | null
     updatedAt?: NullableStringFieldUpdateOperationsInput | string | null
-    pingedAt?: NullableStringFieldUpdateOperationsInput | string | null
     projectId?: NullableStringFieldUpdateOperationsInput | string | null
     worldId?: NullableStringFieldUpdateOperationsInput | string | null
     data?: NullableJsonNullValueInput | InputJsonValue
-    runState?: StringFieldUpdateOperationsInput | string
     image?: NullableStringFieldUpdateOperationsInput | string | null
-    rootSpellId?: NullableStringFieldUpdateOperationsInput | string | null
     default?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     currentSpellReleaseId?: NullableStringFieldUpdateOperationsInput | string | null
-    embedModel?: NullableStringFieldUpdateOperationsInput | string | null
     version?: StringFieldUpdateOperationsInput | string
     embeddingProvider?: NullableStringFieldUpdateOperationsInput | string | null
     embeddingModel?: NullableStringFieldUpdateOperationsInput | string | null
     isDraft?: BoolFieldUpdateOperationsInput | boolean
     draftAgentId?: NullableStringFieldUpdateOperationsInput | string | null
     description?: NullableStringFieldUpdateOperationsInput | string | null
+    rootSpellId?: NullableStringFieldUpdateOperationsInput | string | null
+    secrets?: NullableStringFieldUpdateOperationsInput | string | null
+    rootSpell?: NullableJsonNullValueInput | InputJsonValue
+    pingedAt?: NullableStringFieldUpdateOperationsInput | string | null
+    publicVariables?: NullableStringFieldUpdateOperationsInput | string | null
+    embedModel?: NullableStringFieldUpdateOperationsInput | string | null
+    runState?: StringFieldUpdateOperationsInput | string
     agent_credentials?: agent_credentialsUncheckedUpdateManyWithoutAgentsNestedInput
     graphEvents?: graphEventsUncheckedUpdateManyWithoutAgentsNestedInput
     pluginState?: pluginStateUncheckedUpdateManyWithoutAgentsNestedInput
@@ -29848,28 +29848,28 @@ export namespace Prisma {
 
   export type agentsCreateWithoutGraphEventsInput = {
     id: string
-    rootSpell?: NullableJsonNullValueInput | InputJsonValue
-    publicVariables?: string | null
-    secrets?: string | null
     name?: string | null
     enabled?: boolean | null
     updatedAt?: string | null
-    pingedAt?: string | null
     projectId?: string | null
     worldId?: string | null
     data?: NullableJsonNullValueInput | InputJsonValue
-    runState?: string
     image?: string | null
-    rootSpellId?: string | null
     default?: boolean
     createdAt?: Date | string | null
-    embedModel?: string | null
     version?: string
     embeddingProvider?: string | null
     embeddingModel?: string | null
     isDraft?: boolean
     draftAgentId?: string | null
     description?: string | null
+    rootSpellId?: string | null
+    secrets?: string | null
+    rootSpell?: NullableJsonNullValueInput | InputJsonValue
+    pingedAt?: string | null
+    publicVariables?: string | null
+    embedModel?: string | null
+    runState?: string
     agent_credentials?: agent_credentialsCreateNestedManyWithoutAgentsInput
     spellReleases_agents_currentSpellReleaseIdTospellReleases?: spellReleasesCreateNestedOneWithoutAgents_agents_currentSpellReleaseIdTospellReleasesInput
     chatMessages?: chatMessagesCreateNestedManyWithoutAgentsInput
@@ -29880,29 +29880,29 @@ export namespace Prisma {
 
   export type agentsUncheckedCreateWithoutGraphEventsInput = {
     id: string
-    rootSpell?: NullableJsonNullValueInput | InputJsonValue
-    publicVariables?: string | null
-    secrets?: string | null
     name?: string | null
     enabled?: boolean | null
     updatedAt?: string | null
-    pingedAt?: string | null
     projectId?: string | null
     worldId?: string | null
     data?: NullableJsonNullValueInput | InputJsonValue
-    runState?: string
     image?: string | null
-    rootSpellId?: string | null
     default?: boolean
     createdAt?: Date | string | null
     currentSpellReleaseId?: string | null
-    embedModel?: string | null
     version?: string
     embeddingProvider?: string | null
     embeddingModel?: string | null
     isDraft?: boolean
     draftAgentId?: string | null
     description?: string | null
+    rootSpellId?: string | null
+    secrets?: string | null
+    rootSpell?: NullableJsonNullValueInput | InputJsonValue
+    pingedAt?: string | null
+    publicVariables?: string | null
+    embedModel?: string | null
+    runState?: string
     agent_credentials?: agent_credentialsUncheckedCreateNestedManyWithoutAgentsInput
     chatMessages?: chatMessagesUncheckedCreateNestedManyWithoutAgentsInput
     pluginState?: pluginStateUncheckedCreateNestedManyWithoutAgentsInput
@@ -29928,28 +29928,28 @@ export namespace Prisma {
 
   export type agentsUpdateWithoutGraphEventsInput = {
     id?: StringFieldUpdateOperationsInput | string
-    rootSpell?: NullableJsonNullValueInput | InputJsonValue
-    publicVariables?: NullableStringFieldUpdateOperationsInput | string | null
-    secrets?: NullableStringFieldUpdateOperationsInput | string | null
     name?: NullableStringFieldUpdateOperationsInput | string | null
     enabled?: NullableBoolFieldUpdateOperationsInput | boolean | null
     updatedAt?: NullableStringFieldUpdateOperationsInput | string | null
-    pingedAt?: NullableStringFieldUpdateOperationsInput | string | null
     projectId?: NullableStringFieldUpdateOperationsInput | string | null
     worldId?: NullableStringFieldUpdateOperationsInput | string | null
     data?: NullableJsonNullValueInput | InputJsonValue
-    runState?: StringFieldUpdateOperationsInput | string
     image?: NullableStringFieldUpdateOperationsInput | string | null
-    rootSpellId?: NullableStringFieldUpdateOperationsInput | string | null
     default?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    embedModel?: NullableStringFieldUpdateOperationsInput | string | null
     version?: StringFieldUpdateOperationsInput | string
     embeddingProvider?: NullableStringFieldUpdateOperationsInput | string | null
     embeddingModel?: NullableStringFieldUpdateOperationsInput | string | null
     isDraft?: BoolFieldUpdateOperationsInput | boolean
     draftAgentId?: NullableStringFieldUpdateOperationsInput | string | null
     description?: NullableStringFieldUpdateOperationsInput | string | null
+    rootSpellId?: NullableStringFieldUpdateOperationsInput | string | null
+    secrets?: NullableStringFieldUpdateOperationsInput | string | null
+    rootSpell?: NullableJsonNullValueInput | InputJsonValue
+    pingedAt?: NullableStringFieldUpdateOperationsInput | string | null
+    publicVariables?: NullableStringFieldUpdateOperationsInput | string | null
+    embedModel?: NullableStringFieldUpdateOperationsInput | string | null
+    runState?: StringFieldUpdateOperationsInput | string
     agent_credentials?: agent_credentialsUpdateManyWithoutAgentsNestedInput
     spellReleases_agents_currentSpellReleaseIdTospellReleases?: spellReleasesUpdateOneWithoutAgents_agents_currentSpellReleaseIdTospellReleasesNestedInput
     chatMessages?: chatMessagesUpdateManyWithoutAgentsNestedInput
@@ -29960,29 +29960,29 @@ export namespace Prisma {
 
   export type agentsUncheckedUpdateWithoutGraphEventsInput = {
     id?: StringFieldUpdateOperationsInput | string
-    rootSpell?: NullableJsonNullValueInput | InputJsonValue
-    publicVariables?: NullableStringFieldUpdateOperationsInput | string | null
-    secrets?: NullableStringFieldUpdateOperationsInput | string | null
     name?: NullableStringFieldUpdateOperationsInput | string | null
     enabled?: NullableBoolFieldUpdateOperationsInput | boolean | null
     updatedAt?: NullableStringFieldUpdateOperationsInput | string | null
-    pingedAt?: NullableStringFieldUpdateOperationsInput | string | null
     projectId?: NullableStringFieldUpdateOperationsInput | string | null
     worldId?: NullableStringFieldUpdateOperationsInput | string | null
     data?: NullableJsonNullValueInput | InputJsonValue
-    runState?: StringFieldUpdateOperationsInput | string
     image?: NullableStringFieldUpdateOperationsInput | string | null
-    rootSpellId?: NullableStringFieldUpdateOperationsInput | string | null
     default?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     currentSpellReleaseId?: NullableStringFieldUpdateOperationsInput | string | null
-    embedModel?: NullableStringFieldUpdateOperationsInput | string | null
     version?: StringFieldUpdateOperationsInput | string
     embeddingProvider?: NullableStringFieldUpdateOperationsInput | string | null
     embeddingModel?: NullableStringFieldUpdateOperationsInput | string | null
     isDraft?: BoolFieldUpdateOperationsInput | boolean
     draftAgentId?: NullableStringFieldUpdateOperationsInput | string | null
     description?: NullableStringFieldUpdateOperationsInput | string | null
+    rootSpellId?: NullableStringFieldUpdateOperationsInput | string | null
+    secrets?: NullableStringFieldUpdateOperationsInput | string | null
+    rootSpell?: NullableJsonNullValueInput | InputJsonValue
+    pingedAt?: NullableStringFieldUpdateOperationsInput | string | null
+    publicVariables?: NullableStringFieldUpdateOperationsInput | string | null
+    embedModel?: NullableStringFieldUpdateOperationsInput | string | null
+    runState?: StringFieldUpdateOperationsInput | string
     agent_credentials?: agent_credentialsUncheckedUpdateManyWithoutAgentsNestedInput
     chatMessages?: chatMessagesUncheckedUpdateManyWithoutAgentsNestedInput
     pluginState?: pluginStateUncheckedUpdateManyWithoutAgentsNestedInput
@@ -29992,28 +29992,28 @@ export namespace Prisma {
 
   export type agentsCreateWithoutPluginStateInput = {
     id: string
-    rootSpell?: NullableJsonNullValueInput | InputJsonValue
-    publicVariables?: string | null
-    secrets?: string | null
     name?: string | null
     enabled?: boolean | null
     updatedAt?: string | null
-    pingedAt?: string | null
     projectId?: string | null
     worldId?: string | null
     data?: NullableJsonNullValueInput | InputJsonValue
-    runState?: string
     image?: string | null
-    rootSpellId?: string | null
     default?: boolean
     createdAt?: Date | string | null
-    embedModel?: string | null
     version?: string
     embeddingProvider?: string | null
     embeddingModel?: string | null
     isDraft?: boolean
     draftAgentId?: string | null
     description?: string | null
+    rootSpellId?: string | null
+    secrets?: string | null
+    rootSpell?: NullableJsonNullValueInput | InputJsonValue
+    pingedAt?: string | null
+    publicVariables?: string | null
+    embedModel?: string | null
+    runState?: string
     agent_credentials?: agent_credentialsCreateNestedManyWithoutAgentsInput
     spellReleases_agents_currentSpellReleaseIdTospellReleases?: spellReleasesCreateNestedOneWithoutAgents_agents_currentSpellReleaseIdTospellReleasesInput
     chatMessages?: chatMessagesCreateNestedManyWithoutAgentsInput
@@ -30024,29 +30024,29 @@ export namespace Prisma {
 
   export type agentsUncheckedCreateWithoutPluginStateInput = {
     id: string
-    rootSpell?: NullableJsonNullValueInput | InputJsonValue
-    publicVariables?: string | null
-    secrets?: string | null
     name?: string | null
     enabled?: boolean | null
     updatedAt?: string | null
-    pingedAt?: string | null
     projectId?: string | null
     worldId?: string | null
     data?: NullableJsonNullValueInput | InputJsonValue
-    runState?: string
     image?: string | null
-    rootSpellId?: string | null
     default?: boolean
     createdAt?: Date | string | null
     currentSpellReleaseId?: string | null
-    embedModel?: string | null
     version?: string
     embeddingProvider?: string | null
     embeddingModel?: string | null
     isDraft?: boolean
     draftAgentId?: string | null
     description?: string | null
+    rootSpellId?: string | null
+    secrets?: string | null
+    rootSpell?: NullableJsonNullValueInput | InputJsonValue
+    pingedAt?: string | null
+    publicVariables?: string | null
+    embedModel?: string | null
+    runState?: string
     agent_credentials?: agent_credentialsUncheckedCreateNestedManyWithoutAgentsInput
     chatMessages?: chatMessagesUncheckedCreateNestedManyWithoutAgentsInput
     graphEvents?: graphEventsUncheckedCreateNestedManyWithoutAgentsInput
@@ -30072,28 +30072,28 @@ export namespace Prisma {
 
   export type agentsUpdateWithoutPluginStateInput = {
     id?: StringFieldUpdateOperationsInput | string
-    rootSpell?: NullableJsonNullValueInput | InputJsonValue
-    publicVariables?: NullableStringFieldUpdateOperationsInput | string | null
-    secrets?: NullableStringFieldUpdateOperationsInput | string | null
     name?: NullableStringFieldUpdateOperationsInput | string | null
     enabled?: NullableBoolFieldUpdateOperationsInput | boolean | null
     updatedAt?: NullableStringFieldUpdateOperationsInput | string | null
-    pingedAt?: NullableStringFieldUpdateOperationsInput | string | null
     projectId?: NullableStringFieldUpdateOperationsInput | string | null
     worldId?: NullableStringFieldUpdateOperationsInput | string | null
     data?: NullableJsonNullValueInput | InputJsonValue
-    runState?: StringFieldUpdateOperationsInput | string
     image?: NullableStringFieldUpdateOperationsInput | string | null
-    rootSpellId?: NullableStringFieldUpdateOperationsInput | string | null
     default?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    embedModel?: NullableStringFieldUpdateOperationsInput | string | null
     version?: StringFieldUpdateOperationsInput | string
     embeddingProvider?: NullableStringFieldUpdateOperationsInput | string | null
     embeddingModel?: NullableStringFieldUpdateOperationsInput | string | null
     isDraft?: BoolFieldUpdateOperationsInput | boolean
     draftAgentId?: NullableStringFieldUpdateOperationsInput | string | null
     description?: NullableStringFieldUpdateOperationsInput | string | null
+    rootSpellId?: NullableStringFieldUpdateOperationsInput | string | null
+    secrets?: NullableStringFieldUpdateOperationsInput | string | null
+    rootSpell?: NullableJsonNullValueInput | InputJsonValue
+    pingedAt?: NullableStringFieldUpdateOperationsInput | string | null
+    publicVariables?: NullableStringFieldUpdateOperationsInput | string | null
+    embedModel?: NullableStringFieldUpdateOperationsInput | string | null
+    runState?: StringFieldUpdateOperationsInput | string
     agent_credentials?: agent_credentialsUpdateManyWithoutAgentsNestedInput
     spellReleases_agents_currentSpellReleaseIdTospellReleases?: spellReleasesUpdateOneWithoutAgents_agents_currentSpellReleaseIdTospellReleasesNestedInput
     chatMessages?: chatMessagesUpdateManyWithoutAgentsNestedInput
@@ -30104,29 +30104,29 @@ export namespace Prisma {
 
   export type agentsUncheckedUpdateWithoutPluginStateInput = {
     id?: StringFieldUpdateOperationsInput | string
-    rootSpell?: NullableJsonNullValueInput | InputJsonValue
-    publicVariables?: NullableStringFieldUpdateOperationsInput | string | null
-    secrets?: NullableStringFieldUpdateOperationsInput | string | null
     name?: NullableStringFieldUpdateOperationsInput | string | null
     enabled?: NullableBoolFieldUpdateOperationsInput | boolean | null
     updatedAt?: NullableStringFieldUpdateOperationsInput | string | null
-    pingedAt?: NullableStringFieldUpdateOperationsInput | string | null
     projectId?: NullableStringFieldUpdateOperationsInput | string | null
     worldId?: NullableStringFieldUpdateOperationsInput | string | null
     data?: NullableJsonNullValueInput | InputJsonValue
-    runState?: StringFieldUpdateOperationsInput | string
     image?: NullableStringFieldUpdateOperationsInput | string | null
-    rootSpellId?: NullableStringFieldUpdateOperationsInput | string | null
     default?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     currentSpellReleaseId?: NullableStringFieldUpdateOperationsInput | string | null
-    embedModel?: NullableStringFieldUpdateOperationsInput | string | null
     version?: StringFieldUpdateOperationsInput | string
     embeddingProvider?: NullableStringFieldUpdateOperationsInput | string | null
     embeddingModel?: NullableStringFieldUpdateOperationsInput | string | null
     isDraft?: BoolFieldUpdateOperationsInput | boolean
     draftAgentId?: NullableStringFieldUpdateOperationsInput | string | null
     description?: NullableStringFieldUpdateOperationsInput | string | null
+    rootSpellId?: NullableStringFieldUpdateOperationsInput | string | null
+    secrets?: NullableStringFieldUpdateOperationsInput | string | null
+    rootSpell?: NullableJsonNullValueInput | InputJsonValue
+    pingedAt?: NullableStringFieldUpdateOperationsInput | string | null
+    publicVariables?: NullableStringFieldUpdateOperationsInput | string | null
+    embedModel?: NullableStringFieldUpdateOperationsInput | string | null
+    runState?: StringFieldUpdateOperationsInput | string
     agent_credentials?: agent_credentialsUncheckedUpdateManyWithoutAgentsNestedInput
     chatMessages?: chatMessagesUncheckedUpdateManyWithoutAgentsNestedInput
     graphEvents?: graphEventsUncheckedUpdateManyWithoutAgentsNestedInput
@@ -30136,28 +30136,28 @@ export namespace Prisma {
 
   export type agentsCreateWithoutSpellReleases_agents_currentSpellReleaseIdTospellReleasesInput = {
     id: string
-    rootSpell?: NullableJsonNullValueInput | InputJsonValue
-    publicVariables?: string | null
-    secrets?: string | null
     name?: string | null
     enabled?: boolean | null
     updatedAt?: string | null
-    pingedAt?: string | null
     projectId?: string | null
     worldId?: string | null
     data?: NullableJsonNullValueInput | InputJsonValue
-    runState?: string
     image?: string | null
-    rootSpellId?: string | null
     default?: boolean
     createdAt?: Date | string | null
-    embedModel?: string | null
     version?: string
     embeddingProvider?: string | null
     embeddingModel?: string | null
     isDraft?: boolean
     draftAgentId?: string | null
     description?: string | null
+    rootSpellId?: string | null
+    secrets?: string | null
+    rootSpell?: NullableJsonNullValueInput | InputJsonValue
+    pingedAt?: string | null
+    publicVariables?: string | null
+    embedModel?: string | null
+    runState?: string
     agent_credentials?: agent_credentialsCreateNestedManyWithoutAgentsInput
     chatMessages?: chatMessagesCreateNestedManyWithoutAgentsInput
     graphEvents?: graphEventsCreateNestedManyWithoutAgentsInput
@@ -30168,28 +30168,28 @@ export namespace Prisma {
 
   export type agentsUncheckedCreateWithoutSpellReleases_agents_currentSpellReleaseIdTospellReleasesInput = {
     id: string
-    rootSpell?: NullableJsonNullValueInput | InputJsonValue
-    publicVariables?: string | null
-    secrets?: string | null
     name?: string | null
     enabled?: boolean | null
     updatedAt?: string | null
-    pingedAt?: string | null
     projectId?: string | null
     worldId?: string | null
     data?: NullableJsonNullValueInput | InputJsonValue
-    runState?: string
     image?: string | null
-    rootSpellId?: string | null
     default?: boolean
     createdAt?: Date | string | null
-    embedModel?: string | null
     version?: string
     embeddingProvider?: string | null
     embeddingModel?: string | null
     isDraft?: boolean
     draftAgentId?: string | null
     description?: string | null
+    rootSpellId?: string | null
+    secrets?: string | null
+    rootSpell?: NullableJsonNullValueInput | InputJsonValue
+    pingedAt?: string | null
+    publicVariables?: string | null
+    embedModel?: string | null
+    runState?: string
     agent_credentials?: agent_credentialsUncheckedCreateNestedManyWithoutAgentsInput
     chatMessages?: chatMessagesUncheckedCreateNestedManyWithoutAgentsInput
     graphEvents?: graphEventsUncheckedCreateNestedManyWithoutAgentsInput
@@ -30210,28 +30210,28 @@ export namespace Prisma {
 
   export type agentsCreateWithoutSpellReleases_spellReleases_agentIdToagentsInput = {
     id: string
-    rootSpell?: NullableJsonNullValueInput | InputJsonValue
-    publicVariables?: string | null
-    secrets?: string | null
     name?: string | null
     enabled?: boolean | null
     updatedAt?: string | null
-    pingedAt?: string | null
     projectId?: string | null
     worldId?: string | null
     data?: NullableJsonNullValueInput | InputJsonValue
-    runState?: string
     image?: string | null
-    rootSpellId?: string | null
     default?: boolean
     createdAt?: Date | string | null
-    embedModel?: string | null
     version?: string
     embeddingProvider?: string | null
     embeddingModel?: string | null
     isDraft?: boolean
     draftAgentId?: string | null
     description?: string | null
+    rootSpellId?: string | null
+    secrets?: string | null
+    rootSpell?: NullableJsonNullValueInput | InputJsonValue
+    pingedAt?: string | null
+    publicVariables?: string | null
+    embedModel?: string | null
+    runState?: string
     agent_credentials?: agent_credentialsCreateNestedManyWithoutAgentsInput
     spellReleases_agents_currentSpellReleaseIdTospellReleases?: spellReleasesCreateNestedOneWithoutAgents_agents_currentSpellReleaseIdTospellReleasesInput
     chatMessages?: chatMessagesCreateNestedManyWithoutAgentsInput
@@ -30242,29 +30242,29 @@ export namespace Prisma {
 
   export type agentsUncheckedCreateWithoutSpellReleases_spellReleases_agentIdToagentsInput = {
     id: string
-    rootSpell?: NullableJsonNullValueInput | InputJsonValue
-    publicVariables?: string | null
-    secrets?: string | null
     name?: string | null
     enabled?: boolean | null
     updatedAt?: string | null
-    pingedAt?: string | null
     projectId?: string | null
     worldId?: string | null
     data?: NullableJsonNullValueInput | InputJsonValue
-    runState?: string
     image?: string | null
-    rootSpellId?: string | null
     default?: boolean
     createdAt?: Date | string | null
     currentSpellReleaseId?: string | null
-    embedModel?: string | null
     version?: string
     embeddingProvider?: string | null
     embeddingModel?: string | null
     isDraft?: boolean
     draftAgentId?: string | null
     description?: string | null
+    rootSpellId?: string | null
+    secrets?: string | null
+    rootSpell?: NullableJsonNullValueInput | InputJsonValue
+    pingedAt?: string | null
+    publicVariables?: string | null
+    embedModel?: string | null
+    runState?: string
     agent_credentials?: agent_credentialsUncheckedCreateNestedManyWithoutAgentsInput
     chatMessages?: chatMessagesUncheckedCreateNestedManyWithoutAgentsInput
     graphEvents?: graphEventsUncheckedCreateNestedManyWithoutAgentsInput
@@ -30330,29 +30330,29 @@ export namespace Prisma {
     OR?: agentsScalarWhereInput[]
     NOT?: agentsScalarWhereInput | agentsScalarWhereInput[]
     id?: UuidFilter<"agents"> | string
-    rootSpell?: JsonNullableFilter<"agents">
-    publicVariables?: StringNullableFilter<"agents"> | string | null
-    secrets?: StringNullableFilter<"agents"> | string | null
     name?: StringNullableFilter<"agents"> | string | null
     enabled?: BoolNullableFilter<"agents"> | boolean | null
     updatedAt?: StringNullableFilter<"agents"> | string | null
-    pingedAt?: StringNullableFilter<"agents"> | string | null
     projectId?: StringNullableFilter<"agents"> | string | null
     worldId?: StringNullableFilter<"agents"> | string | null
     data?: JsonNullableFilter<"agents">
-    runState?: StringFilter<"agents"> | string
     image?: StringNullableFilter<"agents"> | string | null
-    rootSpellId?: UuidNullableFilter<"agents"> | string | null
     default?: BoolFilter<"agents"> | boolean
     createdAt?: DateTimeNullableFilter<"agents"> | Date | string | null
     currentSpellReleaseId?: UuidNullableFilter<"agents"> | string | null
-    embedModel?: StringNullableFilter<"agents"> | string | null
     version?: StringFilter<"agents"> | string
     embeddingProvider?: StringNullableFilter<"agents"> | string | null
     embeddingModel?: StringNullableFilter<"agents"> | string | null
     isDraft?: BoolFilter<"agents"> | boolean
     draftAgentId?: UuidNullableFilter<"agents"> | string | null
     description?: StringNullableFilter<"agents"> | string | null
+    rootSpellId?: UuidNullableFilter<"agents"> | string | null
+    secrets?: StringNullableFilter<"agents"> | string | null
+    rootSpell?: JsonNullableFilter<"agents">
+    pingedAt?: StringNullableFilter<"agents"> | string | null
+    publicVariables?: StringNullableFilter<"agents"> | string | null
+    embedModel?: StringNullableFilter<"agents"> | string | null
+    runState?: StringFilter<"agents"> | string
   }
 
   export type agentsUpsertWithoutSpellReleases_spellReleases_agentIdToagentsInput = {
@@ -30368,28 +30368,28 @@ export namespace Prisma {
 
   export type agentsUpdateWithoutSpellReleases_spellReleases_agentIdToagentsInput = {
     id?: StringFieldUpdateOperationsInput | string
-    rootSpell?: NullableJsonNullValueInput | InputJsonValue
-    publicVariables?: NullableStringFieldUpdateOperationsInput | string | null
-    secrets?: NullableStringFieldUpdateOperationsInput | string | null
     name?: NullableStringFieldUpdateOperationsInput | string | null
     enabled?: NullableBoolFieldUpdateOperationsInput | boolean | null
     updatedAt?: NullableStringFieldUpdateOperationsInput | string | null
-    pingedAt?: NullableStringFieldUpdateOperationsInput | string | null
     projectId?: NullableStringFieldUpdateOperationsInput | string | null
     worldId?: NullableStringFieldUpdateOperationsInput | string | null
     data?: NullableJsonNullValueInput | InputJsonValue
-    runState?: StringFieldUpdateOperationsInput | string
     image?: NullableStringFieldUpdateOperationsInput | string | null
-    rootSpellId?: NullableStringFieldUpdateOperationsInput | string | null
     default?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    embedModel?: NullableStringFieldUpdateOperationsInput | string | null
     version?: StringFieldUpdateOperationsInput | string
     embeddingProvider?: NullableStringFieldUpdateOperationsInput | string | null
     embeddingModel?: NullableStringFieldUpdateOperationsInput | string | null
     isDraft?: BoolFieldUpdateOperationsInput | boolean
     draftAgentId?: NullableStringFieldUpdateOperationsInput | string | null
     description?: NullableStringFieldUpdateOperationsInput | string | null
+    rootSpellId?: NullableStringFieldUpdateOperationsInput | string | null
+    secrets?: NullableStringFieldUpdateOperationsInput | string | null
+    rootSpell?: NullableJsonNullValueInput | InputJsonValue
+    pingedAt?: NullableStringFieldUpdateOperationsInput | string | null
+    publicVariables?: NullableStringFieldUpdateOperationsInput | string | null
+    embedModel?: NullableStringFieldUpdateOperationsInput | string | null
+    runState?: StringFieldUpdateOperationsInput | string
     agent_credentials?: agent_credentialsUpdateManyWithoutAgentsNestedInput
     spellReleases_agents_currentSpellReleaseIdTospellReleases?: spellReleasesUpdateOneWithoutAgents_agents_currentSpellReleaseIdTospellReleasesNestedInput
     chatMessages?: chatMessagesUpdateManyWithoutAgentsNestedInput
@@ -30400,29 +30400,29 @@ export namespace Prisma {
 
   export type agentsUncheckedUpdateWithoutSpellReleases_spellReleases_agentIdToagentsInput = {
     id?: StringFieldUpdateOperationsInput | string
-    rootSpell?: NullableJsonNullValueInput | InputJsonValue
-    publicVariables?: NullableStringFieldUpdateOperationsInput | string | null
-    secrets?: NullableStringFieldUpdateOperationsInput | string | null
     name?: NullableStringFieldUpdateOperationsInput | string | null
     enabled?: NullableBoolFieldUpdateOperationsInput | boolean | null
     updatedAt?: NullableStringFieldUpdateOperationsInput | string | null
-    pingedAt?: NullableStringFieldUpdateOperationsInput | string | null
     projectId?: NullableStringFieldUpdateOperationsInput | string | null
     worldId?: NullableStringFieldUpdateOperationsInput | string | null
     data?: NullableJsonNullValueInput | InputJsonValue
-    runState?: StringFieldUpdateOperationsInput | string
     image?: NullableStringFieldUpdateOperationsInput | string | null
-    rootSpellId?: NullableStringFieldUpdateOperationsInput | string | null
     default?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     currentSpellReleaseId?: NullableStringFieldUpdateOperationsInput | string | null
-    embedModel?: NullableStringFieldUpdateOperationsInput | string | null
     version?: StringFieldUpdateOperationsInput | string
     embeddingProvider?: NullableStringFieldUpdateOperationsInput | string | null
     embeddingModel?: NullableStringFieldUpdateOperationsInput | string | null
     isDraft?: BoolFieldUpdateOperationsInput | boolean
     draftAgentId?: NullableStringFieldUpdateOperationsInput | string | null
     description?: NullableStringFieldUpdateOperationsInput | string | null
+    rootSpellId?: NullableStringFieldUpdateOperationsInput | string | null
+    secrets?: NullableStringFieldUpdateOperationsInput | string | null
+    rootSpell?: NullableJsonNullValueInput | InputJsonValue
+    pingedAt?: NullableStringFieldUpdateOperationsInput | string | null
+    publicVariables?: NullableStringFieldUpdateOperationsInput | string | null
+    embedModel?: NullableStringFieldUpdateOperationsInput | string | null
+    runState?: StringFieldUpdateOperationsInput | string
     agent_credentials?: agent_credentialsUncheckedUpdateManyWithoutAgentsNestedInput
     chatMessages?: chatMessagesUncheckedUpdateManyWithoutAgentsNestedInput
     graphEvents?: graphEventsUncheckedUpdateManyWithoutAgentsNestedInput
@@ -30523,28 +30523,28 @@ export namespace Prisma {
 
   export type agentsCreateWithoutWebhookInput = {
     id: string
-    rootSpell?: NullableJsonNullValueInput | InputJsonValue
-    publicVariables?: string | null
-    secrets?: string | null
     name?: string | null
     enabled?: boolean | null
     updatedAt?: string | null
-    pingedAt?: string | null
     projectId?: string | null
     worldId?: string | null
     data?: NullableJsonNullValueInput | InputJsonValue
-    runState?: string
     image?: string | null
-    rootSpellId?: string | null
     default?: boolean
     createdAt?: Date | string | null
-    embedModel?: string | null
     version?: string
     embeddingProvider?: string | null
     embeddingModel?: string | null
     isDraft?: boolean
     draftAgentId?: string | null
     description?: string | null
+    rootSpellId?: string | null
+    secrets?: string | null
+    rootSpell?: NullableJsonNullValueInput | InputJsonValue
+    pingedAt?: string | null
+    publicVariables?: string | null
+    embedModel?: string | null
+    runState?: string
     agent_credentials?: agent_credentialsCreateNestedManyWithoutAgentsInput
     spellReleases_agents_currentSpellReleaseIdTospellReleases?: spellReleasesCreateNestedOneWithoutAgents_agents_currentSpellReleaseIdTospellReleasesInput
     chatMessages?: chatMessagesCreateNestedManyWithoutAgentsInput
@@ -30555,29 +30555,29 @@ export namespace Prisma {
 
   export type agentsUncheckedCreateWithoutWebhookInput = {
     id: string
-    rootSpell?: NullableJsonNullValueInput | InputJsonValue
-    publicVariables?: string | null
-    secrets?: string | null
     name?: string | null
     enabled?: boolean | null
     updatedAt?: string | null
-    pingedAt?: string | null
     projectId?: string | null
     worldId?: string | null
     data?: NullableJsonNullValueInput | InputJsonValue
-    runState?: string
     image?: string | null
-    rootSpellId?: string | null
     default?: boolean
     createdAt?: Date | string | null
     currentSpellReleaseId?: string | null
-    embedModel?: string | null
     version?: string
     embeddingProvider?: string | null
     embeddingModel?: string | null
     isDraft?: boolean
     draftAgentId?: string | null
     description?: string | null
+    rootSpellId?: string | null
+    secrets?: string | null
+    rootSpell?: NullableJsonNullValueInput | InputJsonValue
+    pingedAt?: string | null
+    publicVariables?: string | null
+    embedModel?: string | null
+    runState?: string
     agent_credentials?: agent_credentialsUncheckedCreateNestedManyWithoutAgentsInput
     chatMessages?: chatMessagesUncheckedCreateNestedManyWithoutAgentsInput
     graphEvents?: graphEventsUncheckedCreateNestedManyWithoutAgentsInput
@@ -30603,28 +30603,28 @@ export namespace Prisma {
 
   export type agentsUpdateWithoutWebhookInput = {
     id?: StringFieldUpdateOperationsInput | string
-    rootSpell?: NullableJsonNullValueInput | InputJsonValue
-    publicVariables?: NullableStringFieldUpdateOperationsInput | string | null
-    secrets?: NullableStringFieldUpdateOperationsInput | string | null
     name?: NullableStringFieldUpdateOperationsInput | string | null
     enabled?: NullableBoolFieldUpdateOperationsInput | boolean | null
     updatedAt?: NullableStringFieldUpdateOperationsInput | string | null
-    pingedAt?: NullableStringFieldUpdateOperationsInput | string | null
     projectId?: NullableStringFieldUpdateOperationsInput | string | null
     worldId?: NullableStringFieldUpdateOperationsInput | string | null
     data?: NullableJsonNullValueInput | InputJsonValue
-    runState?: StringFieldUpdateOperationsInput | string
     image?: NullableStringFieldUpdateOperationsInput | string | null
-    rootSpellId?: NullableStringFieldUpdateOperationsInput | string | null
     default?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    embedModel?: NullableStringFieldUpdateOperationsInput | string | null
     version?: StringFieldUpdateOperationsInput | string
     embeddingProvider?: NullableStringFieldUpdateOperationsInput | string | null
     embeddingModel?: NullableStringFieldUpdateOperationsInput | string | null
     isDraft?: BoolFieldUpdateOperationsInput | boolean
     draftAgentId?: NullableStringFieldUpdateOperationsInput | string | null
     description?: NullableStringFieldUpdateOperationsInput | string | null
+    rootSpellId?: NullableStringFieldUpdateOperationsInput | string | null
+    secrets?: NullableStringFieldUpdateOperationsInput | string | null
+    rootSpell?: NullableJsonNullValueInput | InputJsonValue
+    pingedAt?: NullableStringFieldUpdateOperationsInput | string | null
+    publicVariables?: NullableStringFieldUpdateOperationsInput | string | null
+    embedModel?: NullableStringFieldUpdateOperationsInput | string | null
+    runState?: StringFieldUpdateOperationsInput | string
     agent_credentials?: agent_credentialsUpdateManyWithoutAgentsNestedInput
     spellReleases_agents_currentSpellReleaseIdTospellReleases?: spellReleasesUpdateOneWithoutAgents_agents_currentSpellReleaseIdTospellReleasesNestedInput
     chatMessages?: chatMessagesUpdateManyWithoutAgentsNestedInput
@@ -30635,29 +30635,29 @@ export namespace Prisma {
 
   export type agentsUncheckedUpdateWithoutWebhookInput = {
     id?: StringFieldUpdateOperationsInput | string
-    rootSpell?: NullableJsonNullValueInput | InputJsonValue
-    publicVariables?: NullableStringFieldUpdateOperationsInput | string | null
-    secrets?: NullableStringFieldUpdateOperationsInput | string | null
     name?: NullableStringFieldUpdateOperationsInput | string | null
     enabled?: NullableBoolFieldUpdateOperationsInput | boolean | null
     updatedAt?: NullableStringFieldUpdateOperationsInput | string | null
-    pingedAt?: NullableStringFieldUpdateOperationsInput | string | null
     projectId?: NullableStringFieldUpdateOperationsInput | string | null
     worldId?: NullableStringFieldUpdateOperationsInput | string | null
     data?: NullableJsonNullValueInput | InputJsonValue
-    runState?: StringFieldUpdateOperationsInput | string
     image?: NullableStringFieldUpdateOperationsInput | string | null
-    rootSpellId?: NullableStringFieldUpdateOperationsInput | string | null
     default?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     currentSpellReleaseId?: NullableStringFieldUpdateOperationsInput | string | null
-    embedModel?: NullableStringFieldUpdateOperationsInput | string | null
     version?: StringFieldUpdateOperationsInput | string
     embeddingProvider?: NullableStringFieldUpdateOperationsInput | string | null
     embeddingModel?: NullableStringFieldUpdateOperationsInput | string | null
     isDraft?: BoolFieldUpdateOperationsInput | boolean
     draftAgentId?: NullableStringFieldUpdateOperationsInput | string | null
     description?: NullableStringFieldUpdateOperationsInput | string | null
+    rootSpellId?: NullableStringFieldUpdateOperationsInput | string | null
+    secrets?: NullableStringFieldUpdateOperationsInput | string | null
+    rootSpell?: NullableJsonNullValueInput | InputJsonValue
+    pingedAt?: NullableStringFieldUpdateOperationsInput | string | null
+    publicVariables?: NullableStringFieldUpdateOperationsInput | string | null
+    embedModel?: NullableStringFieldUpdateOperationsInput | string | null
+    runState?: StringFieldUpdateOperationsInput | string
     agent_credentials?: agent_credentialsUncheckedUpdateManyWithoutAgentsNestedInput
     chatMessages?: chatMessagesUncheckedUpdateManyWithoutAgentsNestedInput
     graphEvents?: graphEventsUncheckedUpdateManyWithoutAgentsNestedInput
@@ -30931,28 +30931,28 @@ export namespace Prisma {
 
   export type agentsCreateManySpellReleases_agents_currentSpellReleaseIdTospellReleasesInput = {
     id: string
-    rootSpell?: NullableJsonNullValueInput | InputJsonValue
-    publicVariables?: string | null
-    secrets?: string | null
     name?: string | null
     enabled?: boolean | null
     updatedAt?: string | null
-    pingedAt?: string | null
     projectId?: string | null
     worldId?: string | null
     data?: NullableJsonNullValueInput | InputJsonValue
-    runState?: string
     image?: string | null
-    rootSpellId?: string | null
     default?: boolean
     createdAt?: Date | string | null
-    embedModel?: string | null
     version?: string
     embeddingProvider?: string | null
     embeddingModel?: string | null
     isDraft?: boolean
     draftAgentId?: string | null
     description?: string | null
+    rootSpellId?: string | null
+    secrets?: string | null
+    rootSpell?: NullableJsonNullValueInput | InputJsonValue
+    pingedAt?: string | null
+    publicVariables?: string | null
+    embedModel?: string | null
+    runState?: string
   }
 
   export type spellsCreateManySpellReleasesInput = {
@@ -30968,28 +30968,28 @@ export namespace Prisma {
 
   export type agentsUpdateWithoutSpellReleases_agents_currentSpellReleaseIdTospellReleasesInput = {
     id?: StringFieldUpdateOperationsInput | string
-    rootSpell?: NullableJsonNullValueInput | InputJsonValue
-    publicVariables?: NullableStringFieldUpdateOperationsInput | string | null
-    secrets?: NullableStringFieldUpdateOperationsInput | string | null
     name?: NullableStringFieldUpdateOperationsInput | string | null
     enabled?: NullableBoolFieldUpdateOperationsInput | boolean | null
     updatedAt?: NullableStringFieldUpdateOperationsInput | string | null
-    pingedAt?: NullableStringFieldUpdateOperationsInput | string | null
     projectId?: NullableStringFieldUpdateOperationsInput | string | null
     worldId?: NullableStringFieldUpdateOperationsInput | string | null
     data?: NullableJsonNullValueInput | InputJsonValue
-    runState?: StringFieldUpdateOperationsInput | string
     image?: NullableStringFieldUpdateOperationsInput | string | null
-    rootSpellId?: NullableStringFieldUpdateOperationsInput | string | null
     default?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    embedModel?: NullableStringFieldUpdateOperationsInput | string | null
     version?: StringFieldUpdateOperationsInput | string
     embeddingProvider?: NullableStringFieldUpdateOperationsInput | string | null
     embeddingModel?: NullableStringFieldUpdateOperationsInput | string | null
     isDraft?: BoolFieldUpdateOperationsInput | boolean
     draftAgentId?: NullableStringFieldUpdateOperationsInput | string | null
     description?: NullableStringFieldUpdateOperationsInput | string | null
+    rootSpellId?: NullableStringFieldUpdateOperationsInput | string | null
+    secrets?: NullableStringFieldUpdateOperationsInput | string | null
+    rootSpell?: NullableJsonNullValueInput | InputJsonValue
+    pingedAt?: NullableStringFieldUpdateOperationsInput | string | null
+    publicVariables?: NullableStringFieldUpdateOperationsInput | string | null
+    embedModel?: NullableStringFieldUpdateOperationsInput | string | null
+    runState?: StringFieldUpdateOperationsInput | string
     agent_credentials?: agent_credentialsUpdateManyWithoutAgentsNestedInput
     chatMessages?: chatMessagesUpdateManyWithoutAgentsNestedInput
     graphEvents?: graphEventsUpdateManyWithoutAgentsNestedInput
@@ -31000,28 +31000,28 @@ export namespace Prisma {
 
   export type agentsUncheckedUpdateWithoutSpellReleases_agents_currentSpellReleaseIdTospellReleasesInput = {
     id?: StringFieldUpdateOperationsInput | string
-    rootSpell?: NullableJsonNullValueInput | InputJsonValue
-    publicVariables?: NullableStringFieldUpdateOperationsInput | string | null
-    secrets?: NullableStringFieldUpdateOperationsInput | string | null
     name?: NullableStringFieldUpdateOperationsInput | string | null
     enabled?: NullableBoolFieldUpdateOperationsInput | boolean | null
     updatedAt?: NullableStringFieldUpdateOperationsInput | string | null
-    pingedAt?: NullableStringFieldUpdateOperationsInput | string | null
     projectId?: NullableStringFieldUpdateOperationsInput | string | null
     worldId?: NullableStringFieldUpdateOperationsInput | string | null
     data?: NullableJsonNullValueInput | InputJsonValue
-    runState?: StringFieldUpdateOperationsInput | string
     image?: NullableStringFieldUpdateOperationsInput | string | null
-    rootSpellId?: NullableStringFieldUpdateOperationsInput | string | null
     default?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    embedModel?: NullableStringFieldUpdateOperationsInput | string | null
     version?: StringFieldUpdateOperationsInput | string
     embeddingProvider?: NullableStringFieldUpdateOperationsInput | string | null
     embeddingModel?: NullableStringFieldUpdateOperationsInput | string | null
     isDraft?: BoolFieldUpdateOperationsInput | boolean
     draftAgentId?: NullableStringFieldUpdateOperationsInput | string | null
     description?: NullableStringFieldUpdateOperationsInput | string | null
+    rootSpellId?: NullableStringFieldUpdateOperationsInput | string | null
+    secrets?: NullableStringFieldUpdateOperationsInput | string | null
+    rootSpell?: NullableJsonNullValueInput | InputJsonValue
+    pingedAt?: NullableStringFieldUpdateOperationsInput | string | null
+    publicVariables?: NullableStringFieldUpdateOperationsInput | string | null
+    embedModel?: NullableStringFieldUpdateOperationsInput | string | null
+    runState?: StringFieldUpdateOperationsInput | string
     agent_credentials?: agent_credentialsUncheckedUpdateManyWithoutAgentsNestedInput
     chatMessages?: chatMessagesUncheckedUpdateManyWithoutAgentsNestedInput
     graphEvents?: graphEventsUncheckedUpdateManyWithoutAgentsNestedInput
@@ -31032,28 +31032,28 @@ export namespace Prisma {
 
   export type agentsUncheckedUpdateManyWithoutSpellReleases_agents_currentSpellReleaseIdTospellReleasesInput = {
     id?: StringFieldUpdateOperationsInput | string
-    rootSpell?: NullableJsonNullValueInput | InputJsonValue
-    publicVariables?: NullableStringFieldUpdateOperationsInput | string | null
-    secrets?: NullableStringFieldUpdateOperationsInput | string | null
     name?: NullableStringFieldUpdateOperationsInput | string | null
     enabled?: NullableBoolFieldUpdateOperationsInput | boolean | null
     updatedAt?: NullableStringFieldUpdateOperationsInput | string | null
-    pingedAt?: NullableStringFieldUpdateOperationsInput | string | null
     projectId?: NullableStringFieldUpdateOperationsInput | string | null
     worldId?: NullableStringFieldUpdateOperationsInput | string | null
     data?: NullableJsonNullValueInput | InputJsonValue
-    runState?: StringFieldUpdateOperationsInput | string
     image?: NullableStringFieldUpdateOperationsInput | string | null
-    rootSpellId?: NullableStringFieldUpdateOperationsInput | string | null
     default?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    embedModel?: NullableStringFieldUpdateOperationsInput | string | null
     version?: StringFieldUpdateOperationsInput | string
     embeddingProvider?: NullableStringFieldUpdateOperationsInput | string | null
     embeddingModel?: NullableStringFieldUpdateOperationsInput | string | null
     isDraft?: BoolFieldUpdateOperationsInput | boolean
     draftAgentId?: NullableStringFieldUpdateOperationsInput | string | null
     description?: NullableStringFieldUpdateOperationsInput | string | null
+    rootSpellId?: NullableStringFieldUpdateOperationsInput | string | null
+    secrets?: NullableStringFieldUpdateOperationsInput | string | null
+    rootSpell?: NullableJsonNullValueInput | InputJsonValue
+    pingedAt?: NullableStringFieldUpdateOperationsInput | string | null
+    publicVariables?: NullableStringFieldUpdateOperationsInput | string | null
+    embedModel?: NullableStringFieldUpdateOperationsInput | string | null
+    runState?: StringFieldUpdateOperationsInput | string
   }
 
   export type spellsUpdateWithoutSpellReleasesInput = {
