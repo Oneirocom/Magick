@@ -64,12 +64,36 @@ export const SubspellNode: React.FC<Props> = ({
 
   useEffect(() => {
     if (!data.configuration) return
-    if (!data.configuration.spellId) return
-    if (data.configuration.spellId === spell?.id) return
+    if (!data.configuration.spellId && !data.configuration.spellName) return
+    if (
+      data.configuration.spellId === spell?.id &&
+      data.configuration.spellName === spell?.name
+    )
+      return
     ;(async () => {
-      const spell = await client
-        .service('spells')
-        .get(data.configuration.spellId)
+      let spell
+
+      console.log('subspell node getting subspell', data.configuration)
+
+      if (data.configuration.spellId) {
+        spell = await client.service('spells').get(data.configuration.spellId)
+      }
+
+      if (data.configuration.spellName) {
+        spell = await client
+          .service('spells')
+          .find({
+            query: {
+              name: data.configuration.spellName,
+            },
+          })
+          .then((res: any) => res.data[0])
+      }
+
+      if (!spell) {
+        console.error('No spell found for subspell node')
+        return
+      }
 
       setSpell(spell)
     })()
