@@ -104,7 +104,7 @@ export class Agent
   commandHub: CommandHub<this>
   version!: string
   pubsub: RedisPubSub
-  app: Application
+  app: any
   spellbook: Spellbook<Application, this>
   pluginManager: PluginManager<this>
   private heartbeatInterval: NodeJS.Timer | null = null
