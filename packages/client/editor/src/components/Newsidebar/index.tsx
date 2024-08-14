@@ -100,8 +100,8 @@ export function NewSidebar(): React.JSX.Element {
               enabled: true,
               default: false,
               version: '2.0',
-              publicVariables: '{}',
-              secrets: '{}',
+              // publicVariables: '{}', // TODO: Deprecated
+              // secrets: '{}', // TODO: Deprecated
               updatedAt: new Date().toISOString(),
               createdAt: new Date().toISOString(),
               isDraft: false,
@@ -114,18 +114,18 @@ export function NewSidebar(): React.JSX.Element {
           if (!agent) throw new Error('No agent found during setup')
 
           const newDraftAgent = await createNewAgent({
-            publicVariables: '{}',
-            secrets: '{}',
+            // secrets: '{}', // TODO: Deprecated
             name: agent.name,
             enabled: true,
-            pingedAt: '',
             projectId: agent.projectId,
-            data: agent.data || {},
-            runState: newAgent?.runState,
             image: agent.image || '',
-            default: true,
             currentSpellReleaseId: null,
             isDraft: true,
+            // publicVariables: '{}', // TODO: Deprecated
+            // pingedAt: '', // TODO: Deprecated
+            // data: agent.data || {}, // TODO: Deprecated
+            // runState: newAgent?.runState, // TODO: Deprecated
+            // default: true, // TODO: Deprecated
           }).unwrap()
 
           // Create a release for the live agent

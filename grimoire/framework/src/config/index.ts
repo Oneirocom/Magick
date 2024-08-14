@@ -4,6 +4,11 @@ type GrimoireConfig = {
   agent: {
     name: string
     id: string
+    projectId: string
+    enabled: boolean
+    version: string
+    description: string
+    image: string
   }
   nitro: NitroConfig
 }

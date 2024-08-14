@@ -105,7 +105,8 @@ export class CloudAgentWorker {
 
     const agentData = {
       ...agentDBResult[0],
-      pingedAt: new Date().toISOString(),
+      // TODO: Deprecated
+      // pingedAt: new Date().toISOString(),
     }
 
     if (!agentData.enabled) {

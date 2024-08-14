@@ -64,8 +64,9 @@ const AgentWindow = ({ data, onLoadFile }: Props) => {
                 name: 'New Agent',
                 projectId: config.projectId,
                 enabled: false,
-                publicVariables: '{}',
-                secrets: '{}',
+                // TODO: Deprecated
+                // publicVariables: '{}',
+                // secrets: '{}',
               })
                 .unwrap()
                 .then(() => {

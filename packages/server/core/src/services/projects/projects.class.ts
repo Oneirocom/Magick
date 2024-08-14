@@ -132,13 +132,14 @@ export class ProjectsService {
         name: name,
         projectId: projectId,
         enabled: true,
-        default: true,
         version: '2.0',
-        publicVariables: '{}',
-        secrets: '{}',
         updatedAt: new Date().toISOString(),
         createdAt: new Date().toISOString(),
         isDraft: true,
+        // secrets: '{}', // Deprecated
+        // default: true, // TODO: Deprecated
+        // TODO: Deprecated
+        // publicVariables: '{}',
       })
 
       // Create a live agent
@@ -146,14 +147,15 @@ export class ProjectsService {
         name: name,
         projectId: projectId,
         enabled: true,
-        default: false,
         version: '2.0',
-        publicVariables: '{}',
-        secrets: '{}',
         updatedAt: new Date().toISOString(),
         createdAt: new Date().toISOString(),
         isDraft: false,
         draftAgentId: draftAgent.id,
+        // secrets: '{}', // Deprecated
+        // default: false, // TODO: Deprecated
+        // TODO: Deprecated
+        // publicVariables: '{}',
       })
 
       // Create a release for the live agent
@@ -210,11 +212,11 @@ export class ProjectsService {
     const mappedAgents = (agents ?? []).map((agent: AgentInterface) => {
       // @ts-ignore
       delete agent.id
-      if (!agent.data) agent.data = '{}'
       if ('spells' in agent) delete agent.spells // <-- Updated to fix eliza import
       agent.enabled = false
       agent.projectId = projectId
-      agent.secrets = JSON.stringify(agent.secrets || {})
+      // if (!agent.data) agent.data = '{}' // TODO: Deprecated
+      // agent.secrets = JSON.stringify(agent.secrets || {}) // Deprecated
       return agent
     })
 
@@ -248,7 +250,7 @@ export class ProjectsService {
     if (mappedAgents.length > 0) {
       mappedAgents.forEach(async (agent: AgentInterface) => {
         // todo: clear this up so validation works
-        delete agent.runState
+        // delete agent.runState // TODO: Deprecated
 
         const r = await app.service('agents').create(agent)
         agentResponse.push(r)

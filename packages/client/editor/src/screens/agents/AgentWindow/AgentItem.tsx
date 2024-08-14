@@ -46,7 +46,7 @@ const AgentItem = ({
   }
 
   const renderDeleteButton = () => {
-    return !agent.default ? (
+    return !agent.isDraft ? (
       <IconBtn
         label="delete"
         Icon={<Icon name="trash" size={20} />}

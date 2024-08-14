@@ -128,29 +128,29 @@ exports.Prisma.Agent_credentialsScalarFieldEnum = {
 
 exports.Prisma.AgentsScalarFieldEnum = {
   id: 'id',
-  rootSpell: 'rootSpell',
-  publicVariables: 'publicVariables',
-  secrets: 'secrets',
   name: 'name',
   enabled: 'enabled',
   updatedAt: 'updatedAt',
-  pingedAt: 'pingedAt',
   projectId: 'projectId',
   worldId: 'worldId',
   data: 'data',
-  runState: 'runState',
   image: 'image',
-  rootSpellId: 'rootSpellId',
   default: 'default',
   createdAt: 'createdAt',
   currentSpellReleaseId: 'currentSpellReleaseId',
-  embedModel: 'embedModel',
   version: 'version',
   embeddingProvider: 'embeddingProvider',
   embeddingModel: 'embeddingModel',
   isDraft: 'isDraft',
   draftAgentId: 'draftAgentId',
-  description: 'description'
+  description: 'description',
+  rootSpellId: 'rootSpellId',
+  secrets: 'secrets',
+  rootSpell: 'rootSpell',
+  pingedAt: 'pingedAt',
+  publicVariables: 'publicVariables',
+  embedModel: 'embedModel',
+  runState: 'runState'
 };
 
 exports.Prisma.ChatMessagesScalarFieldEnum = {
@@ -401,23 +401,23 @@ exports.Prisma.NullsOrder = {
 
 exports.Prisma.agentsOrderByRelevanceFieldEnum = {
   id: 'id',
-  publicVariables: 'publicVariables',
-  secrets: 'secrets',
   name: 'name',
   updatedAt: 'updatedAt',
-  pingedAt: 'pingedAt',
   projectId: 'projectId',
   worldId: 'worldId',
-  runState: 'runState',
   image: 'image',
-  rootSpellId: 'rootSpellId',
   currentSpellReleaseId: 'currentSpellReleaseId',
-  embedModel: 'embedModel',
   version: 'version',
   embeddingProvider: 'embeddingProvider',
   embeddingModel: 'embeddingModel',
   draftAgentId: 'draftAgentId',
-  description: 'description'
+  description: 'description',
+  rootSpellId: 'rootSpellId',
+  secrets: 'secrets',
+  pingedAt: 'pingedAt',
+  publicVariables: 'publicVariables',
+  embedModel: 'embedModel',
+  runState: 'runState'
 };
 
 exports.Prisma.chatMessagesOrderByRelevanceFieldEnum = {

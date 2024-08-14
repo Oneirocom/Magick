@@ -25,15 +25,16 @@ async function main() {
       id: AGENT_ID,
       name: AGENT_ID,
       enabled: true,
-      default: false,
       version: '2.0',
-      publicVariables: '{}',
-      secrets: '{}',
       updatedAt: new Date().toISOString(),
       createdAt: new Date().toISOString(),
       isDraft: false,
       projectId: WORLD_ID,
       worldId: WORLD_ID,
+      // secrets: '{}', // Deprecated
+      // default: false, // TODO: Deprecated
+      // TODO: Deprecated
+      // publicVariables: '{}',
     },
   })
   console.log('Seed Agent created:', agent.id)
