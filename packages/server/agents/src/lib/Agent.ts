@@ -107,9 +107,10 @@ export class Agent
   app: Application
   spellbook: Spellbook<Application, this>
   pluginManager: PluginManager<this>
-  private heartbeatInterval: NodeJS.Timer
+  private heartbeatInterval: NodeJS.Timer | null = null
   loggingService: AgentLoggingService<this>
   seraphManager?: SeraphManager
+  private initializationPromise: Promise<void>
 
   /**
    * Agent constructor initializes properties and sets intervals for updating agents
@@ -164,9 +165,7 @@ export class Agent
       commandHub: this.commandHub,
     })
 
-    this.initialize()
-
-    this.heartbeatInterval = this.startHeartbeat()
+    this.initializationPromise = this.initialize()
 
     this.logger.info('New agent created: %s | %s', this.name, this.id)
   }
@@ -178,20 +177,16 @@ export class Agent
 
     await this.pluginManager.loadRawPlugins(plugins)
 
+    this.heartbeatInterval = this.startHeartbeat()
+
     // initialzie spellbook
     await this.initializeSpellbook()
 
     this.logger.info('Agent fully initialized: %s | %s', this.name, this.id)
   }
 
-  public static async create(
-    agentData: AgentInterface,
-    pubsub: RedisPubSub,
-    app: Application
-  ): Promise<Agent> {
-    const agent = new Agent(agentData, pubsub, app)
-    await agent.initialize()
-    return agent
+  public async waitForInitialization(): Promise<void> {
+    await this.initializationPromise
   }
 
   formatEvent<Data = Record<string, unknown>, Y = Record<string, unknown>>(
