@@ -33,9 +33,9 @@ model agents {
   updatedAt                                                 String?
   projectId                                                 String?
   worldId                                                   String?
-  data                                                      Json? // Deprecated
+  data                                                      Json?
   image                                                     String?
-  default                                                   Boolean             @default(false) // deprecated
+  default                                                   Boolean             @default(false)
   createdAt                                                 DateTime?           @default(now()) @db.Timestamptz(6)
   currentSpellReleaseId                                     String?             @db.Uuid
   version                                                   String              @default("1.0") @db.VarChar(255)

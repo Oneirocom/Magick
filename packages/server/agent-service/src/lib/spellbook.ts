@@ -615,6 +615,7 @@ export class Spellbook<
    *   graph: {},
    * });
    */
+
   async loadSpell(
     spell: SpellInterface,
     _initialState?: SpellState
@@ -863,6 +864,10 @@ export class Spellbook<
     }
 
     this.eventMap.delete(eventKey)
+  }
+
+  public async getSpells() {
+    return this.spells
   }
 
   /**

@@ -107,9 +107,10 @@ export class Agent
   app: Application
   spellbook: Spellbook<Application, this>
   pluginManager: PluginManager<this>
-  private heartbeatInterval: NodeJS.Timer
+  private heartbeatInterval: NodeJS.Timer | null = null
   loggingService: AgentLoggingService<this>
   seraphManager?: SeraphManager
+  private initializationPromise: Promise<void>
 
   /**
    * Agent constructor initializes properties and sets intervals for updating agents
@@ -134,7 +135,7 @@ export class Agent
 
     this.commandHub = new CommandHub<this>(this, this.pubsub)
 
-    if (process.env['ENABLE_SERAPH']) {
+    if (process.env['ENABLE_SERAPH'] === 'true') {
       this.seraphManager = new SeraphManager({
         seraphOptions: {
           openAIApiKey: process.env.OPENAI_API_KEY || '',
@@ -149,7 +150,7 @@ export class Agent
     }
 
     this.pluginManager = new PluginManager<this>({
-      pluginDirectory: process.env.PLUGIN_DIRECTORY || './plugins',
+      pluginDirectory: process.env.PLUGIN_DIRECTORY ?? './plugins',
       connection: this.app.get('redis'),
       agent: this,
       pubSub: this.app.get('pubsub'),
@@ -164,22 +165,28 @@ export class Agent
       commandHub: this.commandHub,
     })
 
-    this.initialize()
-
-    this.heartbeatInterval = this.startHeartbeat()
+    this.initializationPromise = this.initialize()
 
     this.logger.info('New agent created: %s | %s', this.name, this.id)
   }
 
-  initialize() {
+  async initialize() {
     // initialize the core commands
     // These are used to remotely control the agent
     this.initializeCoreCommands()
 
-    this.pluginManager.loadRawPlugins(plugins)
+    await this.pluginManager.loadRawPlugins(plugins)
+
+    this.heartbeatInterval = this.startHeartbeat()
 
     // initialzie spellbook
-    this.initializeSpellbook()
+    await this.initializeSpellbook()
+
+    this.logger.info('Agent fully initialized: %s | %s', this.name, this.id)
+  }
+
+  public async waitForInitialization(): Promise<void> {
+    await this.initializationPromise
   }
 
   formatEvent<Data = Record<string, unknown>, Y = Record<string, unknown>>(
@@ -232,7 +239,8 @@ export class Agent
         this.currentSpellReleaseId || 'draft-agent'
       }`
     )
-    const spellsData = await (this.app.service('spells') as any).find({
+    const spellService = this.app.service('spells')
+    const spellsData = await spellService.find({
       query: {
         projectId: this.projectId,
         type: 'behave',
@@ -245,7 +253,10 @@ export class Agent
     }
 
     const spells = spellsData.data
+    console.log('SPELLS', spells)
     await this.spellbook.loadSpells(spells)
+
+    return this.spellbook.loadSpells(spells)
   }
 
   startHeartbeat() {

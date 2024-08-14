@@ -77,10 +77,9 @@ export async function initApp(environment: Environment = 'default') {
   const credentialsManager = new CredentialsManager()
   app.set('credentialsManager', credentialsManager)
 
-  const prompt = 'You are seraph, a helpful AI angel.'
-
-  if (process.env['ENABLE_SERAPH']) {
+  if (process.env['ENABLE_SERAPH'] === 'true') {
     logger.info('INITIALIZING SERAPH')
+    const prompt = 'You are seraph, a helpful AI angel.'
     const seraph = new SeraphCore({
       prompt,
       openAIApiKey: process.env['OPENAI_API_KEY'] as string,

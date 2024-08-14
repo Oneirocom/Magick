@@ -111,7 +111,12 @@ class CoreEventClient {
   }
 
   triggerEvent(eventType: string, event: EventPayload): void {
-    this.eventHandlers.get(eventType)?.forEach(handler => handler(event))
+    const eventHandler = this.eventHandlers.get(eventType)
+    if (eventHandler) {
+      eventHandler.forEach(handler => handler(event))
+    } else {
+      console.warn(`No handler registered for event type: ${eventType}`)
+    }
   }
 
   /**
