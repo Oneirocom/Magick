@@ -111,10 +111,7 @@ class CoreEventClient {
   }
 
   triggerEvent(eventType: string, event: EventPayload): void {
-    console.log(`Triggering event: ${eventType}`)
     const eventHandler = this.eventHandlers.get(eventType)
-    console.log('EVENT HANDLERS:', this.eventHandlers)
-    console.log('TRIGGER EVENT', eventType, eventHandler)
     if (eventHandler) {
       eventHandler.forEach(handler => handler(event))
     } else {
