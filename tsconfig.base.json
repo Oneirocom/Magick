@@ -59,6 +59,9 @@
       "@magickml/core-plugin": ["packages/plugins/core/src/index.ts"],
       "@magickml/credentials": ["packages/server/credentials/src/index.ts"],
       "@magickml/discord-plugin": ["packages/plugins/discord/src/index.ts"],
+      "@magickml/embedder-api-auth": [
+        "packages/embedder/api/auth/src/index.ts"
+      ],
       "@magickml/embedder-api-jobs": [
         "packages/embedder/api/jobs/src/index.ts"
       ],
@@ -217,9 +220,6 @@
       "@magickml/types": ["packages/@types/src/index.ts"],
       "@magickml/utils": ["packages/shared/utils/src/index.ts"],
       "@magickml/vercel-sdk-core": ["packages/server/vercel/core/src/index.ts"],
-      "@magickml/embedder-api-auth": [
-        "packages/embedder/api/auth/src/index.ts"
-      ],
       "@packmvp": ["../anne/server/client/sdk.ts"],
       "chat-window": ["packages/client/chat/src/index.ts"],
       "client/core": ["packages/client/core/src/index.ts"],

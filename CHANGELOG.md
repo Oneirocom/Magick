@@ -1,3 +1,68 @@
+## 0.0.11-9 (2024-08-14)
+
+
+### 🚀 Features
+
+- Add useEffect hooks for deletion and upload updates ([3b23c3054](https://github.com/Oneirocom/Magick/commit/3b23c3054))
+- Add pack deletion endpoint and job creation ([8a0d9fdbb](https://github.com/Oneirocom/Magick/commit/8a0d9fdbb))
+- Add dropdown menu for knowledge pack card actions ([5a7465f90](https://github.com/Oneirocom/Magick/commit/5a7465f90))
+- Add deletePackWithBody endpoint for pack deletion ([c4799ea6d](https://github.com/Oneirocom/Magick/commit/c4799ea6d))
+- Update packEndpoints to use new DeletePackResponseSchema ([c180f4e79](https://github.com/Oneirocom/Magick/commit/c180f4e79))
+- Add credentialsManager interface ([ac570fd3e](https://github.com/Oneirocom/Magick/commit/ac570fd3e))
+- Add ILLMService interface ([aa1c51667](https://github.com/Oneirocom/Magick/commit/aa1c51667))
+- Update LanguageModelV1 interface to extend LanguageModel ([85e317e97](https://github.com/Oneirocom/Magick/commit/85e317e97))
+- Add ICredentialsManager interface ([66d6d212c](https://github.com/Oneirocom/Magick/commit/66d6d212c))
+- Add health check API endpoint on embedder ([62b6e16b9](https://github.com/Oneirocom/Magick/commit/62b6e16b9))
+- Add worldId to AgentConfigBuilder options ([2481bf029](https://github.com/Oneirocom/Magick/commit/2481bf029))
+- inital grimoire cli ([0eb80caff](https://github.com/Oneirocom/Magick/commit/0eb80caff))
+- Add Grimoire configuration file ([c4868ab68](https://github.com/Oneirocom/Magick/commit/c4868ab68))
+- Add Grimoire playground ([93c1e11b9](https://github.com/Oneirocom/Magick/commit/93c1e11b9))
+- setup type declarations for Nitro and NitroApp ([9c7460897](https://github.com/Oneirocom/Magick/commit/9c7460897))
+- Add Grimoire core module ([003a97e14](https://github.com/Oneirocom/Magick/commit/003a97e14))
+- Init base nova agent plugin ([1061f3a76](https://github.com/Oneirocom/Magick/commit/1061f3a76))
+- Add new Grimoire playground nodes and exports ([c2fc6b27d](https://github.com/Oneirocom/Magick/commit/c2fc6b27d))
+- Initialize agent plugin and update dependencies ([8cef0ce12](https://github.com/Oneirocom/Magick/commit/8cef0ce12))
+- Add utility functions for defining different types of nodes ([ead241391](https://github.com/Oneirocom/Magick/commit/ead241391))
+- Add create-grimoire-app CLI command for downloading templates ([2833f871b](https://github.com/Oneirocom/Magick/commit/2833f871b))
+- Add CGA (create-grimoire-app) module to build configuration and package.json ([c0a625405](https://github.com/Oneirocom/Magick/commit/c0a625405))
+- Add hello-agent plugin to grimoire playground ([63903936c](https://github.com/Oneirocom/Magick/commit/63903936c))
+- Add message schema to grimoire playground ([d01cb4192](https://github.com/Oneirocom/Magick/commit/d01cb4192))
+- grimoire nodes module plugin ([093b1df1e](https://github.com/Oneirocom/Magick/commit/093b1df1e))
+- Add nodeFeatures and node module definition ([7d46edbb4](https://github.com/Oneirocom/Magick/commit/7d46edbb4))
+- add schema definers ([496c02c53](https://github.com/Oneirocom/Magick/commit/496c02c53))
+- add schema validator/getter utils ([8f85f2998](https://github.com/Oneirocom/Magick/commit/8f85f2998))
+- add schema features and type defs ([605da5bac](https://github.com/Oneirocom/Magick/commit/605da5bac))
+- add schema runtime plugin ([c1d370dbb](https://github.com/Oneirocom/Magick/commit/c1d370dbb))
+- add schema module ([c75778987](https://github.com/Oneirocom/Magick/commit/c75778987))
+- Add @magickml/schemas module to grimoire framework ([8b5a819a0](https://github.com/Oneirocom/Magick/commit/8b5a819a0))
+- Runtime integration for spells ([61f12f81d](https://github.com/Oneirocom/Magick/commit/61f12f81d))
+- spells module ([3326533df](https://github.com/Oneirocom/Magick/commit/3326533df))
+- Add @magickml/spells module to the grimoire framework ([196017f2e](https://github.com/Oneirocom/Magick/commit/196017f2e))
+- tool definers, utils and types ([a2b1a8cf4](https://github.com/Oneirocom/Magick/commit/a2b1a8cf4))
+- tool virtuals and plugin ([e163481c4](https://github.com/Oneirocom/Magick/commit/e163481c4))
+- spells feature plugin ([60c75f2cc](https://github.com/Oneirocom/Magick/commit/60c75f2cc))
+- grimoire tools feature def and module ([90a2ce265](https://github.com/Oneirocom/Magick/commit/90a2ce265))
+- Add defineSpellGraph function for defining spell graphs, update test spell ([8698804aa](https://github.com/Oneirocom/Magick/commit/8698804aa))
+- Update dependencies in grimoire tools module ([464b874aa](https://github.com/Oneirocom/Magick/commit/464b874aa))
+- portal module runtime utils and plugin ([6503e5636](https://github.com/Oneirocom/Magick/commit/6503e5636))
+- Add portal module def ([7f45e7e41](https://github.com/Oneirocom/Magick/commit/7f45e7e41))
+- Add knowledge features and types ([b33b35202](https://github.com/Oneirocom/Magick/commit/b33b35202))
+- Add knowledge module plugin ([e109d20df](https://github.com/Oneirocom/Magick/commit/e109d20df))
+- Add knowledge module definition ([6384380d2](https://github.com/Oneirocom/Magick/commit/6384380d2))
+- Add @magickml/portal and @magickml/knowledge modules to frimoire framework ([369bc0eb4](https://github.com/Oneirocom/Magick/commit/369bc0eb4))
+- enable tools module ([df8dc65fa](https://github.com/Oneirocom/Magick/commit/df8dc65fa))
+
+### 🩹 Fixes
+
+- Fix paths in server config ([fc1584e8b](https://github.com/Oneirocom/Magick/commit/fc1584e8b))
+- Add optional debug output to redis pubsub ([508a76be3](https://github.com/Oneirocom/Magick/commit/508a76be3))
+
+### ❤️  Thank You
+
+- coffeeorgreentea @coffeeorgreentea
+- Jakob
+- Michael
+
 ## 0.0.11-8 (2024-06-28)
 
 
