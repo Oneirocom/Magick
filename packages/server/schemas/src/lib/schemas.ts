@@ -25,6 +25,7 @@ export const spellSchema = Type.Object(
   {
     id: Type.String(),
     projectId: Type.String(),
+    worldId: Type.Optional(Type.Union([Type.String(), Type.Null()])),
     name: Type.String(),
     type: Type.Optional(Type.String()),
     graph: Type.Object({
