@@ -9,6 +9,7 @@ import { z } from 'zod'
 
 import { fileURLToPath } from 'url'
 
+//@ts-ignore
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
 
