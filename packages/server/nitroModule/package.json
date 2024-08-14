@@ -22,6 +22,7 @@
     "nitropack": "^2.9.6",
     "pathe": "1.1.2",
     "tslib": "^2.3.0",
-    "@magickml/agents": "0.0.1"
+    "@magickml/agents": "0.0.1",
+    "@magickml/agent-server-schemas": "0.0.1"
   }
 }

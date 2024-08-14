@@ -1,16 +1,8 @@
 {
-  "name": "agents-v2",
+  "name": "server/agents-v2",
   "$schema": "../../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "packages/server/agents-v2/src",
   "projectType": "library",
-  "release": {
-    "version": {
-      "generatorOptions": {
-        "packageRoot": "dist/{projectRoot}",
-        "currentVersionResolver": "git-tag"
-      }
-    }
-  },
   "tags": [],
   "targets": {
     "build": {
@@ -22,11 +14,6 @@
         "packageJson": "packages/server/agents-v2/package.json",
         "main": "packages/server/agents-v2/src/index.ts",
         "assets": ["packages/server/agents-v2/*.md"]
-      }
-    },
-    "nx-release-publish": {
-      "options": {
-        "packageRoot": "dist/{projectRoot}"
       }
     },
     "test": {

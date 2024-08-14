@@ -176,10 +176,12 @@
       "plugins/*",
       "packages/embedder/**/*",
       "packages/shared/*",
+      "!packages/shared/llm-service-types",
       "!packages/server/cloud-agent-manager",
       "!packages/server/cloud-agent-worker",
       "!packages/server/communication",
       "!packages/server/meter",
+      "!packages/server/agents-v2",
       "!portal/cloud/packages/ideClient",
       "packages/server/agent-service"
     ],
@@ -192,7 +194,9 @@
       "exclude": [
         "server-cloud-agent-manager",
         "server-cloud-agent-worker",
+        "shared/llm-service-types",
         "server/communication",
+        "server/agents-v2",
         "server/meter",
         "ideClient"
       ]
