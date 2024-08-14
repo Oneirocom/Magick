@@ -134,7 +134,7 @@ export class Agent
 
     this.commandHub = new CommandHub<this>(this, this.pubsub)
 
-    if (process.env['ENABLE_SERAPH']) {
+    if (process.env['ENABLE_SERAPH'] === 'true') {
       this.seraphManager = new SeraphManager({
         seraphOptions: {
           openAIApiKey: process.env.OPENAI_API_KEY || '',
