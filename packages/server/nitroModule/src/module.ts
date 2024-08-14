@@ -4,10 +4,10 @@ import { NitroModule } from 'nitropack/types'
 import { fileURLToPath } from 'node:url'
 import consola from 'consola'
 
-import { getMagickNodes, getMagickPlugins } from './helpers/scan'
+import { getSpells } from './helpers/scan'
 
 import { Application } from '@magickml/agent-server'
-import { AgentV2 } from '@magickml/agents'
+import { Agent } from '@magickml/agents'
 
 declare module 'nitropack' {
   interface NitroOptions {
@@ -16,13 +16,12 @@ declare module 'nitropack' {
 
   interface Nitro {
     grimoire: {
-      scannedNodes: any
-      scannedPlugins: any
+      scannedSpells: any
     }
   }
 
   interface NitroApp {
-    agent: AgentV2
+    agent: Agent
     agentServer: Application
   }
 }
@@ -34,26 +33,17 @@ export default <NitroModule>{
       fileURLToPath(new URL(path, import.meta.url))
 
     consola.info('Setting up Grimoire')
-    // 1: Initalize magick object
+    // 1: Initialize magick object
     nitro.grimoire = {
-      scannedNodes: [],
-      scannedPlugins: [],
+      scannedSpells: [],
     }
 
     // Scan the folders for Magick dependencies
-    const nodes = await getMagickNodes(nitro)
-    const magickPlugins = await getMagickPlugins(nitro)
+    const spells = await getSpells(nitro)
+    nitro.grimoire.scannedSpells = spells
 
-    // Store the scanned nodes
-    nitro.grimoire.scannedNodes = nodes
-    nitro.grimoire.scannedPlugins = magickPlugins
-
-    nitro?.grimoire?.scannedNodes?.forEach((node: { name: string }) => {
-      consola.info(`Registered node: ${node.name.split('.')[0]}`)
-    })
-
-    nitro?.grimoire?.scannedPlugins?.forEach((node: { name: string }) => {
-      consola.info(`Registered plugin: ${node.name.split('.')[0]}`)
+    nitro?.grimoire?.scannedSpells?.forEach((spell: { name: string }) => {
+      consola.info(`Registered spell: ${spell.name.split('.')[0]}`)
     })
 
     if (nitro.options.imports) {
@@ -69,26 +59,25 @@ export default <NitroModule>{
       fileURLToPath(new URL('runtimes/', import.meta.url))
     )
 
-    // Load the plugins into a virtual file to make them accessible from the plugin
-    nitro.options.virtual['#magick/plugins'] = async () => {
-      const plugins = await getMagickPlugins(nitro)
+    // Load the spells into a virtual file to make them accessible from the plugin
+    nitro.options.virtual['#magick/spells'] = async () => {
+      const spells = await getSpells(nitro)
 
-      // strip .ts from plugin name
-      const formatName = (pluginName: string) => pluginName.replace(/\.ts$/, '')
+      // strip .json from spell name
+      const formatName = (spellName: string) => spellName.replace(/\.json$/, '')
 
-      const imports = plugins
+      const imports = spells
         .map(
-          plugin =>
-            `import ${formatName(plugin.name)} from '${plugin.handler}';`
+          spell => `import ${formatName(spell.name)} from '${spell.handler}';`
         )
         .join('\n')
 
-      const exportArray = plugins
+      const exportArray = spells
         .map(
-          plugin => `
-          ...(Array.isArray(${formatName(plugin.name)}) ? ${formatName(
-            plugin.name
-          )} : [${formatName(plugin.name)}])
+          spell => `
+          ...(Array.isArray(${formatName(spell.name)}) ? ${formatName(
+            spell.name
+          )} : [${formatName(spell.name)}])
         `
         )
         .join(', ')
@@ -96,18 +85,15 @@ export default <NitroModule>{
       return `
     ${imports}
     
-const magickPlugins = [${exportArray}];
+const magickSpells = [${exportArray}];
 
-export default magickPlugins;
+export default magickSpells;
       `.trim()
     }
 
-    nitro.options.externals.inline.push('#magick/plugins')
-    nitro.options.externals.inline.push(
-      resolve('runtimes/plugins/initializeAgent')
-    )
+    nitro.options.externals.inline.push('#magick/spells')
 
-    // // load out plugins
+    // load out plugins
     nitro.options.plugins.push(resolve('runtimes/plugins/initializeAgent'))
   },
 }

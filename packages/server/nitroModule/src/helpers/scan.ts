@@ -52,6 +52,17 @@ export async function getMagickNodes(nitro: Nitro): Promise<NodeHandler[]> {
   })
 }
 
+export async function getSpells(nitro: Nitro): Promise<NodeHandler[]> {
+  const nodeFiles = await scanFiles(nitro, 'spells')
+
+  console.log('spells files', nodeFiles)
+
+  return nodeFiles.map(file => {
+    const name = file.path.replace(/.*\/nodes\/(.*)\.(js|ts)/, '$1')
+    return { name, handler: file.fullPath }
+  })
+}
+
 export async function getMagickPlugins(nitro: Nitro): Promise<NodeHandler[]> {
   const pluginFiles = await scanFiles(nitro, 'magickPlugins')
 
