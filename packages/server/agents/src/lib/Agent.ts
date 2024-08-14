@@ -149,7 +149,7 @@ export class Agent
     }
 
     this.pluginManager = new PluginManager<this>({
-      pluginDirectory: process.env.PLUGIN_DIRECTORY || './plugins',
+      pluginDirectory: process.env.PLUGIN_DIRECTORY ?? './plugins',
       connection: this.app.get('redis'),
       agent: this,
       pubSub: this.app.get('pubsub'),
@@ -171,15 +171,27 @@ export class Agent
     this.logger.info('New agent created: %s | %s', this.name, this.id)
   }
 
-  initialize() {
+  async initialize() {
     // initialize the core commands
     // These are used to remotely control the agent
     this.initializeCoreCommands()
 
-    this.pluginManager.loadRawPlugins(plugins)
+    await this.pluginManager.loadRawPlugins(plugins)
 
     // initialzie spellbook
-    this.initializeSpellbook()
+    await this.initializeSpellbook()
+
+    this.logger.info('Agent fully initialized: %s | %s', this.name, this.id)
+  }
+
+  public static async create(
+    agentData: AgentInterface,
+    pubsub: RedisPubSub,
+    app: Application
+  ): Promise<Agent> {
+    const agent = new Agent(agentData, pubsub, app)
+    await agent.initialize()
+    return agent
   }
 
   formatEvent<Data = Record<string, unknown>, Y = Record<string, unknown>>(
@@ -246,7 +258,10 @@ export class Agent
     }
 
     const spells = spellsData.data
+    console.log('SPELLS', spells)
     await this.spellbook.loadSpells(spells)
+
+    return this.spellbook.loadSpells(spells)
   }
 
   startHeartbeat() {
