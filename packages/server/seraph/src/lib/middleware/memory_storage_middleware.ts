@@ -7,11 +7,10 @@ import { metadataManager } from '../cognitive_functions/memory'
 import { SeraphCore } from '../seraphCore'
 import { z } from 'zod'
 
-import { fileURLToPath } from 'url'
+// import { fileURLToPath } from 'url'
 
-//@ts-ignore
-const __filename = fileURLToPath(import.meta.url)
-const __dirname = path.dirname(__filename)
+// @ts-ignore
+// const __dirname = path.dirname(fileURLToPath(import.meta.url))
 
 class MemoryStorageMiddleware implements IMiddleware {
   name = 'memoryStorage'

@@ -6,11 +6,11 @@ import { BaseCognitiveFunction } from '../../base_cognitive_function'
 import { metadataManager } from './metadata_manager'
 import { SeraphCore } from '../../seraphCore'
 
-import { fileURLToPath } from 'url'
+// import { fileURLToPath } from 'url'
 
 //@ts-ignore
-const __filename = fileURLToPath(import.meta.url)
-const __dirname = path.dirname(__filename)
+// const __filename = fileURLToPath(import.meta.url)
+// const __dirname = path.dirname(__filename)
 
 interface MemoryMetadata {
   text: string
