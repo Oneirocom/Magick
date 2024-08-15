@@ -234,6 +234,11 @@ export async function processEmbedJob(jobId: string) {
       .build()
 
     for (const loader of loaders) {
+      if (!loader || typeof loader !== 'object' || !loader.type) {
+        consola.error(`Invalid loader object: ${JSON.stringify(loader)}`)
+        continue // Skip this loader
+      }
+      console.log('Loader object:', JSON.stringify(loader, null, 2))
       const { type } = loader
       consola.info(
         `[processEmbedJob] type: ${type}, loader: ${JSON.stringify(
