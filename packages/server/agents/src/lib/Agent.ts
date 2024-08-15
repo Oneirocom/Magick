@@ -14,7 +14,10 @@ import { AgentInterface, SpellInterface } from '@magickml/agent-server-schemas'
 import { RedisPubSub } from '@magickml/redis-pubsub'
 import { PluginManager } from '@magickml/agent-plugin-manager'
 import { CommandHub } from '@magickml/agent-command-hub'
-import { AGENT_HEARTBEAT_INTERVAL_MSEC } from '@magickml/server-config'
+import {
+  AGENT_HEARTBEAT_INTERVAL_MSEC,
+  POSTHOG_ENABLED,
+} from '@magickml/server-config'
 import {
   ActionPayload,
   EventPayload,
@@ -416,7 +419,9 @@ export class Agent
       return
     }
 
-    this.app.get('posthog').track(eventType, event, agentId)
+    if (POSTHOG_ENABLED) {
+      this.app.get('posthog').track(eventType, event, agentId)
+    }
 
     return (this.app.service('graphEvents') as any).create({
       sender,
