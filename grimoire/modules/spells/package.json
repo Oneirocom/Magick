@@ -24,7 +24,8 @@
     "@magickml/behave-graph": "^0.14.15",
     "consola": "^3.2.3",
     "md5": "^2.3.0",
-    "nitro": "npm:nitro-nightly@3x"
+    "nitro": "npm:nitro-nightly@3x",
+    "unimport": "^3.7.2"
   },
   "devDependencies": {
     "@types/md5": "^2.3.5",

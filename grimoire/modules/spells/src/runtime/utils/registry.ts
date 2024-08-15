@@ -1,7 +1,7 @@
 import type { Spell, SpellRegistry } from '../../types'
 
 // This is a mock of our existing system
-class SpellRegistryManager implements SpellRegistry {
+export class SpellRegistryManager implements SpellRegistry {
   private spells: Map<string, Spell> = new Map()
 
   get(id: string): Spell | undefined {

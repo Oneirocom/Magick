@@ -1,7 +1,12 @@
 // @ts-ignore
-import { handlers as spells } from "#spells-virtual/spells";
+import { spells } from '#spells-virtual/spells'
 
-import type { BaseVirtualHandler } from "@gtc-nova/kit/runtime";
-import type { Spell } from "../types";
+import type { Spell } from '../types'
 
-export const getVirtualSpells = (): BaseVirtualHandler<Spell>[] => spells;
+interface ScannedSpell {
+  path: string
+  data: Spell
+  name: string
+}
+
+export const getVirtualSpells = (): ScannedSpell[] => spells

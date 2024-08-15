@@ -3,6 +3,7 @@ import { nodeRegistry } from '../utils'
 import { useRuntimeConfig } from 'nitro/runtime'
 import type { NodeFeatures } from '../../features'
 import { getVirtualNodes } from '../exports'
+import { nitro } from 'node:process'
 
 export default defineNovaPlugin<NodeFeatures, any>({
   useRuntimeConfig,
