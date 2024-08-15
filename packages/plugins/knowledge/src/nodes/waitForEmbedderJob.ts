@@ -102,6 +102,7 @@ export const waitForEmbedderJob = makeAsyncNodeDefinition({
         loaderRes = await embedder.getLoader({
           params: { id: packId, loaderId },
         })
+        console.log('loaderResponse', loaderRes.status)
       } catch (err) {
         console.error('Error polling loader:', err)
         state.isBusy = false
