@@ -366,6 +366,13 @@ export class Spellbook<
     }
   }
 
+  clearSpells() {
+    this.logger.debug(
+      `Clearing all spells from spellbook for agent ${this.agent.id}`
+    )
+    this.spells.clear()
+  }
+
   async isChannelDisabled(eventKey: string) {
     const agentChannel = await this.prisma.agent_channels
       .findFirst({
