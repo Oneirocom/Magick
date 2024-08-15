@@ -5,7 +5,7 @@ import { MemoryRetrieval } from './cognitive_functions/memory/memory'
 import SeraphCLI from './seraphCLI'
 import { MemoryStorageMiddleware } from './middleware/memory_storage_middleware'
 import { BashExecutor } from './cognitive_functions/bash_executor'
-import { GitManager } from './cognitive_functions/git_manager'
+// import { GitManager } from './cognitive_functions/git_manager'
 import { importPrivatePrompts } from './utils'
 
 dotenv.config()

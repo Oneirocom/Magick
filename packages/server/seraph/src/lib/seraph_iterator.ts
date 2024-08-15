@@ -1,6 +1,6 @@
 import { SeraphCore } from './seraphCore'
 import { LLMManager } from './llm_manager'
-import { ConsoleLogWriter } from 'drizzle-orm'
+// import { ConsoleLogWriter } from 'drizzle-orm'
 
 class SeraphIterator implements AsyncIterator<string> {
   private seraph: SeraphCore
@@ -30,7 +30,7 @@ class SeraphIterator implements AsyncIterator<string> {
     )
 
     let insideMessage = false
-    const partialOpeningTag = ''
+    // const partialOpeningTag = ''
 
     const stream = this.llmManager.streamResponse(
       this.systemPrompt,
