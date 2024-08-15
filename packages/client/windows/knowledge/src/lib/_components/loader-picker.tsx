@@ -10,6 +10,8 @@ import {
   YoutubeIcon,
   PresentationIcon,
 } from 'lucide-react'
+import { useSnackbar } from 'notistack'
+
 import {
   type LoaderType,
   TextLoaderSchema,
@@ -28,7 +30,6 @@ import { TextareaWithLabel, InputWithLabel, Button } from '@magickml/client-ui'
 import { createEmbedderReactClient } from '@magickml/embedder-client-react'
 import { useAtomValue } from 'jotai'
 import { activePackIdAtom } from '../_pkg/state'
-import toast from 'react-hot-toast'
 import FileDropper from './fileDropper'
 import { ZodTypeAny } from 'zod'
 import {
@@ -120,8 +121,22 @@ export const LoaderPicker: React.FC<Props> = ({
   const [newKnowledge, setNewKnowledge] = useState<AddKnowledge[]>([])
 
   const [getPresignedUrl, getPresignedUrlState] = useGetPresignedUrlMutation()
-  const [userEditedFilePathOrUrl, setUserEditedFilePathOrUrl] = useState('')
   const isLoading = getPresignedUrlState.isLoading
+  const { enqueueSnackbar } = useSnackbar()
+  const [userEditedUrlOrPath, setUserEditedUrlOrPath] = useState('')
+
+  useEffect(() => {
+    if (selectedType) {
+      const initialConfig: Record<string, string> = {}
+      Object.keys(loaderSchemas[selectedType]._def.shape()).forEach(
+        (key: string) => {
+          initialConfig[key] = ''
+        }
+      )
+      setConfig(initialConfig)
+      setUserEditedUrlOrPath('')
+    }
+  }, [selectedType])
 
   const handleFileUpload = async (
     event: React.ChangeEvent<HTMLInputElement>
@@ -177,7 +192,9 @@ export const LoaderPicker: React.FC<Props> = ({
             status: 'uploaded',
           }
         } else if ('error' in response) {
-          toast.error('Error generating URL for upload')
+          enqueueSnackbar('Error generating URL for upload', {
+            variant: 'error',
+          })
 
           // Update the file status to 'error' if URL generation fails
           setNewKnowledge(prevKnowledge =>
@@ -196,7 +213,9 @@ export const LoaderPicker: React.FC<Props> = ({
             status: 'error',
           }
         } else {
-          toast.error('Error uploading file. Please try again.')
+          enqueueSnackbar('Error uploading file. Please try again.', {
+            variant: 'error',
+          })
 
           // Update the file status to 'error' if upload fails
           setNewKnowledge(prevKnowledge =>
@@ -241,38 +260,154 @@ export const LoaderPicker: React.FC<Props> = ({
     {
       onSuccess: async () => {
         await invalidate()
-        toast.success('Loader added successfully.')
+        enqueueSnackbar('Loader added successfully.', {
+          variant: 'success',
+        })
         setName('')
         setDescription('')
         setConfig({})
         setSelectedType(null)
       },
       onError: () => {
-        toast.error('Failed to add loader.')
+        enqueueSnackbar('Failed to add loader.', {
+          variant: 'error',
+        })
       },
     }
   )
 
+  const handleInputChange = (key: string, value: string) => {
+    if (key === 'name') {
+      setName(value)
+    } else if (key === 'description') {
+      setDescription(value)
+    } else {
+      setConfig(prevConfig => ({
+        ...prevConfig,
+        [key]: value,
+      }))
+    }
+
+    if (
+      key === 'filePathOrUrl' ||
+      key === 'url' ||
+      key === 'urlOrContent' ||
+      key === 'videoIdOrUrl'
+    ) {
+      setUserEditedUrlOrPath(value)
+      setConfig(prevConfig => ({
+        ...prevConfig,
+        filePathOrUrl: value,
+        urlOrContent: value,
+        videoIdOrUrl: value,
+      }))
+    }
+  }
+
   const handleCreateLoader = async (e: React.FormEvent) => {
     e.preventDefault()
     if (!selectedType) return
-    if (!config.filePathOrUrl) {
-      toast.error('File path or URL is required loaders')
+
+    const isUrlBasedLoader = [
+      'web',
+      'youtube',
+      'youtube_channel',
+      'youtube_search',
+      'sitemap',
+    ].includes(selectedType)
+
+    const urlField = selectedType === 'youtube' ? 'videoIdOrUrl' : 'url'
+
+    if (isUrlBasedLoader && !userEditedUrlOrPath) {
+      enqueueSnackbar(
+        `${
+          urlField.charAt(0).toUpperCase() + urlField.slice(1)
+        } is required for this loader type`,
+        {
+          variant: 'error',
+        }
+      )
       return
     }
 
-    await createLoader({
-      type: selectedType,
-      name,
-      description,
-      config: {
-        ...config,
+    let loaderConfig: any
+
+    switch (selectedType) {
+      case 'text':
+        loaderConfig = { type: 'text', text: config.text || '' }
+        break
+      case 'youtube':
+        loaderConfig = { type: 'youtube', videoIdOrUrl: userEditedUrlOrPath }
+        break
+      case 'youtube_channel':
+        loaderConfig = {
+          type: 'youtube_channel',
+          youtubeChannelId: userEditedUrlOrPath,
+        }
+        break
+      case 'youtube_search':
+        loaderConfig = {
+          type: 'youtube_search',
+          youtubeSearchString: userEditedUrlOrPath,
+        }
+        break
+      case 'web':
+        loaderConfig = { type: 'web', urlOrContent: userEditedUrlOrPath }
+        break
+      case 'sitemap':
+        loaderConfig = { type: 'sitemap', url: userEditedUrlOrPath }
+        break
+      case 'pdf':
+      case 'docx':
+      case 'excel':
+      case 'ppt':
+        loaderConfig = {
+          type: selectedType,
+          filePathOrUrl: config.filePathOrUrl || userEditedUrlOrPath,
+        }
+        break
+      default:
+        throw new Error(`Unsupported loader type: ${selectedType}`)
+    }
+
+    try {
+      console.log(
+        'Full loader data:',
+        JSON.stringify(
+          {
+            type: selectedType,
+            name,
+            description,
+            config: loaderConfig,
+            isUpload: !isUrlBasedLoader,
+            path: isUrlBasedLoader ? userEditedUrlOrPath : config.filePathOrUrl,
+          },
+          null,
+          2
+        )
+      )
+
+      await createLoader({
         type: selectedType,
-      } as any,
-      isUpload: true,
-      path: config.filePathOrUrl,
-    })
-    setAwaitingUploadUpdate(true)
+        name,
+        description,
+        config: loaderConfig,
+        isUpload: !isUrlBasedLoader,
+        path: isUrlBasedLoader ? userEditedUrlOrPath : config.filePathOrUrl,
+      })
+      setAwaitingUploadUpdate(true)
+    } catch (error) {
+      console.error('Error creating loader:', error)
+      if (error instanceof Error) {
+        console.error('Error details:', error.message)
+      }
+      enqueueSnackbar(
+        'Failed to add loader. Please check your input and try again.',
+        {
+          variant: 'error',
+        }
+      )
+    }
   }
 
   const handleCancel = (e: React.MouseEvent) => {
@@ -303,8 +438,9 @@ export const LoaderPicker: React.FC<Props> = ({
         ...prevConfig,
         source: sourceUrl,
         filePathOrUrl: sourceUrl,
+        urlOrContent: sourceUrl,
       }))
-      setUserEditedFilePathOrUrl(sourceUrl)
+      setUserEditedUrlOrPath(sourceUrl)
     }
     if (name) {
       setName(name)
@@ -329,6 +465,14 @@ export const LoaderPicker: React.FC<Props> = ({
       ? { sourceUrl: uploadedKnowledge.sourceUrl, name: uploadedKnowledge.name }
       : { sourceUrl: '', name: '' }
   }
+
+  const isUrlBasedLoader = [
+    'web',
+    'youtube',
+    'youtube_channel',
+    'youtube_search',
+    'sitemap',
+  ].includes(selectedType || '')
 
   return (
     <div className="w-full flex gap-4 flex-wrap mx-auto items-center">
@@ -388,31 +532,39 @@ export const LoaderPicker: React.FC<Props> = ({
             {Object.keys(loaderSchemas[selectedType]._def.shape()).map(key => {
               if (key === 'type') return null
               const splitKey = splitCamelCase(key)
+              const isUrlField =
+                key === 'filePathOrUrl' ||
+                key === 'url' ||
+                key === 'urlOrContent' ||
+                key === 'videoIdOrUrl'
+
+              if (isUrlBasedLoader && key === 'filePathOrUrl') return null
 
               return (
                 <InputWithLabel
                   key={splitKey}
                   id={key}
-                  label={splitKey}
+                  label={
+                    isUrlField
+                      ? isUrlBasedLoader
+                        ? selectedType === 'youtube'
+                          ? 'Video ID or URL'
+                          : 'URL'
+                        : 'URL or File Path'
+                      : splitKey
+                  }
                   name={splitKey}
                   className="w-full"
-                  onChange={e => {
-                    const value = e.target.value
-                    const safeValue = key === 'filePathOrUrl' ? value : value
-                    setConfig(prevConfig => ({
-                      ...prevConfig,
-                      [key]: safeValue,
-                    }))
-
-                    // If the key is 'filePathOrUrl', update the userEditedFilePathOrUrl state
-                    if (key === 'filePathOrUrl') {
-                      setUserEditedFilePathOrUrl(safeValue)
-                    }
-                  }}
-                  value={
-                    key === 'filePathOrUrl'
-                      ? userEditedFilePathOrUrl
-                      : config[key]
+                  onChange={e => handleInputChange(key, e.target.value)}
+                  value={isUrlField ? userEditedUrlOrPath : config[key] || ''}
+                  placeholder={
+                    isUrlField
+                      ? isUrlBasedLoader
+                        ? selectedType === 'youtube'
+                          ? 'Enter Video ID or URL'
+                          : 'Enter URL'
+                        : 'Enter URL or file path'
+                      : ''
                   }
                 />
               )
