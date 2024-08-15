@@ -135,19 +135,6 @@ export async function createDeletePackJob(packId: string) {
   consola.info(`Delete pack job created for pack ${packId}`)
 }
 
-function extractRelevantPathAndFileName(url: string) {
-  const urlRegex = /https:\/\/storage\.googleapis\.com\/[^/]+\/(.+)\?/
-  const match = url.match(urlRegex)
-
-  if (match) {
-    const relevantPath = decodeURIComponent(match[1])
-    const fileName = relevantPath.split('/').pop() || ''
-    return { relevantPath, fileName }
-  }
-
-  return { relevantPath: url, fileName: null }
-}
-
 export async function processDeleteLoaderJob(
   loaderId: string,
   filePath: string
@@ -196,6 +183,27 @@ export async function processDeletePackJob(packId: string) {
     consola.error(`Error deleting pack ${packId}:`, error)
   }
 }
+
+function getRelevantPath(loader: Loader): string {
+  const config = loader.config as any
+  switch (loader.type) {
+    case 'text':
+    case 'youtube':
+    case 'youtube_channel':
+    case 'youtube_search':
+    case 'web':
+    case 'sitemap':
+      return config.url || config.urlOrContent || ''
+    case 'pdf':
+    case 'docx':
+    case 'excel':
+    case 'ppt':
+      return config.filePathOrUrl || ''
+    default:
+      return ''
+  }
+}
+
 export async function processEmbedJob(jobId: string) {
   // tood: just pass job in instead of db call
   const job = await embedderDb
@@ -235,10 +243,7 @@ export async function processEmbedJob(jobId: string) {
         )}`
       )
       const res = await app.addLoader(createLoader(loader))
-
-      const { relevantPath } = extractRelevantPathAndFileName(
-        loader.config.filePathOrUrl
-      )
+      const relevantPath = getRelevantPath(loader)
 
       // update the loader status
       await embedderDb
