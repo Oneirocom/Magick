@@ -1,4 +1,3 @@
-/* eslint-disable */
 export default {
   displayName: 'agents',
   preset: '../../../jest.preset.js',
