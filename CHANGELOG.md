@@ -1,3 +1,15 @@
+## 0.0.12-0 (2024-08-16)
+
+
+### 🚀 Features
+
+- Add @magickml/nodes, @magickml/portal, and @magickml/spells deps to grimoire framework ([5f41dc373](https://github.com/Oneirocom/Magick/commit/5f41dc373))
+- spell scanning ([c7e6261b6](https://github.com/Oneirocom/Magick/commit/c7e6261b6))
+
+### ❤️  Thank You
+
+- coffeeorgreentea @coffeeorgreentea
+
 ## 0.0.11-10 (2024-08-14)
 
 This was a version bump only, there were no code changes.
