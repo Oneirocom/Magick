@@ -1,17 +1,9 @@
 {
-  "name": "embedder-api-auth",
+  "name": "embedder/api/auth",
   "$schema": "../../../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "packages/embedder/api/auth/src",
   "projectType": "library",
-  "release": {
-    "version": {
-      "generatorOptions": {
-        "packageRoot": "dist/{projectRoot}",
-        "currentVersionResolver": "git-tag"
-      }
-    }
-  },
-  "tags": [],
+  "tags": ["release"],
   "targets": {
     "build": {
       "executor": "@nx/js:tsc",
@@ -21,11 +13,6 @@
         "main": "packages/embedder/api/auth/src/index.ts",
         "tsConfig": "packages/embedder/api/auth/tsconfig.lib.json",
         "assets": ["packages/embedder/api/auth/*.md"]
-      }
-    },
-    "nx-release-publish": {
-      "options": {
-        "packageRoot": "dist/{projectRoot}"
       }
     },
     "test": {
