@@ -7,7 +7,8 @@
     "@magickml/embedder-api-packs": "0.0.1",
     "@magickml/embedder-api-loaders": "0.0.1",
     "@magickml/embedder-api-jobs": "0.0.1",
-    "zod": "^3.22.4"
+    "zod": "^3.22.4",
+    "@magickml/embedder-api-auth": "0.0.1"
   },
   "type": "commonjs",
   "main": "./src/index.js",
