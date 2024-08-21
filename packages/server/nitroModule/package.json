@@ -15,7 +15,7 @@
     }
   },
   "bin": {
-    "grimoire": "./src/grimoire.js"
+    "grimoire": "./grimoire.js"
   },
   "scripts": {
     "grimoire:init": "node ./src/grimoire.js init"
@@ -34,4 +34,3 @@
     "commander": "^12.1.0"
   }
 }
-

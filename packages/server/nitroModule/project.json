@@ -18,9 +18,15 @@
         "outputPath": "dist/packages/server/nitroModule",
         "tsConfig": "packages/server/nitroModule/tsconfig.lib.json",
         "main": "packages/server/nitroModule/src/index.ts",
-        "assets": ["packages/server/nitroModule/*.md"]
+        "assets": [
+          "packages/server/nitroModule/*.md",
+          {
+            "glob": "grimoire.js",
+            "input": "packages/server/nitroModule/src",
+            "output": "."
+          }
+        ]
       }
     }
   }
 }
-
