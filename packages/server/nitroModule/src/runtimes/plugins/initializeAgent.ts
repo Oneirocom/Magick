@@ -19,7 +19,17 @@ export default defineNitroPlugin(async nitroApp => {
 
   nitroApp.agentServer = app
 
-  const agentId = runtimeConfig.agentId
+  let agentId: string | undefined
+
+  try {
+    const configFile = fs.readFileSync('agent-config.json', 'utf8')
+    const configData = JSON.parse(configFile)
+    agentId = configData.AGENT_ID
+  } catch (error) {
+    console.error('Error reading agent-config.json:', error)
+  }
+
+  agentId = agentId || runtimeConfig.agentId
 
   const existingAgent = await prisma.agents.findUnique({
     where: {
@@ -30,20 +40,21 @@ export default defineNitroPlugin(async nitroApp => {
   if (!existingAgent) {
     const agent = await prisma.agents.create({
       data: {
-        id: agentId,
-        name: agentId,
+        id: agentId as string,
+        name: agentId as string,
         enabled: true,
         version: '2.0',
         updatedAt: new Date().toISOString(),
         createdAt: new Date().toISOString(),
         isDraft: false,
-        projectId: runtimeConfig.projectId || 'default',
-        worldId: runtimeConfig.worldId || 'default',
+        projectId: (runtimeConfig.projectId || 'default') as string,
+        worldId: (runtimeConfig.worldId || 'default') as string,
       },
     })
 
-    //write to .env
-    fs.writeFileSync('.env', `AGENT_ID=${agent.id}`)
+    // Write to a JSON file
+    const configData = { AGENT_ID: agent.id }
+    fs.writeFileSync('agent-config.json', JSON.stringify(configData, null, 2))
     console.log('Agent created:', agent.id)
     runtimeConfig.agentId = agent.id
   }
