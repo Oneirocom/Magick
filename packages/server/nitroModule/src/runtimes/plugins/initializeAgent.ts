@@ -31,11 +31,13 @@ export default defineNitroPlugin(async nitroApp => {
 
   agentId = agentId || runtimeConfig.agentId
 
-  const existingAgent = await prisma.agents.findUnique({
-    where: {
-      id: agentId || '',
-    },
-  })
+  const existingAgent = agentId
+    ? await prisma.agents.findUnique({
+        where: {
+          id: agentId,
+        },
+      })
+    : null
 
   if (!existingAgent) {
     const agent = await prisma.agents.create({
