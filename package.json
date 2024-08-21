@@ -258,7 +258,7 @@
     "clsx": "^1.2.1",
     "cmdk": "^0.2.0",
     "codemirror": "^6.0.1",
-    "commander": "^12.0.0",
+    "commander": "^12.1.0",
     "consola": "^3.2.3",
     "daisyui": "^4.6.0",
     "date-fns": "^2.30.0",

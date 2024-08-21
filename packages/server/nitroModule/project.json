@@ -5,6 +5,12 @@
   "projectType": "library",
   "tags": ["release"],
   "targets": {
+    "grimoire:init": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "node ./src/grimoire.js init"
+      }
+    },
     "build": {
       "executor": "@nx/js:tsc",
       "outputs": ["{options.outputPath}"],
@@ -17,3 +23,4 @@
     }
   }
 }
+
