@@ -3,7 +3,7 @@ import { Agent } from '@magickml/agents'
 import { testSpell1, testSpell2 } from './testSpells'
 
 const AGENT_ID = 'e9005717-d02c-4399-9740-ced783c727b3'
-const PROJECT_ID = 'clzd9ymf30001dvsxf9r08exv'
+const PROJECT_ID = 'default'
 
 describe('Agent Standalone Integration', () => {
   let agent: Agent
