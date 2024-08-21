@@ -23,7 +23,7 @@ export default defineNitroPlugin(async nitroApp => {
 
   const existingAgent = await prisma.agents.findUnique({
     where: {
-      id: agentId,
+      id: agentId || '',
     },
   })
 
@@ -44,6 +44,8 @@ export default defineNitroPlugin(async nitroApp => {
 
     //write to .env
     fs.writeFileSync('.env', `AGENT_ID=${agent.id}`)
+    console.log('Agent created:', agent.id)
+    runtimeConfig.agentId = agent.id
   }
 
   // // use data and app to create agent
