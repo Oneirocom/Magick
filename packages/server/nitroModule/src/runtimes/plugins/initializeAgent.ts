@@ -6,6 +6,7 @@ import { Agent } from '@magickml/agents'
 import { AgentInterface } from '@magickml/agent-server-schemas'
 import { NitroRuntimeConfig } from 'nitropack'
 import { PrismaClient } from '@magickml/server-db'
+import { v4 as uuidv4 } from 'uuid'
 import fs from 'fs'
 
 const prisma = new PrismaClient()
@@ -37,7 +38,7 @@ export default defineNitroPlugin(async nitroApp => {
           id: agentId,
         },
       })
-    : null
+    : uuidv4()
 
   if (!existingAgent) {
     const agent = await prisma.agents.create({
