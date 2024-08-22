@@ -251,13 +251,35 @@ export class Agent
       },
     })
     if (!spellsData.data.length) {
-      this.error(`No spells found for agent ${this.id} to load into spellbook.`)
+      this.warn(
+        `No spells found in database for agent ${this.id} to load into spellbook.`
+      )
+      this.warn('Current spells in spellbook: ', this.spellbook.spells)
       return
     }
 
-    const spells = spellsData.data
-    console.log('SPELLS', spells)
-    await this.spellbook.loadSpells(spells)
+    const loadedSpells = this.spellbook.spells
+    const databaseSpells = spellsData.data
+
+    // Combine loaded spells and database spells, deduplicating based on spell name
+    const combinedSpells = new Map()
+
+    // Add loaded spells to the map
+    loadedSpells.forEach(spell => {
+      combinedSpells.set(spell.name, spell)
+    })
+
+    // Add or update with database spells
+    databaseSpells.forEach((spell: SpellInterface) => {
+      combinedSpells.set(spell.name, spell)
+    })
+
+    // Convert the map back to an array
+    const spells = Array.from(combinedSpells.values())
+
+    this.logger.debug(
+      `Combined ${loadedSpells.size} loaded spells with ${databaseSpells.length} database spells, resulting in ${spells.length} unique spells.`
+    )
 
     return this.spellbook.loadSpells(spells)
   }

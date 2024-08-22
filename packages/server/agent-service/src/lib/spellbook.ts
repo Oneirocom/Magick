@@ -57,7 +57,7 @@ export class Spellbook<
    * We use this to scale spell runners and to keep track of them.
    */
   private eventMap: Map<string, Map<string, SpellCaster<A>>> = new Map()
-  private spells: Map<string, SpellInterface> = new Map()
+  spells: Map<string, SpellInterface> = new Map()
 
   private commandHub: CommandHub<A>
 
