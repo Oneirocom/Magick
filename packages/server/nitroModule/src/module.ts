@@ -63,8 +63,9 @@ export default <NitroModule>{
     nitro.options.virtual['#magick/spells'] = async () => {
       const spells = await getSpells(nitro)
 
-      // strip .json from spell name
-      const formatName = (spellName: string) => spellName.replace(/\.json$/, '')
+      // Format the spell name to be a valid JavaScript identifier
+      const formatName = (spellName: string) =>
+        spellName.replace(/\.json$/, '').replace(/[^a-zA-Z0-9_]/g, '_')
 
       const imports = spells
         .map(
@@ -74,17 +75,16 @@ export default <NitroModule>{
 
       const exportArray = spells
         .map(
-          spell => `
-          ...(Array.isArray(${formatName(spell.name)}) ? ${formatName(
-            spell.name
-          )} : [${formatName(spell.name)}])
-        `
+          spell =>
+            `...(Array.isArray(${formatName(spell.name)}) ? ${formatName(
+              spell.name
+            )} : [${formatName(spell.name)}])`
         )
         .join(', ')
 
       return `
-    ${imports}
-    
+${imports}
+
 const magickSpells = [${exportArray}];
 
 export default magickSpells;

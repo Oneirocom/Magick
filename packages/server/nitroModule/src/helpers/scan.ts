@@ -2,7 +2,7 @@ import { relative, join } from 'pathe'
 import { globby } from 'globby'
 import { Nitro } from 'nitropack/types'
 
-export const GLOB_SCAN_PATTERN = '**/*.{js,mjs,cjs,ts,mts,cts,tsx,jsx}'
+export const GLOB_SCAN_PATTERN = '**/*.{js,mjs,cjs,ts,mts,cts,tsx,jsx,json}'
 type FileInfo = { path: string; fullPath: string }
 
 export async function scanFiles(
