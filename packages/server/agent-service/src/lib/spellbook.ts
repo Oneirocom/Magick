@@ -568,7 +568,6 @@ export class Spellbook<
     )
 
     this.clearAllSpellCasters()
-    this.spells.clear()
 
     for (const spell of spells) {
       this.spells.set(spell.id, spell)

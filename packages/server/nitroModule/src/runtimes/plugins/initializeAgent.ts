@@ -76,6 +76,7 @@ export default defineNitroPlugin(async nitroApp => {
   } else {
     console.log('Existing agent found:', existingAgent.id)
     config.agentId = existingAgent.id
+    config.projectId = existingAgent.projectId || 'default'
     config.id = existingAgent.id
   }
   // // use data and app to create agent
