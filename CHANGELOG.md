@@ -1,36 +1,4 @@
-## 0.0.12-10 (2024-08-22)
-
-This was a version bump only, there were no code changes.
-
-## 0.0.12-9 (2024-08-22)
-
-This was a version bump only, there were no code changes.
-
-## 0.0.12-8 (2024-08-22)
-
-This was a version bump only, there were no code changes.
-
-## 0.0.12-7 (2024-08-22)
-
-This was a version bump only, there were no code changes.
-
-## 0.0.12-6 (2024-08-22)
-
-This was a version bump only, there were no code changes.
-
-## 0.0.12-5 (2024-08-21)
-
-This was a version bump only, there were no code changes.
-
-## 0.0.12-4 (2024-08-21)
-
-This was a version bump only, there were no code changes.
-
-## 0.0.12-3 (2024-08-21)
-
-This was a version bump only, there were no code changes.
-
-## 0.0.12-2 (2024-08-21)
+## 0.0.12-11 (2024-08-23)
 
 This was a version bump only, there were no code changes.
 
@@ -40,13 +8,12 @@ This was a version bump only, there were no code changes.
 
 ## 0.0.12-0 (2024-08-16)
 
-
 ### 🚀 Features
 
 - Add @magickml/nodes, @magickml/portal, and @magickml/spells deps to grimoire framework ([5f41dc373](https://github.com/Oneirocom/Magick/commit/5f41dc373))
 - spell scanning ([c7e6261b6](https://github.com/Oneirocom/Magick/commit/c7e6261b6))
 
-### ❤️  Thank You
+### ❤️ Thank You
 
 - coffeeorgreentea @coffeeorgreentea
 
@@ -55,7 +22,6 @@ This was a version bump only, there were no code changes.
 This was a version bump only, there were no code changes.
 
 ## 0.0.11-9 (2024-08-14)
-
 
 ### 🚀 Features
 
@@ -113,7 +79,7 @@ This was a version bump only, there were no code changes.
 - Fix paths in server config ([fc1584e8b](https://github.com/Oneirocom/Magick/commit/fc1584e8b))
 - Add optional debug output to redis pubsub ([508a76be3](https://github.com/Oneirocom/Magick/commit/508a76be3))
 
-### ❤️  Thank You
+### ❤️ Thank You
 
 - coffeeorgreentea @coffeeorgreentea
 - Jakob
@@ -121,57 +87,52 @@ This was a version bump only, there were no code changes.
 
 ## 0.0.11-8 (2024-06-28)
 
-
 ### 🩹 Fixes
 
 - publish vercel package properly ([f5bffb006](https://github.com/Oneirocom/Magick/commit/f5bffb006))
 
-### ❤️  Thank You
+### ❤️ Thank You
 
 - Michael
 
 ## 0.0.11-7 (2024-06-28)
 
-
 ### 🩹 Fixes
 
 - Version mixup with token validator ([d19e6efd6](https://github.com/Oneirocom/Magick/commit/d19e6efd6))
 
-### ❤️  Thank You
+### ❤️ Thank You
 
 - Michael
 
 ## 0.0.11-6 (2024-06-28)
-
 
 ### 🩹 Fixes
 
 - remove seraph reliance on import.meta ([e088ac158](https://github.com/Oneirocom/Magick/commit/e088ac158))
 - don't pull in seraph additions to core app ([f2e0b0532](https://github.com/Oneirocom/Magick/commit/f2e0b0532))
 
-### ❤️  Thank You
+### ❤️ Thank You
 
 - Michael
 
 ## 0.0.11-5 (2024-06-28)
 
-
 ### 🩹 Fixes
 
 - patch seraph memory middleware ([ff5c289ca](https://github.com/Oneirocom/Magick/commit/ff5c289ca))
 
-### ❤️  Thank You
+### ❤️ Thank You
 
 - Michael
 
 ## 0.0.11-4 (2024-06-28)
 
-
 ### 🩹 Fixes
 
-- reset all package versions to 0.0.1.  Fix module type for serpah. ([98c9e40d3](https://github.com/Oneirocom/Magick/commit/98c9e40d3))
+- reset all package versions to 0.0.1. Fix module type for serpah. ([98c9e40d3](https://github.com/Oneirocom/Magick/commit/98c9e40d3))
 
-### ❤️  Thank You
+### ❤️ Thank You
 
 - Michael
 
@@ -185,39 +146,35 @@ This was a version bump only, there were no code changes.
 
 ## 0.0.11-1 (2024-06-28)
 
-
 ### 🩹 Fixes
 
 - Change db from alias to relative path ([c01da97ec](https://github.com/Oneirocom/Magick/commit/c01da97ec))
 
-### ❤️  Thank You
+### ❤️ Thank You
 
 - Michael
 
 ## 0.0.10 (2024-06-28)
 
-
 ### 🩹 Fixes
 
 - Change db from alias to relative path ([c01da97ec](https://github.com/Oneirocom/Magick/commit/c01da97ec))
 
-### ❤️  Thank You
+### ❤️ Thank You
 
 - Michael
 
 ## 0.0.10-4 (2024-06-27)
 
-
 ### 🩹 Fixes
 
 - Fix agent serve rbuilding config for proper import ([f3152671f](https://github.com/Oneirocom/Magick/commit/f3152671f))
 
-### ❤️  Thank You
+### ❤️ Thank You
 
 - Michael
 
 ## 0.0.10-3 (2024-06-27)
-
 
 ### 🚀 Features
 
@@ -226,30 +183,28 @@ This was a version bump only, there were no code changes.
 - Add optional properties for file upload in LoaderWithoutConfigSchema ([e2f83b852](https://github.com/Oneirocom/Magick/commit/e2f83b852))
 - Update @dnd-kit/utilities to version 3.2.2 ([f5dd2a15f](https://github.com/Oneirocom/Magick/commit/f5dd2a15f))
 
-### ❤️  Thank You
+### ❤️ Thank You
 
 - Jakob
 
 ## 0.0.10-2 (2024-06-27)
-
 
 ### 🩹 Fixes
 
 - cleanup old packages and lint errors ([257ff5dc1](https://github.com/Oneirocom/Magick/commit/257ff5dc1))
 - linting errors for global build command ([7c143e9df](https://github.com/Oneirocom/Magick/commit/7c143e9df))
 
-### ❤️  Thank You
+### ❤️ Thank You
 
 - Michael
 
 ## 0.0.10-1 (2024-06-27)
 
-
 ### 🩹 Fixes
 
 - get nitr module src included in build ([1bf5b662b](https://github.com/Oneirocom/Magick/commit/1bf5b662b))
 
-### ❤️  Thank You
+### ❤️ Thank You
 
 - Michael
 
@@ -263,12 +218,11 @@ This was a version bump only, there were no code changes.
 
 ## 0.0.9-0 (2024-06-27)
 
-
 ### 🩹 Fixes
 
 - fixes for knowledge plugin ([92888862e](https://github.com/Oneirocom/Magick/commit/92888862e))
 
-### ❤️  Thank You
+### ❤️ Thank You
 
 - Michael
 
@@ -297,7 +251,6 @@ This was a version bump only, there were no code changes.
 This was a version bump only, there were no code changes.
 
 ## 0.0.2 (2024-06-27)
-
 
 ### 🚀 Features
 
@@ -416,7 +369,7 @@ This was a version bump only, there were no code changes.
 - **discord:** add spell id at agent handler ([94782bcdb](https://github.com/Oneirocom/Magick/commit/94782bcdb))
 - **discord:** add binding to agent handler ([818001bf6](https://github.com/Oneirocom/Magick/commit/818001bf6))
 
-### ❤️  Thank You
+### ❤️ Thank You
 
 - Alexandre Ferreira
 - BMO @SkyPressATX
