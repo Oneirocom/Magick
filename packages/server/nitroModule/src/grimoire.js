@@ -8,6 +8,64 @@ const require = createRequire(import.meta.url)
 
 const program = new Command()
 
+function initializePrismaSchema() {
+  try {
+    // Dynamically resolve the path to the @magickml/server-db package
+    const serverDbPath = dirname(
+      require.resolve('@magickml/server-db/package.json')
+    )
+    const schemaPath = resolve(
+      serverDbPath,
+      'src',
+      'lib',
+      'prisma',
+      'client-core',
+      'schema.prisma'
+    )
+
+    // Construct and execute the db push command
+    const command = `npx prisma db push --schema=${schemaPath}`
+    execSync(command, {
+      stdio: 'inherit',
+      cwd: process.cwd(), // Use the current working directory
+    })
+
+    console.log('Database schema successfully synchronized with Prisma schema')
+  } catch (error) {
+    console.error('Error pushing schema changes:', error.message)
+    throw error
+  }
+}
+
+function generatePrismaClient() {
+  try {
+    // Dynamically resolve the path to the @magickml/server-db package
+    const serverDbPath = dirname(
+      require.resolve('@magickml/server-db/package.json')
+    )
+    const schemaPath = resolve(
+      serverDbPath,
+      'src',
+      'lib',
+      'prisma',
+      'client-core',
+      'schema.prisma'
+    )
+
+    // Construct and execute the generate command
+    const command = `npx prisma generate --schema=${schemaPath}`
+    execSync(command, {
+      stdio: 'inherit',
+      cwd: process.cwd(), // Use the current working directory
+    })
+
+    console.log('Prisma client generated successfully')
+  } catch (error) {
+    console.error('Error generating Prisma client:', error.message)
+    throw error
+  }
+}
+
 program
   .command('init')
   .description(
@@ -16,29 +74,12 @@ program
   .action(() => {
     try {
       console.log('Initializing Grimoire...')
-      // Dynamically resolve the path to the @magickml/server-db package
-      const serverDbPath = dirname(
-        require.resolve('@magickml/server-db/package.json')
-      )
-      const schemaPath = resolve(
-        serverDbPath,
-        'src',
-        'lib',
-        'prisma',
-        'client-core',
-        'schema.prisma'
-      )
 
-      // Construct and execute the db push command
-      const command = `npx prisma db push --schema=${schemaPath}`
-      execSync(command, {
-        stdio: 'inherit',
-        cwd: process.cwd(), // Use the current working directory
-      })
+      console.log('Initializing Prisma schema...')
+      initializePrismaSchema()
 
-      console.log(
-        'Database schema successfully synchronized with Prisma schema'
-      )
+      console.log('Generating Prisma client...')
+      generatePrismaClient()
     } catch (error) {
       console.error('Error pushing schema changes:', error.message)
     }
