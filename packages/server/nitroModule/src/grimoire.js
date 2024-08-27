@@ -23,7 +23,6 @@ function initializePrismaSchema() {
       'src',
       'lib',
       'prisma',
-      'client-core',
       'schema.prisma'
     )
 
@@ -52,7 +51,6 @@ function generatePrismaClient() {
       'src',
       'lib',
       'prisma',
-      'client-core',
       'schema.prisma'
     )
 
