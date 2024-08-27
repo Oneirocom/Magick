@@ -3,7 +3,7 @@ generator client {
   output          = "./client-core"
   previewFeatures = ["fullTextSearch", "multiSchema", "postgresqlExtensions"]
   name            = "prisma"
-  binaryTargets   = ["native", "linux-musl-openssl-3.0.x"]
+  binaryTargets   = ["native", "linux-musl-openssl-3.0.x", "linux-arm64-openssl-3.0.x"]
 }
 
 datasource db {
