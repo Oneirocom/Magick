@@ -3,6 +3,10 @@ import { execSync } from 'child_process'
 import { Command } from 'commander'
 import { resolve, dirname } from 'path'
 import { createRequire } from 'module'
+import dotenv from 'dotenv'
+
+// Load environment variables from .env file if it exists
+dotenv.config()
 
 const require = createRequire(import.meta.url)
 

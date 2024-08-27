@@ -32,6 +32,7 @@
     "@magickml/agent-server-schemas": "0.0.1",
     "@magickml/server-db": "0.0.1",
     "commander": "^12.1.0",
-    "uuid": "^9.0.0"
+    "uuid": "^9.0.0",
+    "dotenv": "16.4.5",
   }
 }
