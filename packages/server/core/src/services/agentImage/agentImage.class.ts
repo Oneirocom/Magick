@@ -15,26 +15,42 @@ type AgentImageData = {
 }
 
 export class AgentImageService {
-  s3: S3Client
+  s3: S3Client | null = null
   bucketName: string = AWS_BUCKET_NAME
 
   constructor() {
-    this.s3 = new S3Client({
-      credentials: {
-        accessKeyId: AWS_ACCESS_KEY,
-        secretAccessKey: AWS_SECRET_KEY,
-      },
-      region: AWS_REGION,
-      endpoint: AWS_BUCKET_ENDPOINT,
-      forcePathStyle: true,
-    })
+    if (this.isS3Configured()) {
+      this.s3 = new S3Client({
+        credentials: {
+          accessKeyId: AWS_ACCESS_KEY,
+          secretAccessKey: AWS_SECRET_KEY,
+        },
+        region: AWS_REGION,
+        endpoint: AWS_BUCKET_ENDPOINT,
+        forcePathStyle: true,
+      })
+    }
+  }
+
+  private isS3Configured(): boolean {
+    return !!(
+      AWS_ACCESS_KEY &&
+      AWS_SECRET_KEY &&
+      AWS_ACCESS_KEY.trim() !== '' &&
+      AWS_SECRET_KEY.trim() !== ''
+    )
   }
 
   createBufferFromImage(image: string): Buffer {
     return Buffer.from(image.replace(/^data:image\/\w+;base64,/, ''), 'base64')
   }
 
-  async create(data: AgentImageData): Promise<PutObjectOutput> {
+  async create(data: AgentImageData): Promise<PutObjectOutput | null> {
+    if (!this.isS3Configured()) {
+      console.log('Agent Image Service is not configured')
+      return null
+    }
+
     const logger = getLogger()
 
     try {
@@ -51,7 +67,7 @@ export class AgentImageService {
 
       const command = new PutObjectCommand(s3Params)
 
-      const result = await this.s3.send(command)
+      const result = await this.s3!.send(command)
       console.log('Image uploaded to S3', { result })
       logger.info('Image uploaded to S3', { result })
       return result
