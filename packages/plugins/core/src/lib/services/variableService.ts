@@ -4,6 +4,7 @@ import { ArrayVariable, ArrayVariableData } from '../values/Array/ArrayVariable'
 import EventEmitter from 'events'
 import TypedEmitter from 'typed-emitter'
 import { EventPayload, CORE_DEP_KEYS } from '@magickml/shared-services'
+import { Agent } from '@magickml/agents'
 
 type Payload = {
   name: string
@@ -32,20 +33,16 @@ export class VariableService
   implements IVariableService
 {
   private keyv: Keyv
+  private agent: Agent
   private spellCaster: SpellCaster<any>
   private agentId: string
 
-  constructor(
-    postgresUrl: string,
-    agentId: string,
-    spellCaster: SpellCaster<any>
-  ) {
+  constructor(agent: Agent, spellCaster: SpellCaster<any>) {
     super()
-    this.keyv = new Keyv(postgresUrl, {
-      namespace: agentId,
-      schema: 'variables',
-    })
-    this.agentId = agentId
+    this.agent = agent
+    this.agentId = agent.id
+    this.keyv = agent.app.get('variableKeyv')
+    this.agentId = agent.id
     this.spellCaster = spellCaster
   }
 

@@ -1,7 +1,6 @@
 import { CoreEventsPlugin } from '@magickml/agent-plugin'
 import { RedisPubSub } from '@magickml/redis-pubsub'
 import { SpellCaster } from '@magickml/agent-service'
-import { DATABASE_URL } from '@magickml/server-config'
 
 import { CoreLLMService } from './services/coreLLMService/coreLLMService'
 import { messageEvent } from './nodes/events/messageEvent'
@@ -290,8 +289,7 @@ export class CorePlugin extends CoreEventsPlugin<
         this.actionQueueName
       ),
       [CORE_DEP_KEYS.I_VARIABLE_SERVICE]: new VariableService(
-        DATABASE_URL as string,
-        this.agentId,
+        this.agent,
         spellCaster
       ),
       [CORE_DEP_KEYS.LLM_SERVICE]: this.coreLLMService,

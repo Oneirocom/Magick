@@ -66,6 +66,7 @@ declare module './declarations' {
     seraphCore: SeraphCore
     prisma: typeof prismaCore
     keyv: Keyv
+    variableKeyv: Keyv
   }
 }
 
@@ -127,6 +128,12 @@ export async function initApp(environment: Environment = 'default') {
   })
 
   app.set('keyv', keyv)
+
+  const variableKeyv = new Keyv(DATABASE_URL, {
+    schema: 'variables',
+  })
+
+  app.set('variableKeyv', variableKeyv)
 
   // sync up messages between the app and the runner
   logger.info('SETTING UP REDIS')
