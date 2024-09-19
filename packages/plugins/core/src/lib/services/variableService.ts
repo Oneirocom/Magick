@@ -4,7 +4,6 @@ import { ArrayVariable, ArrayVariableData } from '../values/Array/ArrayVariable'
 import EventEmitter from 'events'
 import TypedEmitter from 'typed-emitter'
 import { EventPayload, CORE_DEP_KEYS } from '@magickml/shared-services'
-import { Agent } from '@magickml/agents'
 
 type Payload = {
   name: string
@@ -33,13 +32,11 @@ export class VariableService
   implements IVariableService
 {
   private keyv: Keyv
-  private agent: Agent
   private spellCaster: SpellCaster<any>
   private agentId: string
 
-  constructor(agent: Agent, spellCaster: SpellCaster<any>) {
+  constructor(agent: any, spellCaster: SpellCaster<any>) {
     super()
-    this.agent = agent
     this.agentId = agent.id
     this.keyv = agent.app.get('variableKeyv')
     this.agentId = agent.id

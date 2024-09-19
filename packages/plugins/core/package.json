@@ -5,7 +5,6 @@
     "@clerk/clerk-sdk-node": "^5.0.7",
     "@langchain/openai": "^0.0.33",
     "@langchain/pinecone": "^0.0.6",
-    "@magickml/agents": "0.0.1",
     "@magickml/agent-communication": "0.0.1",
     "@magickml/agent-plugin-state": "0.0.1",
     "@magickml/agent-plugin": "0.0.1",
