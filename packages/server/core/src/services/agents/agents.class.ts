@@ -15,7 +15,7 @@ import { BadRequest, NotAuthenticated, NotFound } from '@feathersjs/errors'
 import { EventPayload, ISeraphEvent } from '@magickml/shared-services'
 import { AgentCommandData } from '@magickml/agent-commander'
 import { AgentInterface } from '@magickml/agent-server-schemas'
-import { BullQueue } from 'server/communication'
+import { BullQueue } from '@magickml/server-communication'
 import { AGENT_DELETE_JOB } from '@magickml/agent-communication'
 
 // Define AgentParams type based on KnexAdapterParams with AgentQuery

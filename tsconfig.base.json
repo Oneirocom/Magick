@@ -240,6 +240,9 @@
         "packages/server/cloud-agent-worker/src/index.ts"
       ],
       "server/communication": ["packages/server/communication/src/index.ts"],
+      "@magickml/server-communication": [
+        "packages/server/communication/src/index.ts"
+      ],
       "server/grimoire-types": ["packages/server/grimoire/src/index.ts"],
       "stylesheets": ["packages/client/stylesheets/src/index.ts"],
       "window-agent-channels": [
