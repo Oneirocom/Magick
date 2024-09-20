@@ -71,6 +71,8 @@ const configureCustomServices = (
       'message',
       'ping',
       'processSeraphEvent',
+      'createAgent',
+      'removeAgent',
     ],
     events: [
       'log',
