@@ -40,6 +40,13 @@ export function AgentMenu({ data }) {
   const [createAgentRelease] = useCreateAgentReleaseMutation()
 
   const setCurrentAgent = useCallback((agent: AgentInterface) => {
+    console.log('CREATING AGENT IN AGENT MENU')
+
+    // onlt create agent if it is enabled
+    if (agent.enabled) {
+      client.service('agents').createAgent(agent.id)
+    }
+
     client.service('agents').subscribe(agent.id)
     _setCurrentAgent(agent)
     // store this current agent in the global state for use in the editor
@@ -55,10 +62,8 @@ export function AgentMenu({ data }) {
       const draft = data.find(agent => agent.isDraft)
       const published = data.find(agent => agent.currentSpellReleaseId)
 
-      if (draft) {
-        setDraftAgent(draft)
-        setCurrentAgent(draft)
-      }
+      setDraftAgent(draft)
+      setCurrentAgent(draft)
       if (published) setPublishedAgent(published)
     }
 

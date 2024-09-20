@@ -15,6 +15,7 @@ import { EditIcon } from './edit-icon'
 import { defaultImage } from '@magickml/utils'
 import { CheckIcon, Cross1Icon } from '@radix-ui/react-icons'
 import { useUpdateAgentMutation } from 'client/state'
+import { useFeathers } from '@magickml/providers'
 
 interface ConfigHeaderProps {
   selectedAgentData: any
@@ -31,6 +32,7 @@ export const ConfigHeader = ({
   selectedAgentData,
   setSelectedAgentData,
 }: ConfigHeaderProps) => {
+  const { client } = useFeathers()
   const [updateAgent] = useUpdateAgentMutation()
   const [editName, setEditName] = useState(false)
   const isDraft = selectedAgentData?.currentSpellReleaseId === null || false
@@ -52,6 +54,19 @@ export const ConfigHeader = ({
         setSelectedAgentData && setSelectedAgentData(data)
       })
       .catch(console.error)
+  }
+
+  const toggleAgent = () => {
+    const newEnabled = !selectedAgentData.enabled
+    update({
+      enabled: !selectedAgentData.enabled,
+    })
+
+    if (newEnabled) {
+      client.service('agents').createAgent(selectedAgentData.id)
+    } else {
+      client.service('agents').removeAgent(selectedAgentData.id)
+    }
   }
 
   if (!selectedAgentData) return null
@@ -126,11 +141,7 @@ export const ConfigHeader = ({
               <Switch
                 className="m-0"
                 checked={selectedAgentData.enabled}
-                onCheckedChange={() => {
-                  update({
-                    enabled: !selectedAgentData.enabled,
-                  })
-                }}
+                onCheckedChange={toggleAgent}
               />
               <span className="text-sm font-medium text-white/60">
                 {selectedAgentData.enabled ? 'On' : 'Off'}
