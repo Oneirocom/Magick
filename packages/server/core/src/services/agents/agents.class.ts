@@ -15,6 +15,8 @@ import { BadRequest, NotAuthenticated, NotFound } from '@feathersjs/errors'
 import { EventPayload, ISeraphEvent } from '@magickml/shared-services'
 import { AgentCommandData } from '@magickml/agent-commander'
 import { AgentInterface } from '@magickml/agent-server-schemas'
+import { BullQueue } from 'server/communication'
+import { AGENT_DELETE_JOB } from '@magickml/agent-communication'
 
 // Define AgentParams type based on KnexAdapterParams with AgentQuery
 export type AgentParams = KnexAdapterParams<AgentQuery>
@@ -174,6 +176,43 @@ export class AgentService<
     const response = await agentCommander.command(data)
 
     return { response }
+  }
+
+  async createAgent(agentId: string) {
+    this.app.get('logger').info(`Creating agent ${agentId} in agent class`)
+    // enable the agent. We do this just to make sure the agent is enabled
+    try {
+      await this.patch(agentId, { enabled: true })
+    } catch (error: any) {
+      console.error('Error enabling agent', error)
+      throw new Error(`Error enabling agent: ${error.message}`)
+    }
+
+    // create the agent in the background.
+    // This ensures the agent is running
+    const createQueue = new BullQueue(app.get('redis'))
+    createQueue.initialize('agent:create')
+
+    createQueue.addJob('agent:create', { agentId })
+
+    return { success: true }
+  }
+
+  async removeAgent(agentId: string) {
+    this.app.get('logger').info(`Removing agent ${agentId} in agent class`)
+    // disable the agent
+    try {
+      await this.patch(agentId, { enabled: false })
+    } catch (error: any) {
+      console.error('Error disabling agent', error)
+      throw new Error(`Error disabling agent: ${error.message}`)
+    }
+
+    this.app
+      .get('pubsub')
+      .publish(AGENT_DELETE_JOB(agentId), JSON.stringify({ agentId: agentId }))
+
+    return { success: true }
   }
 
   async subscribe(agentId: string, params?: ServiceParams) {

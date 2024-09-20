@@ -86,6 +86,8 @@ export const agent = (app: Application) => {
       'processSeraphEvent',
       'createSeraphEvent',
       'getSeraphEvents',
+      'createAgent',
+      'removeAgent',
     ],
     events: AGENT_EVENTS,
   })
