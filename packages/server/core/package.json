@@ -22,6 +22,8 @@
     "@magickml/shared-services": "0.0.1",
     "@magickml/agent-server-schemas": "0.0.1",
     "@magickml/server-config": "0.0.1",
+    "@magickml/server-communication": "0.0.1",
+    "@magickml/agent-communication": "0.0.1",
     "@magickml/storage": "0.0.1",
     "@panva/hkdf": "1.1.1",
     "@feathersjs/typebox": "5.0.25",
