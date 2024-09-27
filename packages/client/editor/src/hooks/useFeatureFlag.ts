@@ -19,34 +19,35 @@ const featureList: Record<Features, (PortalSubscriptions | Roles | boolean)[]> =
     // [Features.SERAPH_CHAT_WINDOW]: [WIZARD, APPRENTICE, NEOPHYTE, ADMIN],
   }
 export const useFeatureFlag = (feature: Features): boolean => {
-  const config = useConfig()
-  const { data: userData } = useGetUserQuery({
-    projectId: config.projectId,
-  })
+  // const config = useConfig()
+  // const { data: userData } = useGetUserQuery({
+  //   projectId: config.projectId,
+  // })
+
   const [hasAccess, setHasAccess] = useState(false)
 
-  useEffect(() => {
-    // Checking for local environment override
-    const envOverride = flags[feature]
+  // useEffect(() => {
+  //   // Checking for local environment override
+  //   const envOverride = flags[feature]
 
-    if (envOverride !== undefined) {
-      setHasAccess(envOverride === 'true')
-      return
-    }
+  //   if (envOverride !== undefined) {
+  //     setHasAccess(envOverride === 'true')
+  //     return
+  //   }
 
-    if (userData && userData.user) {
-      const posthogFlagEnabled = posthog.isFeatureEnabled(feature)
-      const hogFlagIsTrue = posthogFlagEnabled === true
+  //   if (userData && userData.user) {
+  //     const posthogFlagEnabled = posthog.isFeatureEnabled(feature)
+  //     const hogFlagIsTrue = posthogFlagEnabled === true
 
-      const userHasAccess =
-        featureList[feature].includes(userData.user.subscriptionName) ||
-        featureList[feature].includes(userData.user.role) ||
-        featureList[feature].includes(true) ||
-        hogFlagIsTrue
+  //     const userHasAccess =
+  //       featureList[feature].includes(userData.user.subscriptionName) ||
+  //       featureList[feature].includes(userData.user.role) ||
+  //       featureList[feature].includes(true) ||
+  //       hogFlagIsTrue
 
-      setHasAccess(userHasAccess)
-    }
-  }, [userData, feature])
+  //     setHasAccess(userHasAccess)
+  //   }
+  // }, [userData, feature])
 
   return hasAccess
 }

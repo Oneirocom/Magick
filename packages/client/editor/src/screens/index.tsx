@@ -76,14 +76,14 @@ const MagickV2 = () => {
   const { getLayout, setApi } = useGlobalLayout()
   const { theme } = useDockviewTheme()
   const config = useConfig()
-  const { data: userData, isLoading } = useGetUserQuery({
-    projectId: config.projectId,
-  })
+  // const { data: userData, isLoading } = useGetUserQuery({
+  //   projectId: config.projectId,
+  // })
   const dispatch = useDispatch()
 
-  if (isLoading) return null
+  // if (isLoading) return null
 
-  posthog.setPersonPropertiesForFlags({ email: userData?.user?.email })
+  // posthog.setPersonPropertiesForFlags({ email: userData?.user?.email })
 
   const withClickHandler = (WrappedComponent: React.ComponentType<any>) => {
     return (props: IGridviewPanelProps<{ title: string }>) => {

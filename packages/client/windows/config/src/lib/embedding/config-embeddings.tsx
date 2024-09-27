@@ -17,20 +17,20 @@ export const ConfigEmbeddings = ({
 
   const config = useConfig()
 
-  const { data: userData, isLoading: isUserDataLoading } = useGetUserQuery({
-    projectId: config.projectId,
-  })
+  // const { data: userData, isLoading: isUserDataLoading } = useGetUserQuery({
+  //   projectId: config.projectId,
+  // })
 
   const [updateAgent] = useUpdateAgentMutation()
 
-  useEffect(() => {
-    if (userData) {
-      const provider = userData.embeddingProvider
-      const model = userData.embeddingModel
-      setSelectedEmbeddingProvider(provider)
-      setSelectedEmbeddingModel(model)
-    }
-  }, [userData])
+  // useEffect(() => {
+  //   if (userData) {
+  //     const provider = userData.embeddingProvider
+  //     const model = userData.embeddingModel
+  //     setSelectedEmbeddingProvider(provider)
+  //     setSelectedEmbeddingModel(model)
+  //   }
+  // }, [userData])
 
   const handleEmbeddingProviderChange = (provider: string) => {
     setSelectedEmbeddingProvider(provider)
@@ -48,9 +48,9 @@ export const ConfigEmbeddings = ({
     })
   }
 
-  if (isUserDataLoading) {
-    return <div>Loading...</div>
-  }
+  // if (isUserDataLoading) {
+  //   return <div>Loading...</div>
+  // }
 
   return (
     <div className="flex flex-col max-w-2xl w-full gap-y-4">
@@ -61,7 +61,6 @@ export const ConfigEmbeddings = ({
       <EmbeddingModelDropdown
         activeEmbeddingModels={['text-embedding-ada-002']}
         selectedEmbeddingModel={selectedEmbeddingModel}
-        userData={userData}
         modelsWithKeys={['text-embedding-ada-002']}
         onChange={handleEmbeddingModelChange}
       />

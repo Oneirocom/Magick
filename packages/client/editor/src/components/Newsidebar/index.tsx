@@ -14,7 +14,6 @@ import {
   useCreateAgentMutation,
   useCreateAgentReleaseMutation,
   useGetAgentsQuery,
-  useGetUserQuery,
 } from 'client/state'
 import { useModal } from '../../contexts/ModalProvider'
 
@@ -44,9 +43,9 @@ export function NewSidebar(): React.JSX.Element {
     RootState['globalConfig']
   >(state => state.globalConfig)
 
-  const { data: userData, isLoading: userLoading } = useGetUserQuery({
-    projectId: config.projectId,
-  })
+  // const { data: userData, isLoading: userLoading } = useGetUserQuery({
+  //   projectId: config.projectId,
+  // })
 
   // stopgap until I patch the agent menu with new redux stuff
   useEffect(() => {
@@ -201,7 +200,7 @@ export function NewSidebar(): React.JSX.Element {
         <ContextMenu />
       </div>
 
-      <MPBalanceBar userData={userData} isLoading={userLoading} />
+      {/* <MPBalanceBar userData={userData} isLoading={userLoading} /> */}
     </div>
   )
 }

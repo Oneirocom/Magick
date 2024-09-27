@@ -41,9 +41,9 @@ export const EmbeddingProviderOptions: React.FC<
   const { data: credentials } = useListCredentialsQuery({
     projectId: config.projectId,
   })
-  const { data: userData, isLoading: isUserDataLoading } = useGetUserQuery({
-    projectId: config.projectId,
-  })
+  // const { data: userData, isLoading: isUserDataLoading } = useGetUserQuery({
+  //   projectId: config.projectId,
+  // })
 
   useEffect(() => {
     const fetchData = async () => {
@@ -58,13 +58,11 @@ export const EmbeddingProviderOptions: React.FC<
 
         setProviderData(groupedModels)
 
-        if (userData) {
-          setSelectedProvider(props.fullConfig.modelProvider || '')
-          setSelectedModel(props.fullConfig.model || '')
-          setActiveModels(
-            groupedModels[props.fullConfig.modelProvider].models || []
-          )
-        }
+        setSelectedProvider(props.fullConfig.modelProvider || '')
+        setSelectedModel(props.fullConfig.model || '')
+        setActiveModels(
+          groupedModels[props.fullConfig.modelProvider].models || []
+        )
 
         setIsLoading(false)
       } catch (error) {
@@ -74,7 +72,7 @@ export const EmbeddingProviderOptions: React.FC<
     }
 
     fetchData()
-  }, [userData])
+  }, [])
 
   useEffect(() => {
     if (!providerData) return
@@ -91,7 +89,7 @@ export const EmbeddingProviderOptions: React.FC<
     }
   }, [selectedProvider])
 
-  if (isLoading || isUserDataLoading || !userData) {
+  if (isLoading) {
     return <div>Loading...</div>
   }
 
@@ -132,11 +130,12 @@ export const EmbeddingProviderOptions: React.FC<
             </SelectTrigger>
             <SelectContent>
               {activeModels.map(model => {
-                const isAvailable = isModelAvailableToUser({
-                  userData,
-                  model,
-                  providersWithUserKeys,
-                })
+                // const isAvailable = isModelAvailableToUser({
+                //   userData,
+                //   model,
+                //   providersWithUserKeys,
+                // })
+                const isAvailable = true
                 return (
                   <SelectItem
                     key={model.model_name}

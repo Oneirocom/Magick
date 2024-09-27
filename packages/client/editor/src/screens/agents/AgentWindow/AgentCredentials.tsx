@@ -121,9 +121,9 @@ const Header = ({ agentId }: { agentId: string }): JSX.Element => {
     projectId: config.projectId,
   })
 
-  const { data: userData } = useGetUserQuery({
-    projectId: config.projectId,
-  })
+  // const { data: userData } = useGetUserQuery({
+  //   projectId: config.projectId,
+  // })
 
   const [updateAgent] = useUpdateAgentMutation()
 
@@ -160,14 +160,14 @@ const Header = ({ agentId }: { agentId: string }): JSX.Element => {
     )
   }, [selectedEmbeddingProvider])
 
-  useEffect(() => {
-    if (userData) {
-      const provider = userData.embeddingProvider
-      const model = userData.embeddingModel
-      setSelectedEmbeddingProvider(provider)
-      setSelectedEmbeddingModel(model)
-    }
-  }, [userData])
+  // useEffect(() => {
+  //   if (userData) {
+  //     const provider = userData.embeddingProvider
+  //     const model = userData.embeddingModel
+  //     setSelectedEmbeddingProvider(provider)
+  //     setSelectedEmbeddingModel(model)
+  //   }
+  // }, [userData])
 
   const openSecrets = () => {
     openTab({
@@ -195,11 +195,12 @@ const Header = ({ agentId }: { agentId: string }): JSX.Element => {
   }
 
   const modelOptions = activeEmbeddingModels.map(model => {
-    const isAvailable = isModelAvailableToUser({
-      userData,
-      model: model,
-      providersWithUserKeys,
-    })
+    // const isAvailable = isModelAvailableToUser({
+    //   userData,
+    //   model: model,
+    //   providersWithUserKeys,
+    // })
+    const isAvailable = true
     return {
       value: model.model_name,
       label: model.display_name,

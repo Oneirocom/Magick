@@ -4,7 +4,6 @@ import { type FC } from 'react'
 interface EmbeddingModelDropdownProps {
   activeEmbeddingModels: string[]
   selectedEmbeddingModel?: string
-  userData?: any
   modelsWithKeys: string[]
   onChange: (model: string) => void
 }
@@ -12,7 +11,6 @@ interface EmbeddingModelDropdownProps {
 export const EmbeddingModelDropdown: FC<EmbeddingModelDropdownProps> = ({
   activeEmbeddingModels,
   selectedEmbeddingModel,
-  userData,
   modelsWithKeys,
   onChange,
 }) => {

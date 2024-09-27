@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from 'react'
 import { ConfigurationComponentProps } from './PropertiesWindow'
 import { useConfig } from '@magickml/providers'
-import { useListCredentialsQuery, useGetUserQuery } from 'client/state'
+import { useListCredentialsQuery } from 'client/state'
 import {
-  isModelAvailableToUser,
   Model,
   getProvidersWithUserKeys,
   getProviderIdMapping,
@@ -38,16 +37,16 @@ export const CompletionProviderOptions: React.FC<
   const { data: credentials } = useListCredentialsQuery({
     projectId: config.projectId,
   })
-  const { data: userData, isLoading: isUserDataLoading } = useGetUserQuery({
-    projectId: config.projectId,
-  })
+  // const { data: userData, isLoading: isUserDataLoading } = useGetUserQuery({
+  //   projectId: config.projectId,
+  // })
 
   // Handle initial loading
   useEffect(() => {
     if (props.node && props.node.id === lastActiveNodeId) return
     setLastActiveNodeId(props.node?.id || '')
 
-    if (!userData && !providerData) return
+    // if (!userData && !providerData) return
 
     // get the model provider
     let modelProvider = getProviderIdMapping(
@@ -89,7 +88,7 @@ export const CompletionProviderOptions: React.FC<
 
     // set loading to false
     setIsLoading(false)
-  }, [userData, providerData, props.node])
+  }, [providerData, props.node])
 
   useEffect(() => {
     if (!providerData) return
@@ -125,7 +124,7 @@ export const CompletionProviderOptions: React.FC<
     })
   }
 
-  if (isLoading || isUserDataLoading || !userData) {
+  if (isLoading) {
     return <div>Loading...</div>
   }
 
@@ -170,11 +169,12 @@ export const CompletionProviderOptions: React.FC<
             </SelectTrigger>
             <SelectContent className="max-h-52 overflow-y-auto">
               {activeModels.map(model => {
-                const isAvailable = isModelAvailableToUser({
-                  userData,
-                  model,
-                  providersWithUserKeys,
-                })
+                // const isAvailable = isModelAvailableToUser({
+                //   userData,
+                //   model,
+                //   providersWithUserKeys,
+                // })
+                const isAvailable = true
                 return (
                   <SelectItem
                     className="truncate"
